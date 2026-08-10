@@ -430,6 +430,7 @@
         text-align: center;
       }
       .neighbor-honeycomb {
+        touch-action: manipulation;
         margin: 6px auto;
         max-width: var(--hex-graphic-w);
         width: 100%;
@@ -450,6 +451,7 @@
         box-shadow: inset 0 1px 2px rgba(26, 22, 18, 0.04);
       }
       .full-map-svg {
+        touch-action: manipulation;
         width: 100%;
         height: auto;
         display: block;
@@ -583,6 +585,8 @@
         margin-left: 6px;
       }
       .hex-shape {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
         fill: var(--parchment-deep);
         stroke: rgba(107, 94, 78, 0.5);
         stroke-width: 1.2;
@@ -935,6 +939,7 @@
 
       /* ── Hex graphic area ──────────────────────────────────────────── */
       .hex-graphic-wrap {
+        touch-action: manipulation;
         position: relative;
         width: 100%;
         max-width: var(--hex-graphic-w);
