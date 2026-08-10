@@ -76,7 +76,9 @@
         --sp-4: 16px;
         --sp-5: 24px;
         --pad-btn: 6px 14px;
-        --control-h: 38px;        /* canonical form-control height (inputs, selects, form-row buttons) */
+        --control-h: 38px;
+        --hex-graphic-w: 460px;   /* desktop hex map width (fluid<=this on mobile) */
+        --hud-w: 300px;           /* desktop side HUD column width */        /* canonical form-control height (inputs, selects, form-row buttons) */
 
         /* Radius (13 -> 4) */
         --r-sm: 4px;
@@ -429,7 +431,7 @@
       }
       .neighbor-honeycomb {
         margin: 6px auto;
-        max-width: 380px;
+        max-width: var(--hex-graphic-w);
         width: 100%;
       }
       .neighbor-honeycomb svg {
@@ -935,34 +937,36 @@
       .hex-graphic-wrap {
         position: relative;
         width: 100%;
-        max-width: 420px;
+        max-width: var(--hex-graphic-w);
         margin: 0 auto;
       }
-      /* Corner camera button on the hex graphic (persists in all states). */
-      .capture-corner {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        display: inline-flex;
+      /* ===== Responsive hex layout: stacked (mobile) -> media|HUD side-by-side (desktop) ===== */
+      .hex-layout {
+        display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        padding: 0;
-        color: var(--ink-faded);
-        background: var(--parchment-light);
-        border: var(--bw) solid var(--border);
-        border-radius: var(--r-sm);
-        cursor: pointer;
-        opacity: 0.6;
-        transition: opacity var(--t), color var(--t), border-color var(--t);
-        z-index: 3;
-        -webkit-tap-highlight-color: transparent;
-        touch-action: manipulation;
+        gap: 12px;
       }
-      .capture-corner:hover,
-      .capture-corner:active { opacity: 1; color: var(--ochre); border-color: var(--ochre); }
-      .capture-corner:focus-visible { outline: var(--bw-strong) solid var(--focus-ring); outline-offset: 2px; }
+      .hex-layout__media { width: 100%; }
+      .hex-layout__hud { width: 100%; max-width: var(--hud-w); margin-left: auto; margin-right: auto; }
+      @media (min-width: 900px) {
+        .hex-layout--split {
+          flex-direction: row;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 24px;
+        }
+        .hex-layout--split .hex-layout__media {
+          flex: 1 1 auto;
+          min-width: 0;
+          max-width: var(--hex-graphic-w);
+        }
+        .hex-layout--split .hex-layout__hud {
+          flex: 0 0 var(--hud-w);
+          max-width: var(--hud-w);
+        }
+      }
+      /* Corner camera button on the hex graphic (persists in all states). */
 
       /* ── Vantage row ───────────────────────────────────────────────── */
       .track-chooser-item {
@@ -1169,20 +1173,52 @@
       /* ── GM tools row ──────────────────────────────────────────────── */
       /* ── Journey Console ── */
       .journey-console {
-        max-width: 420px;
-        margin: 12px auto 6px;
-        padding: 10px 12px;
+        display: flex; flex-direction: column; gap: 10px; width: 100%;
+        background: var(--parchment-light);
+        border: var(--bw-strong) solid var(--moss);
+        border-radius: 6px;
+        padding: 10px;
+        box-shadow: 0 1px 4px var(--shadow);
+      }
+      /* Unified HUD panel: single container grouping journey + view + vantage + capture. */
+            .capture-corner {
+        position: absolute; top: 10px; right: 10px;
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 32px; height: 32px; padding: 0;
+        color: var(--ink-faded); background: var(--parchment-light);
+        border: var(--bw) solid var(--border); border-radius: var(--r-sm);
+        cursor: pointer; opacity: 0.6; z-index: 3;
+        transition: opacity var(--t), color var(--t), border-color var(--t);
+        -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+      }
+      .capture-corner:hover, .capture-corner:active { opacity: 1; color: var(--ochre); border-color: var(--ochre); }
+      .capture-corner:focus-visible { outline: var(--bw-strong) solid var(--focus-ring); outline-offset: 2px; }
+      /* Reserve room so long hex titles wrap instead of running under the corner camera. */
+      .scene-title { padding-right: 44px; }
+      .hud-panel {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
         background: var(--parchment-deep);
         border: 1px solid var(--ink-faded);
         border-radius: 9px;
         box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+      }
+      /* HUD rows fill the panel (legacy 420px/auto-margins were for the old wide layout). */
+      .hud-panel .hex-action-bar,
+      .hud-panel .vantage-row,
+      .hud-panel .view-mode-row { max-width: none; width: 100%; margin-left: 0; margin-right: 0; }
+      /* Player/2D/World are set-and-forget: quiet 'on' state (not the loud moss fill). */
+      .view-mode-row .toggle--on {
+        background: rgba(168, 120, 56, 0.10);
+        color: var(--ochre);
+        border-color: var(--ochre);
       }
       .jc-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
       /* Travel row is dense (label + 3-way toggle + Rest); tighten it so Rest never wraps at 340px. */
-      .jc-travel { gap: 6px; flex-wrap: nowrap; }
+      .jc-travel { gap: 6px; flex-wrap: nowrap; justify-content: center; }
       .jc-travel .segmented { padding: 1px; }
       .jc-travel .toggle { padding: 6px 8px; }
       .jc-travel .btn { padding: 6px 9px; min-height: 0; }
@@ -1201,6 +1237,12 @@
         font-style: italic;
       }
       .jc-barline { gap: 8px; }
+      .jc-header { justify-content: space-between; gap: 8px; flex-wrap: nowrap; }
+      .jc-resource { justify-content: center; align-items: baseline; gap: 5px; font-family: var(--font-display); }
+      .jc-resource #jrn-tp-val { font-size: var(--fs-lg); font-weight: 600; }
+      .jc-tp-sep, .jc-resource #jrn-tp-total { color: var(--ink-faded); font-size: var(--fs-base); }
+      .jc-tp-unit { color: var(--ink-faded); font-size: var(--fs-xs); letter-spacing: 0.08em; text-transform: uppercase; }
+      .jc-actions-2 { justify-content: center; gap: 8px; }
       .jc-bar-val {
         font-family: var(--font-display);
         font-size: var(--fs-base);
@@ -1435,7 +1477,7 @@
         flex-direction: column;
         align-items: center;
         gap: 6px;
-        max-width: 100%;
+        max-width: var(--hex-graphic-w);
         margin: 0 auto;
         padding: 4px;
       }
@@ -10060,6 +10102,8 @@
         // Full map is now in its own World Map section
         // View + Terrain segmented controls (session setup; shown in both views)
         // ── Hex graphic: full width centered ──────────────────────────────────
+        html += '<div class="hex-layout hex-layout--split">';
+        html += '<div class="hex-layout__media">';
         if (isPlayerView()) {
           // Player View: render hex graphic with callout cards around it
           html += '<div class="pv-callout-container">';
@@ -10157,14 +10201,19 @@
           html += '<div class="hex-graphic-wrap' + ((_trackActive && _jrnLost) ? ' lost' : '') + '">';
           html += buildHoneycomb(h, blockedDirs, ring2Blocked, eyeLevel);
           html += "</div>";
-          if (_trackActive) {
-            // Banners render only when active (shown below the map, so no reserved gap).
-            if (_jrnEncounter) html += '<div class="encounter-banner"><span class="encounter-banner-txt"><span class="jrn-ico">⚔</span> Encounter Appears!</span><button class="btn btn--encounter" onclick="journeyClearEncounter()">Clear Encounter</button></div>';
-            if (_jrnLost) html += '<div class="lost-banner"><span class="lost-banner-txt"><span class="jrn-ico">⚑</span> The party is lost</span><button class="btn btn--lost" onclick="journeyClearLost()">Party Recovers</button></div>';
-          }
         }
 
 
+        html += '</div>'; // /hex-layout__media
+        html += '<div class="hex-layout__hud">';
+        html += '<div class="hud-panel">';
+        // Journey status banners: float above the HUD (desktop) / stack above it (mobile).
+        html += '<div class="hud-banners">';
+        if (_trackActive) {
+          if (_jrnEncounter) html += '<div class="encounter-banner"><span class="encounter-banner-txt"><span class="jrn-ico">⚔</span> Encounter Appears!</span><button class="btn btn--encounter" onclick="journeyClearEncounter()">Clear</button></div>';
+          if (_jrnLost) html += '<div class="lost-banner"><span class="lost-banner-txt"><span class="jrn-ico">⚑</span> The party is lost</span><button class="btn btn--lost" onclick="journeyClearLost()">Recover</button></div>';
+        }
+        html += '</div>';
         // ── Journey Console (all travel controls in one panel while tracking) ──
         const _trkActive = _trackActive;
         let _jt = null;
@@ -10179,10 +10228,28 @@
           const _jrnRes = jrnResourceDisplay(_tpRem);
           html += '<div class="journey-console">';
 
-          // Row 0: resource battery bar (value · [bar] · %). Switches TP<->Miles by mode.
+          // Row 1: Day (left) + Speed (right) — always one line.
+          html += '<div class="jc-row jc-header">';
+          html += '<span id="jrn-day-val" class="jc-day">' + (_jtp ? '<span class="jc-day-num">Day ' + _jtp.day + '</span> <span class="jc-day-date">' + _jtp.currentDate + '</span>' : "") + '</span>';
+          html += '<label class="jrn-lbl">Speed <select id="jrn-speed-sel" class="jrn-sel" onchange="journeySetSpeed(this.value)">';
+          [10, 20, 30, 40, 50, 60].forEach((s) => {
+            html += '<option value="' + s + '"' + (s === (_jtp ? _jtp.speed : _jrnSpeed) ? " selected" : "") + '>' + s + '</option>';
+          });
+          html += '</select></label>';
+          html += '</div>';
+
+          // Row 2: resource — remaining / total (unit).
+          const _jrnResTot = jrnResourceDisplay(_jtp ? _jtp.tpTotal : 0);
+          html += '<div class="jc-row jc-resource">';
+          html += '<span id="jrn-tp-val" class="tp-val' + (_jrnRes.low ? " tp-low" : "") + '">' + _jrnRes.text + '</span>';
+          html += '<span class="jc-tp-sep">/</span>';
+          html += '<span id="jrn-tp-total">' + (_jrnIgnoreRest ? "\u221e" : _jrnResTot.text) + '</span>';
+          html += '<span id="jrn-tp-label" class="jc-tp-unit">' + _jrnRes.label.replace(":", "") + '</span>';
+          html += '</div>';
+
+          // Row 3: battery bar.
           const _bar = jrnBarState(_jtp);
           html += '<div class="jc-row jc-barline">';
-          html += '<span class="jc-bar-val"><span id="jrn-tp-label">' + _jrnRes.label.replace(":", "") + '</span> <span id="jrn-tp-val" class="tp-val' + (_jrnRes.low ? " tp-low" : "") + '">' + _jrnRes.text + '</span></span>';
           html += '<span class="jc-bar-area"><span class="jc-bar-stage"><span class="jc-bar-track"></span>'
             + '<span id="jrn-bar-fill" class="jc-bar-fill ' + _bar.cls + '" style="width:' + _bar.baseW + '%"></span>'
             + '<span id="jrn-bar-fill-ext" class="jc-bar-fill-ext ' + _bar.cls + '" style="width:' + _bar.extW + '%"></span>'
@@ -10190,19 +10257,8 @@
             + '<span id="jrn-bar-pct" class="jc-bar-pct" style="left:' + _bar.pctLeft + '%">' + (_jrnIgnoreRest ? "\u221e" : _bar.pct + "%") + '</span></span></span>';
           html += '</div>';
 
-          // Row 1: Rate (Speed + Forced March) + Date on the right.
-          html += '<div class="jc-row jc-rate-row">';
-          html += '<label class="jrn-lbl">Speed <select id="jrn-speed-sel" class="jrn-sel" onchange="journeySetSpeed(this.value)">';
-          [10, 20, 30, 40, 50, 60].forEach((s) => {
-            html += '<option value="' + s + '"' + (s === (_jtp ? _jtp.speed : _jrnSpeed) ? " selected" : "") + '>' + s + '</option>';
-          });
-          html += '</select></label>';
-          html += '<button id="jrn-fm-btn" class="btn ' + (_jrnForceMarch ? "btn--locked" : "btn--ghost") + '" onclick="journeyToggleForceMarch()">' + jrnFmLabel(_jtp) + '</button>';
-          html += '</div>';
-
-          // Zone 2: Travel mode (Wild | Path | River segmented) + Rest.
+          // Row 4: Travel mode (Wild | Path | River) — segmented, no label.
           html += '<div class="jc-row jc-travel">';
-          html += '<span class="jc-travel-label">Travel</span>';
           html += '<div class="segmented">';
           html += '<button class="toggle' + (_jrnMode === "tp" ? " toggle--on" : "") + '" onclick="journeySetMode(&#39;tp&#39;)">Wild</button>';
           const _roadOK = jrnHexHasRoad(hex) || _jrnMode === "path";
@@ -10210,20 +10266,22 @@
           const _riverOK = jrnHexHasRiver(hex) || _jrnMode === "river" || jrnAquaticCanBoard(hex);
           html += '<button class="toggle' + (_jrnMode === "river" ? " toggle--on" : "") + '"' + (_riverOK ? "" : " disabled") + ' onclick="journeySetMode(&#39;river&#39;)">River</button>';
           html += '</div>';
+          html += '</div>';
+
+          // Row 5: Forced March + Rest.
+          html += '<div class="jc-row jc-actions-2">';
+          html += '<button id="jrn-fm-btn" class="btn ' + (_jrnForceMarch ? "btn--locked" : "btn--ghost") + '" onclick="journeyToggleForceMarch()">' + jrnFmLabel(_jtp) + '</button>';
           html += '<button id="jrn-rest-btn" class="btn btn--ghost" onclick="journeyRest()"><span class="jrn-ico">☾</span> Rest</button>';
           html += '</div>';
 
-          // Zone 3: Status (Lost/Encounter) + Undo + Save & End.
-          html += '<div class="jc-row jc-actions">';
-          html += '<span id="jrn-day-val" class="jc-day">' + (_jtp ? '<span class="jc-day-num">Day ' + _jtp.day + '</span> <span class="jc-day-date">' + _jtp.currentDate + '</span>' : "") + '</span>';
+          // Row 6: Undo + Save & End (unchanged).
           const _uT = trackLoadAll().find((x) => x.id === _trackActiveId);
           const _lostUndoable = !!(_uT && _uT.tpState && (_uT.tpState.lastLostAction === "gotLost" || _uT.tpState.lostClearedPending || (_uT.tpState.fmUndoable && _uT.tpState.forcedMarch)));
           const _undoHex = (!_uT || _uT.waypoints.length < 2) ? null : (_trackPrepend ? _uT.waypoints[0].hex : _uT.waypoints[_uT.waypoints.length - 1].hex);
           const _showUndo = _lostUndoable || (_undoHex !== null && resolveHex(document.getElementById("pan-hex").value) === _undoHex);
-          html += '<span class="jc-actions-right">';
+          html += '<div class="jc-row jc-actions">';
           html += '<button id="track-undo-btn" class="btn btn--ghost" onclick="trackUndoWaypoint()" ' + (_showUndo ? "" : 'style="display:none"') + '><span class="jrn-ico">↶</span> Undo</button>';
           html += '<button id="track-toggle-btn" class="btn btn--ghost" onclick="trackToggle()">Save &amp; End</button>';
-          html += '</span>';
           html += '</div>';
 
           html += '</div>';
@@ -10250,9 +10308,13 @@
           "<span>−60</span></button>";
         html += "</div>";
         html += '<div class="view-mode-row">';
-        html += '<button class="btn btn--ghost" onclick="setPlayerView(' + (isPlayerView() ? 'false' : 'true') + ')">View: ' + (isPlayerView() ? 'Player' : 'Referee') + '</button>';
-        html += '<button class="btn btn--ghost" onclick="set2D(' + (is2D() ? 'false' : 'true') + ')">Terrain: ' + (is2D() ? 'Flat' : 'Isometric') + '</button>';
+        html += '<button class="toggle' + (isPlayerView() ? ' toggle--on' : '') + '" onclick="togglePlayerView()"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M1 8 C3 4 13 4 15 8 C13 12 3 12 1 8Z" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5"/></svg>Player</button>';
+        html += '<button class="toggle' + (is2D() ? ' toggle--on' : '') + '" onclick="toggle2D()"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:4px;"><polygon points="8,1 14,4.5 14,11.5 8,15 2,11.5 2,4.5" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>2D</button>';
+        html += '<button class="toggle' + (isInWorldMapView() ? ' toggle--on' : '') + '" onclick="toggleWorldMap()"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:4px;"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5 Q10 5 10 8 Q10 11 8 14.5" stroke="currentColor" stroke-width="1"/><path d="M8 1.5 Q6 5 6 8 Q6 11 8 14.5" stroke="currentColor" stroke-width="1"/><path d="M1.5 8 H14.5" stroke="currentColor" stroke-width="1"/><path d="M2.5 5 H13.5" stroke="currentColor" stroke-width="1"/><path d="M2.5 11 H13.5" stroke="currentColor" stroke-width="1"/></svg>World</button>';
         html += '</div>';
+        html += '</div>'; // /hud-panel
+        html += '</div>'; // /hex-layout__hud
+        html += '</div>'; // /hex-layout
         const userMods = getUserEntriesForHex(hex);
         if ((h.modules && h.modules.length) || (userMods.length && !pv)) {
           html += `<div style="${pvHide}">`;
