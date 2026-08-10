@@ -78,7 +78,7 @@
         --pad-btn: 6px 14px;
         --control-h: 38px;
         --hex-graphic-w: 460px;   /* desktop hex map width (fluid<=this on mobile) */
-        --hud-w: 300px;           /* desktop side HUD column width */        /* canonical form-control height (inputs, selects, form-row buttons) */
+        --hud-w: 340px;           /* desktop side HUD column width */        /* canonical form-control height (inputs, selects, form-row buttons) */
 
         /* Radius (13 -> 4) */
         --r-sm: 4px;
@@ -964,6 +964,14 @@
         .hex-layout--split .hex-layout__hud {
           flex: 0 0 var(--hud-w);
           max-width: var(--hud-w);
+          align-self: center;
+        }
+        /* Desktop: banners float above the panel so the HUD grows UPWARD (console stays put). */
+        .hex-layout--split .hud-banners {
+          position: absolute;
+          bottom: calc(100% + 8px);
+          left: 0;
+          right: 0;
         }
       }
       /* Corner camera button on the hex graphic (persists in all states). */
@@ -1197,6 +1205,7 @@
       .scene-title { padding-right: 44px; }
       .hud-panel {
         width: 100%;
+        position: relative;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -1219,30 +1228,36 @@
       .jc-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
       /* Travel row is dense (label + 3-way toggle + Rest); tighten it so Rest never wraps at 340px. */
       .jc-travel { gap: 6px; flex-wrap: nowrap; justify-content: center; }
+      .jc-travel .segmented { display: flex; width: 100%; }
+      .jc-travel .segmented .toggle { flex: 1; }
       .jc-travel .segmented { padding: 1px; }
       .jc-travel .toggle { padding: 6px 8px; }
       .jc-travel .btn { padding: 6px 9px; min-height: 0; }
       .jc-tp .tp-val.tp-low { color: var(--rust); }
       .jc-rate { display: inline-flex; align-items: center; gap: 10px; }
-      .jc-day { white-space: nowrap; }
+      .jc-day { display: flex; flex-direction: column; line-height: 1.05; white-space: nowrap; }
       .jc-day-num {
         font-family: var(--font-display);
-        font-size: var(--fs-base);
+        font-size: var(--fs-lg);
         font-weight: 400;
-        color: var(--ink-faded);
+        color: var(--ink-soft);
       }
       .jc-day-date {
-        font-size: var(--fs-xs);
+        font-size: var(--fs-sm);
         color: var(--ink-faded);
         font-style: italic;
       }
       .jc-barline { gap: 8px; }
-      .jc-header { justify-content: space-between; gap: 8px; flex-wrap: nowrap; }
-      .jc-resource { justify-content: center; align-items: baseline; gap: 5px; font-family: var(--font-display); }
+      .jc-header { justify-content: space-between; align-items: center; gap: 8px; flex-wrap: nowrap; }
+      .jc-resource { justify-content: flex-start; align-items: baseline; gap: 8px; font-family: var(--font-display); margin-bottom: -5px; }
+      .jc-tp-wrap { display: inline-flex; align-items: baseline; gap: 5px; }
       .jc-resource #jrn-tp-val { font-size: var(--fs-lg); font-weight: 600; }
       .jc-tp-sep, .jc-resource #jrn-tp-total { color: var(--ink-faded); font-size: var(--fs-base); }
       .jc-tp-unit { color: var(--ink-faded); font-size: var(--fs-xs); letter-spacing: 0.08em; text-transform: uppercase; }
-      .jc-actions-2 { justify-content: center; gap: 8px; }
+      .jc-actions-2 { justify-content: center; gap: 8px; flex-wrap: nowrap; }
+      .jc-actions-2 .btn { white-space: nowrap; font-size: var(--fs-sm); padding: 8px 10px; }
+      .jc-actions-2 #jrn-fm-btn { flex: 1; }
+      .jc-actions-2 #jrn-rest-btn { flex: 0 0 auto; }
       .jc-bar-val {
         font-family: var(--font-display);
         font-size: var(--fs-base);
@@ -1321,6 +1336,7 @@
       .jc-bar-red { background: #9c3320; }
       .jc-bar-pct {
         position: absolute;
+        font-family: var(--font-body);
         top: 50%;
         transform: translateY(-50%);
         margin-left: 6px;
@@ -10238,13 +10254,15 @@
           html += '</select></label>';
           html += '</div>';
 
-          // Row 2: resource — remaining / total (unit).
+          // Row 2: resource — remaining / total (unit), left-justified, hugging the bar below.
           const _jrnResTot = jrnResourceDisplay(_jtp ? _jtp.tpTotal : 0);
           html += '<div class="jc-row jc-resource">';
+          html += '<span class="jc-tp-wrap">';
           html += '<span id="jrn-tp-val" class="tp-val' + (_jrnRes.low ? " tp-low" : "") + '">' + _jrnRes.text + '</span>';
           html += '<span class="jc-tp-sep">/</span>';
           html += '<span id="jrn-tp-total">' + (_jrnIgnoreRest ? "\u221e" : _jrnResTot.text) + '</span>';
           html += '<span id="jrn-tp-label" class="jc-tp-unit">' + _jrnRes.label.replace(":", "") + '</span>';
+          html += '</span>';
           html += '</div>';
 
           // Row 3: battery bar.
