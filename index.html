@@ -959,11 +959,16 @@
         border-radius: 50%;
         flex-shrink: 0;
       }
+      .track-card-title:hover {
+        text-decoration: underline;
+        text-decoration-style: dotted;
+      }
       .track-card-title {
         flex: 1;
         min-width: 0;
         font-weight: 700;
         font-size: var(--fs-sm);
+        cursor: pointer;
         color: var(--ink);
         overflow: hidden;
         text-overflow: ellipsis;
@@ -1223,7 +1228,7 @@
       }
       .encounter-banner-txt {
         font-family: var(--font-display);
-        font-size: var(--fs-lg);
+        font-size: var(--fs-base);
         color: #8f1410;
         letter-spacing: 0.02em;
       }
@@ -1241,7 +1246,7 @@
       }
       .lost-banner-txt {
         font-family: var(--font-display);
-        font-size: var(--fs-lg);
+        font-size: var(--fs-base);
         color: #40454d;
         letter-spacing: 0.02em;
       }
@@ -2248,14 +2253,6 @@
             >
               Entries
             </button>
-            <button
-              type="button"
-              class="hex-tab"
-              data-tab="about"
-              onclick="showHexTab('about')"
-            >
-              About
-            </button>
           </div>
           <div id="hextab-journeys" class="hex-tab-panel" hidden>
             <div class="scene-title">Journeys</div>
@@ -2492,7 +2489,9 @@
               <span id="ue-io-status" class="ue-status"></span>
             </div>
           </div>
-          <div id="hextab-about" class="hex-tab-panel" hidden>
+        </div>
+        
+          <div id="hextab-about" class="card">
             <div class="scene-title">About This Tool</div>
             <p
               style="
@@ -2614,7 +2613,6 @@
               or stories from your table to share!
             </p>
           </div>
-        </div>
       </section>
 
       <p class="disclaimer">
@@ -2687,7 +2685,7 @@
       let _jrnLastRoadId = null; // road/river id used on the previous move (tie-break)
       let _jrnIgnoreRest = false; // resource limits ignored until next Rest
       let _jrnLost = false; // party is lost (referee clears via the Lost button)
-      let _jrnEncounter = false; // encounter this turn (auto-clears on next hex click)
+      let _jrnEncounter = false; // active encounter; persists until Rest or manual clear
 
       // Embedded data
 
@@ -5234,6 +5232,7 @@
             {
               name: "Mallowhearts Repose",
               type: "Civilization",
+              isAnchor: true,
               prominent: true,
               height: 40,
               desc: "Decrepit manor house now turned into an inn",
@@ -8787,11 +8786,6 @@
         return false;
       }
 
-      function hexDescOf(hexCode) {
-        const hx = HEXES[hexCode];
-        return (hx && hx.desc) || "";
-      }
-
       const ROAD_NAMES = {
         "swallop-road": "Swallop Road",
         "fishers-path": "Fisher's Path",
@@ -8824,6 +8818,7 @@
         "mulchers-path": "Mulcher's Path",
         "armsheaths-road": "Armsheath's Road",
         "blacke-road": "Blacke Road",
+        "well-path": "Well Path",
       }; // end const ROAD_NAMES
       // Road lengths in MILES (hex = 6 miles edge-to-edge) from the Maps Book.
       const ROAD_LENGTHS = {
@@ -8841,23 +8836,24 @@
         "swinescombe-road": 18, //checked
         "harrids-path": 21, //checked
         "bogwitt-path": 12, //checked
-        "camp-road": 20, //corrected
+        "camp-road": 20, //checked
         "cave-path": 8, //checked
         "horse-eye-road": 24.5, //checked
         "kings-highway": 7, //checked
-        "swinney-road": 13, //corrected
-        "fort-road": 19, //corrected
+        "swinney-road": 13, //checked
+        "fort-road": 19, //checked
         "creek-path": 19, //checked
         "avernal-path": 21, //calculated
         "downs-road": 79.5, //checked
-        "mirror-road": 4, //corrected
-        "follyegg-road": 21, //corrected
-        "lochsbreth-road": 25, //checked
-        "manor-road-2": 6, //checked
+        "mirror-road": 4, //checked
+        "follyegg-road": 21, //checked
+        "lochsbreth-road": 18.5, //checked
+        "manor-road-2": 6.5, //checked
         "harrow-road": 7, //checked
         "mulchers-path": 11, //checked
         "armsheaths-road": 8, //checked
         "blacke-road": 11.5, //checked
+        "well-path": 2, //checked
       }; // end const ROAD_LENGTHS
 
       // ============================ ROAD SEGMENT FORMAT ============================
@@ -8934,29 +8930,31 @@
       } // end function parseRoadShort
 
       const HEX_ROADS_SHORT = {
-        "0008": [["west-road", "road", "NE3", "S1", null, null, 4.22]],
-        "0009": [["west-road", "road", "N3", "S1", null, "1.2,-0.2", 6.84]],
-        "0010": [["west-road", "road", "N3", "SE1", null, "0.4,-0.7", 4.2]],
-        "0108": [["west-road", "road", "SE3", "SW1", "0.4,0.7", null, 4.22, [0.183]]],
-        "0111": [["west-road", "road", "NW3", "NE2", null, null, 4.67]],
+        "0008": [["west-road", "road", "NE3", "S1", null, null, 3.66]],
+        "0009": [["west-road", "road", "N3", "S1", null, "1.2,-0.2", 5.64]],
+        "0010": [["west-road", "road", "N3", "SE1", null, "0.4,-0.7", 3.66]],
+        "0108": [["west-road", "road", "SE3", "SW1", "0.4,0.7", null, 4.42, [0.183]]],
+        "0111": [["west-road", "road", "NW3", "NE2", null, null, 4.03]],
         "0208": [
-          ["high-road", "road", "SE3", null, "-0.6,-0.35", null, 5.81],
-          ["west-road", "road", null, "NW1", "-0.6,-0.35", null, 1.03],
+          ["high-road", "road", "SE3", null, "-0.6,-0.35", null, 6.88, [0.2]],
+          ["west-road", "road", null, "NW1", "-0.6,-0.35", null, 1.19],
+          ["well-path", "trail", "S1", null, "0.3,0.3", null, 0.96, null, false],
         ],
         "0210": [
-          ["west-road", "road", "SW2", "S3", "-0.6,0.35", null, 0.58],
-          ["west-road", "road", null, "S3", "-0.6,0.35", null, 2.09],
+          ["west-road", "road", "SW2", "S3", "-0.6,0.35", null, 2.4],
+          ["west-road", "road", null, "S3", "-0.6,0.35", null, 2.14],
         ],
-        "0211": [["west-road", "road", "N1", "SE1", null, null, 5.24]],
-        "0309": [["high-road", "road", "SE3", "NW1", null, null, 6.36]],
+        "0209": [["well-path", "trail", "N3", null, "0,-0.3", null, 1.04]],
+        "0211": [["west-road", "road", "N1", "SE1", null, null, 5.98]],
+        "0309": [["high-road", "road", "SE3", "NW1", null, null, 5.66]],
         "0312": [
-          ["west-road", "road", "NW3", null, "-0.4,-0.5", null, 0.91],
+          ["west-road", "road", "NW3", null, "-0.4,-0.5", null, 0.88],
           ["boves-road", "road", null, "NE1", "-0.4,-0.5", null, 3.57],
         ],
-        "0409": [["high-road", "road", "S1", "NW1", "0.4,0.6", null, 6.68, [0.168]]],
+        "0409": [["high-road", "road", "S1", "NW1", "0.4,0.6", null, 5.96, [0.168]]],
         "0410": [
           ["capring-road", "road", "SE1", null, "0.4,-0.3", null, 2.23],
-          ["high-road", "road", null, "N3", "0.4,-0.3", null, 2.15],
+          ["high-road", "road", null, "N3", "0.4,-0.3", null, 2.5],
         ],
         "0411": [
           ["tankards-road", "road", "SE1", "NE3", null, ".7,0", 1.67],
@@ -8966,151 +8964,152 @@
           ["tankards-road", "road", "SW1", null, "-0.3,-0.2", null, 3.18],
           ["capring-road", "road", null, "NW3", "-0.3,-0.2", null, 1.77],
           ["boves-road", "road", "SW3", null, "-0.3,-0.2", null, 2.45],
-          ["the-ditchway-trail", "trail", null, "NE1", "-0.3,-0.2", null, 4.27],
+          ["the-ditchway-trail", "trail", null, "NE1", "-0.3,-0.2", null, 4.26],
         ],
         "0512": [
-          ["swallop-road", "road", null, "NE3", "0,0", null, 3.5],
+          ["swallop-road", "road", null, "NE3", "0,0", null, 3.23],
           ["south-road", "road", null, "S1", "0,0", null, 3],
           ["tankards-road", "road", null, "NW3", "0,0", null, 3.15],
         ],
-        "0601": [["downs-road", "trail", "SE2", "NW1", null, "0,-0.3", 6.3]],
+        "0601": [["downs-road", "trail", "SE2", "NW1", null, "0,-0.3", 6.11]],
         "0604": [
-          ["fort-road", "road", "SE3", null, "-0.1,0.8", null, 2.42],
-          ["creek-path", "trail", null, "NE3", "-0.1,0.8", "0,0", 4.42],
+          ["fort-road", "road", "SE3", null, "-0.1,0.8", null, 3.18],
+          ["creek-path", "trail", null, "NE3", "-0.1,0.8", "0,0", 7.61],
         ],
-        "0610": [["the-ditchway-trail", "trail", "SW3", "NE1", null, null, 7.18]],
-        "0611": [["swallop-road", "road", "SW1", "NE1", null, null, 7.01]],
+        "0610": [["the-ditchway-trail", "trail", "SW3", "NE1", null, null, 7.19]],
+        "0611": [["swallop-road", "road", "SW1", "NE1", null, null, 5.92]],
         "0702": [
-          ["creek-path", "trail", "S3", "NW2", "-0.4,0.5", null, 4.08, [0.284, 0.95]],
-          ["downs-road", "trail", "NE1", "NW2", null, "0,-0.3", 4.94, [0.95]],
+          ["creek-path", "trail", "S3", "NW2", "-0.4,0.5", null, 2.82, [0.284, 0.95], true],
+          ["downs-road", "trail", "NE1", "NW2", null, "0,-0.3", 4.86, [0.2, 0.95]],
         ],
-        "0703": [["creek-path", "trail", "S1", "N1", null, "0.3,0", 5.36]],
+        "0703": [["creek-path", "trail", "S1", "N1", null, "0.3,0", 3.2]],
         "0704": [
-          ["creek-path", "trail", "N3", "SW1", "0,-0.3", null, 5.14, [0.352]],
+          ["creek-path", "trail", "N3", "SW1", "0,-0.3", null, 5.37, [0.352]],
           ["avernal-path", "trail", null, "NE2", "0,-0.3", "0,0", 3.11],
         ],
-        "0705": [["fort-road", "road", "SE3", "NW1", null, "0,0.5", 5.69]],
-        "0708": [["fishers-path", "trail", "S1", "N1", "0.3,0.6", null, 6.79, [0.147]]],
+        "0705": [["fort-road", "road", "SE3", "NW1", null, "0,0.5", 8.91]],
+        "0708": [["fishers-path", "trail", "S1", "N1", "0.3,0.6", null, 7.03, [0.147]]],
         "0709": [
           ["manor-road", "road", "S1", null, "0.2,0", null, 2.91],
-          ["fishers-path", "trail", null, "N3", "0.2,0", null, 3.21],
+          ["fishers-path", "trail", null, "N3", "0.2,0", null, 2.97],
         ],
         "0710": [
           ["manor-road", "road", null, "N3", "0.6,-0.35", null, 2.09],
-          ["swallop-road", "road", "S1", null, "0.6,-0.35", null, 4.92],
+          ["swallop-road", "road", "S1", null, "0.6,-0.35", null, 5.61],
           ["the-ditchway-trail", "trail", "SW3", null, "0.6,-0.35", null, 6.55],
-          ["the-ditchway", "road", null, "NE3", "0.6,-0.35", null, 1.11],
+          ["the-ditchway", "road", null, "NE3", "0.6,-0.35", null, 1.17],
         ],
         "0711": [
-          ["swallop-road", "road", "SW3", "N3", "-0.65,0", null, 6.07, [0.2]],
-          ["swinescombe-road", "trail", null, "SE1", "-0.65,0", null, 6.11],
+          ["swallop-road", "road", "SW3", "N3", "-0.65,0", null, 6.74, [0.2]],
+          ["swinescombe-road", "trail", null, "SE1", "-0.65,0", null, 6.12],
         ],
         "0801": [
           ["avernal-path", "trail", "S1", null, "0,-0.15", "0.5,0", 4.14],
-          ["downs-road", "trail", "NE2", "SW3", null, null, 6.09],
+          ["downs-road", "trail", "NE2", "SW3", null, null, 6.11],
         ],
         "0802": [["avernal-path", "trail", "S3", "N3", null, "-1.3,0", 8.07]],
         "0803": [["avernal-path", "trail", "SW2", "N1", null, "0.3,-0.6", 5.68]],
-        "0805": [["fort-road", "road", "SE3", "NW1", "0.3,0.5", null, 7.09]],
-        "0809": [["the-ditchway", "road", "SW1", "SE3", null, null, 4.54]],
-        "0811": [["swinescombe-road", "trail", "NW3", "SE1", null, null, 6.88]],
-        "0901": [["downs-road", "trail", "NE2", "SW2", null, "0,.2", 6.06]],
+        "0805": [["fort-road", "road", "SE3", "NW1", "0.3,0.5", null, 4.39]],
+        "0809": [["the-ditchway", "road", "SW1", "SE3", null, null, 5.48]],
+        "0811": [["swinescombe-road", "trail", "NW3", "SE1", null, null, 6.87]],
+        "0901": [["downs-road", "trail", "NE2", "SW2", null, "0,.2", 6.09]],
         "0906": [
-          ["swinney-road", "road", "NE3", null, "0,0.1", null, 2.43],
-          ["fort-road", "road", null, "NW1", "0,0.1", null, 3.8],
+          ["swinney-road", "road", "NE3", null, "0,0.1", null, 3.26],
+          ["fort-road", "road", null, "NW1", "0,0.1", null, 2.52],
         ],
-        "0910": [["the-ditchway", "road", "NW1", "SE1", "-.3,0", null, 6.58, [0.34]]],
+        "0910": [["the-ditchway", "road", "NW1", "SE1", "-.3,0", null, 5.43, [0.34]]],
         "0912": [["swinescombe-road", "trail", "NW3", null, "0.6,-0.35", null, 5.01]],
-        "1000": [["downs-road", "trail", "SW2", "SE2", null, null, 5.61]],
-        "1005": [["swinney-road", "road", "SE2", "SW1", null, "0,0", 5.78]],
-        "1009": [["harrids-path", "trail", "N1", "S1", null, null, 6.37]],
+        "1000": [["downs-road", "trail", "SW2", "SE2", null, null, 5.21]],
+        "1005": [["swinney-road", "road", "SE2", "SW1", null, "0,0", 5.32]],
+        "1009": [["harrids-path", "trail", "N1", "S1", null, null, 6.49]],
         "1010": [
-          ["harrids-path", "trail", "N3", "SE3", "0.2,0.1", null, 5.88, [0.582, 0.13]],
-          ["the-ditchway", "road", "NW3", "NE1", null, null, 4.54, [0.691]],
+          ["harrids-path", "trail", "N3", "SE3", "0.2,0.1", null, 7.74, [0.582, 0.13]],
+          ["the-ditchway", "road", "NW3", "NE1", null, null, 4.22, [0.691]],
         ],
-        "1011": [["harrids-path", "trail", "SE1", "NE2", null, "0.3,0", 3.11]],
-        "1101": [["downs-road", "trail", "SE2", "NW2", null, "0,-.4", 6.19]],
+        "1011": [["harrids-path", "trail", "SE1", "NE2", null, "0.3,0", 2.37]],
+        "1101": [["downs-road", "trail", "SE2", "NW2", null, "0,-.4", 6.21]],
         "1105": [
-          ["lochsbreth-road", "road", "NE3", null, "0.4,0.3", null, 2.44],
+          ["lochsbreth-road", "road", "NE3", null, "0.4,0.3", null, 2.51],
           ["harrow-road", "road", null, "SE2", "0.4,0.3", null, 1.15],
         ],
         "1106": [
-          ["horse-eye-road", "road", "SE1", null, "0.25,0.3", null, 2.16],
-          ["harrow-road", "road", "NE2", null, "0.25,0.3", "0.8,0", 2.92],
-          ["swinney-road", "road", null, "NW2", "0.25,0.3", "-0.5,0", 4.79],
+          ["horse-eye-road", "road", "SE1", null, "0.25,0.3", null, 2.07],
+          ["harrow-road", "road", "NE2", null, "0.25,0.3", "0.8,0", 2.91],
+          ["swinney-road", "road", null, "NW2", "0.25,0.3", "-0.5,0", 4.42],
         ],
-        "1110": [["the-ditchway", "road", "SW3", null, "-0.3,0", null, 2.23]],
-        "1111": [["harrids-path", "trail", "SW2", "NW1", null, "-0.5,0", 2.68]],
-        "1112": [["harrids-path", "trail", "NW3", null, "0.2,-0.5", null, 2.96]],
-        "1109": [["camp-road", "road", "SE1", null, "0.7,0.2", null, 0.61]],
-        "1201": [["downs-road", "trail", "NE2", "NW2", null, "0,0.2", 5.78]],
-        "1204": [["lochsbreth-road", "road", "NE3", "SW1", "0.4,0.3", null, 6.2, [0.393]]],
-        "1205": [["harrow-road", "road", "NW2", "SW2", null, "-.4,0", 2.93]],
+        "1110": [["the-ditchway", "road", "SW3", null, "-0.3,0", null, 2.7]],
+        "1111": [["harrids-path", "trail", "SW2", "NW1", null, "-0.5,0", 2.12]],
+        "1112": [["harrids-path", "trail", "NW3", null, "0.2,-0.5", null, 2.28]],
+        "1109": [["camp-road", "road", "SE1", null, "0.7,0.2", null, 1.17]],
+        "1201": [["downs-road", "trail", "NE2", "NW2", null, "0,0.2", 5.8]],
+        "1204": [["lochsbreth-road", "road", "NE3", "SW1", "0.4,0.3", null, 5.75, [0.393]]],
+        "1205": [["harrow-road", "road", "NW2", "SW2", null, "-.4,0", 2.94]],
         "1206": [
-          ["horse-eye-road", "road", "SE1", "NW3", null, "0.3,-.5", 6.1],
+          ["horse-eye-road", "road", "SE1", "NW3", null, "0.3,-.5", 5.63],
           ["mulchers-path", "trail", null, "NE3", "0.5,-0.18", null, 1.35],
         ],
-        "1207": [["cave-path", "trail", "S1", null, "0.2,0.5", null, 1.15]],
-        "1208": [["cave-path", "trail", "N3", "SE1", null, "0.2,0", 4.24]],
+        "1207": [["cave-path", "trail", "S1", null, "0.2,0.5", null, 1.26]],
+        "1208": [["cave-path", "trail", "N3", "SE1", null, "0.2,0", 4.64]],
         "1209": [
           ["bogwitt-path", "trail", "S3", null, "-0.3,-0.5", ".3,0", 5.44],
-          ["camp-road", "road", "NW3", "NE1", "-0.3,-0.5", null, 4.52, [0.276]],
+          ["camp-road", "road", "NW3", "NE1", "-0.3,-0.5", null, 2.99, [0.276]],
         ],
         "1210": [["bogwitt-path", "trail", null, "N1", "-0.3,0.65", "-1.2,0", 6.56]],
-        "1301": [["downs-road", "trail", "SW2", "SE1", null, "0,0", 5.85]],
+        "1301": [["downs-road", "trail", "SW2", "SE1", null, "0,0", 5.87]],
+        "1303": [["manor-road-2", "trail", "SE3", "S1", null, "0.4,0.3", 1.64, null, false]],
         "1304": [
-          ["lochsbreth-road", "road", "NE3", "SW1", null, ".7,0.5", 6.4],
-          ["manor-road-2", "trail", "NE1", null, "0,0", "0,-1", 3.65],
+          ["lochsbreth-road", "road", "NE3", "SW1", null, ".7,0.5", 4.79],
+          ["manor-road-2", "trail", "N3", null, "0,0", null, 2.28],
         ],
         "1306": [["mulchers-path", "trail", "SW1", "SE1", null, null, 5.59]],
-        "1307": [["horse-eye-road", "road", "SE1", "NW3", "0.5,-0.25", null, 6.18, [0.334]]],
+        "1307": [["horse-eye-road", "road", "SE1", "NW3", "0.5,-0.25", null, 6.46, [0.334]]],
         "1309": [
-          ["camp-road", "road", "SW3", "NE1", "0.2,-0.5", null, 6.09, [0.741]],
-          ["cave-path", "trail", null, "NW3", "0.2,-0.5", null, 2.61],
+          ["camp-road", "road", "SW3", "NE1", "0.2,-0.5", null, 7.19, [0.741]],
+          ["cave-path", "trail", null, "NW3", "-0.2,-0.2", null, 2.1, null, false],
         ],
         "1400": [["downs-road", "trail", "S1", "SE3", null, null, 1.51]],
-        "1401": [["downs-road", "trail", "N3", "NW3", null, "0,-0.5", 3.35]],
+        "1401": [["downs-road", "trail", "N3", "NW3", null, "0,-0.5", 3.37]],
         "1403": [
           ["follyegg-road", "road", "NE3", null, "0.1,0.2", null, 3.45],
-          ["lochsbreth-road", "road", null, "SW1", "0.1,0.2", null, 9.96, [0.55]],
-          ["manor-road-2", "trail", "SW3", null, "-0.3,0.45", "0,.5", 2.35, null, false],
+          ["lochsbreth-road", "road", null, "SW1", "0.1,0.2", null, 5.45, [0.55]],
+          ["manor-road-2", "trail", "NW1", null, "-0.3,0.45", "0,.5", 2.58, null, false],
         ],
         "1405": [
           ["mulchers-path", "trail", null, "S3", "0.4,0.6", null, 2.51],
           ["blacke-road", "trail", "SE3", null, "0.4,0.6", null, 0.65],
         ],
         "1406": [["mulchers-path", "trail", "N1", "NW3", null, null, 1.55]],
-        "1407": [["horse-eye-road", "road", "SE2", "NW3", null, "-0.2,0", 6.09]],
-        "1408": [["camp-road", "road", "SW3", "NE2", null, null, 6.11]],
-        "1501": [["downs-road", "trail", "NW1", "NE3", "-0.5,-0.3", null, 6.13, [0.218]]],
-        "1503": [["follyegg-road", "road", "SE3", "SW1", null, "0,0.3", 4.5]],
+        "1407": [["horse-eye-road", "road", "SE2", "NW3", null, "-0.2,0", 6.29]],
+        "1408": [["camp-road", "road", "SW3", "NE2", null, null, 6.0]],
+        "1501": [["downs-road", "trail", "NW1", "NE3", "-0.5,-0.3", null, 6.23, [0.218]]],
+        "1503": [["follyegg-road", "road", "SE3", "SW1", null, "0,0.3", 5.22]],
         "1505": [["blacke-road", "trail", "SE3", "NE3", null, "0.5,0", 2.73]],
-        "1506": [["blacke-road", "trail", "NW1", "NE1", null, "0.8,0", 5.12]],
+        "1506": [["blacke-road", "trail", "NW1", "NE1", null, "0.8,0", 5.13]],
         "1508": [
-          ["camp-road", "road", "SW2", null, "0,0.3", null, 2.67],
-          ["horse-eye-road", "road", "NW2", null, "0,0.3", "0.2,0", 3.97],
+          ["camp-road", "road", "SW2", null, "0,0.3", null, 2.65],
+          ["horse-eye-road", "road", "NW2", null, "0,0.3", "0.2,0", 4.05],
           ["kings-highway", "road", null, "SE1", "0,0.3", null, 2.89],
         ],
-        "1600": [["downs-road", "trail", "SE2", "SW1", null, "-.2,0.2", 5.08]],
+        "1600": [["downs-road", "trail", "SE2", "SW1", null, "-.2,0.2", 5.17]],
         "1603": [
           ["armsheaths-road", "trail", "S2", null, "0,0.3", null, 2.03],
-          ["follyegg-road", "road", "NE3", "NW1", "0,0.3", null, 7.96],
+          ["follyegg-road", "road", "NE3", "NW1", "0,0.3", null, 7.66],
         ],
         "1604": [
           ["blacke-road", "trail", "SW1", null, "0,0.6", null, 1.77],
           ["armsheaths-road", "trail", null, "N2", "0,0.6", "-.7,0", 5.97],
         ],
-        "1605": [["blacke-road", "trail", "NW1", "SW3", null, null, 1.23]],
+        "1605": [["blacke-road", "trail", "NW1", "SW3", null, null, 1.22]],
         "1608": [["kings-highway", "road", "NW3", "NE1", null, null, 4.11]],
-        "1701": [["downs-road", "trail", "SE2", "NW2", null, null, 6.02]],
+        "1701": [["downs-road", "trail", "SE2", "NW2", null, null, 6.15]],
         "1703": [
-          ["follyegg-road", "road", null, "SW1", "0.5,0", null, 5.09],
-          ["mirror-road", "road", "NE3", null, "0.5,0", null, 0.91],
+          ["follyegg-road", "road", null, "SW1", "0.5,0", null, 4.67],
+          ["mirror-road", "road", "NE3", null, "0.5,0", null, 1.3],
         ],
-        "1801": [["downs-road", "trail", "NW2", "S1", null, ".9,-.3", 7.45]],
+        "1801": [["downs-road", "trail", "NW2", "S1", null, ".9,-.3", 7.63]],
         "1802": [
-          ["mirror-road", "road", "SW1", null, "0,0", null, 3.09],
-          ["downs-road", "trail", null, "N3", "0,0", null, 3.14],
+          ["mirror-road", "road", "SW1", null, "0,0", null, 2.7],
+          ["downs-road", "trail", null, "N3", "0,0", null, 3.18],
         ],
       }; // end const HEX_ROADS_SHORT
 
@@ -9362,12 +9361,6 @@
         const el = document.getElementById("tog-2d");
         return el && el.dataset.active === "1";
       }
-      function toggleFog() {
-        const el = document.getElementById("tog-fog");
-        el.dataset.active = el.dataset.active !== "1" ? "1" : "0";
-        doLookAround();
-        saveState();
-      }
       function togglePlayerView() {
         const el = document.getElementById("tog-playerview");
         el.dataset.active = el.dataset.active !== "1" ? "1" : "0";
@@ -9379,20 +9372,6 @@
       function toggle2D() {
         const el = document.getElementById("tog-2d");
         el.dataset.active = el.dataset.active !== "1" ? "1" : "0";
-        doLookAround();
-        saveState();
-      }
-      function setPlayerView(on) {
-        const el = document.getElementById("tog-playerview");
-        el.dataset.active = on ? "1" : "0";
-        const fogEl = document.getElementById("tog-fog");
-        if (fogEl) fogEl.dataset.active = el.dataset.active;
-        doLookAround();
-        saveState();
-      }
-      function set2D(on) {
-        const el = document.getElementById("tog-2d");
-        el.dataset.active = on ? "1" : "0";
         doLookAround();
         saveState();
       }
@@ -9698,20 +9677,6 @@
 
       // Hex label mode: 'names' or 'terrain'
       let hexLabelMode = "names";
-      function getHexLabelMode() {
-        return hexLabelMode;
-      }
-      function setHexLabelMode(mode) {
-        hexLabelMode = mode;
-        doLookAround();
-        saveState();
-      }
-
-      function hexLabelOf(hexCode) {
-        if (hexLabelMode === "terrain") return terrainAbbrevOf(hexCode);
-        return hexNameOf(hexCode);
-      }
-
       // Helpers
       function resolveHex(input) {
         if (input === null || input === undefined) return null;
@@ -9725,11 +9690,6 @@
         if (HEXES[s]) return s;
         return null;
       } // end function resolveHex
-
-      function hexDisplay(h) {
-        const name = hexNameOf(h);
-        return name ? `${h} (${name})` : h;
-      }
 
       // Terrain colour palette for honeycomb rendering.
       const TERRAIN_COLOR = {
@@ -10146,10 +10106,6 @@
         return out;
       } // end function splitFeatures
 
-      function dirWord(d) {
-        return d; // return the abbreviation as-is (N, NE, SE, S, SW, NW)
-      }
-
       // Second ring: collect unique hexes that are 2 away, each tagged with the
       // 1st-ring hex(es) a sightline would pass through. Diagonal 2nd-ring hexes
       // have two possible intervening hexes; straight-line 2nd-ring hexes have one.
@@ -10230,7 +10186,6 @@
           journeys: "hextab-journeys",
           surroundings: "hextab-surroundings",
           entries: "add-entry",
-          about: "hextab-about",
         };
         Object.keys(map).forEach((k) => {
           const p = document.getElementById(map[k]);
@@ -11887,6 +11842,9 @@
           const segments = HEX_ROADS[hexCode];
           if (!segments) continue;
           const info = hexDrawInfo[hexCode];
+          // Player View: a hex the party cannot currently see shows no roads;
+          // revealing it via vantage reveals its roads too. Referee view is unaffected.
+          if (isPlayerView() && info && info.blocked) continue;
           const verts = hexVertices(info.drawX, info.drawY, r);
           for (const seg of segments) {
             // Resolve anchor point if present
@@ -11995,6 +11953,14 @@
               const connEdge = edgeRef.edge;
               const neighborCode = hexData[connEdge];
               if (!neighborCode || !visibleHexCodes.has(neighborCode)) continue;
+              // Player View: hide the inter-hex connector if EITHER hex is unseen.
+              if (
+                isPlayerView() &&
+                ((hexDrawInfo[hexCode] && hexDrawInfo[hexCode].blocked) ||
+                  (hexDrawInfo[neighborCode] &&
+                    hexDrawInfo[neighborCode].blocked))
+              )
+                continue;
               const thisVisH = visualHeight(hexCode);
               const neighborVisH = visualHeight(neighborCode);
               // Rule: never draw N/NE/NW connectors
@@ -12105,6 +12071,8 @@
           const segments = HEX_RIVERS[hexCode];
           if (!segments) continue;
           const info = hexDrawInfo[hexCode];
+          // Player View: an unseen hex shows no rivers (same rule as roads).
+          if (isPlayerView() && info && info.blocked) continue;
           const verts = hexVertices(info.drawX, info.drawY, r);
           for (const seg of segments) {
             let startPt, endPt;
@@ -12154,6 +12122,14 @@
               const connEdge = edgeRef.edge;
               const neighborCode = hexData[connEdge];
               if (!neighborCode || !visibleHexCodes.has(neighborCode)) continue;
+              // Player View: hide the inter-hex connector if EITHER hex is unseen.
+              if (
+                isPlayerView() &&
+                ((hexDrawInfo[hexCode] && hexDrawInfo[hexCode].blocked) ||
+                  (hexDrawInfo[neighborCode] &&
+                    hexDrawInfo[neighborCode].blocked))
+              )
+                continue;
               const thisVisH = visualHeight(hexCode);
               const neighborVisH = visualHeight(neighborCode);
               // Rule: never draw N/NE/NW connectors
@@ -12256,6 +12232,20 @@
             const ia = hexDrawInfo[A.hex],
               ib = hexDrawInfo[B.hex];
             if (!ia || !ib) continue; // both hexes must be visible
+            // Bridge the inter-hex gap with the SAME rule as road/river connectors:
+            // only on the HIGHER hex's downhill (S/SE/SW) edge toward a strictly LOWER
+            // neighbor. Never on N/NE/NW; equal elevation means the edges touch (no
+            // gap, so no connector).
+            const _aVisH = visualHeight(A.hex);
+            const _bVisH = visualHeight(B.hex);
+            if (_aVisH === _bVisH) continue;
+            const _higherEdge = _aVisH > _bVisH ? A.exitEdge : B.entryEdge;
+            if (
+              _higherEdge === "N" ||
+              _higherEdge === "NE" ||
+              _higherEdge === "NW"
+            )
+              continue;
             const startPt = edgePoint(
               hexVertices(ia.drawX, ia.drawY, r),
               A.exitEdge,
@@ -12276,7 +12266,9 @@
                 name: _wnm,
                 miles: _wmiles,
                 priority: _wprio,
-                hex: A.hex,
+                // Anchor to the HIGHER hex (like road/river connectors) so the bridge
+                // paints on top of both hexes, not hidden behind the higher neighbor.
+                hex: _aVisH >= _bVisH ? A.hex : B.hex,
               });
           }
         }
@@ -13055,6 +13047,52 @@
 
       document.addEventListener("DOMContentLoaded", initUEHexSearch);
 
+      // Present a captured PNG. iOS Safari ignores <a download> and a programmatic
+      // data-URL click silently does nothing, so we show the image in an overlay:
+      // long-press to Save on mobile, or tap Download on desktop.
+      function showCaptureResult(dataUrl, fileName) {
+        const old = document.getElementById("capture-result");
+        if (old) old.remove();
+        const ov = document.createElement("div");
+        ov.id = "capture-result";
+        ov.style.cssText =
+          "position:fixed;inset:0;z-index:10010;display:flex;flex-direction:column;" +
+          "align-items:center;justify-content:center;gap:14px;padding:20px;" +
+          "background:rgba(0,0,0,0.72);";
+        ov.addEventListener("click", function (e) {
+          if (e.target === ov) ov.remove();
+        });
+        const img = document.createElement("img");
+        img.src = dataUrl;
+        img.alt = fileName;
+        img.style.cssText =
+          "max-width:92%;max-height:70vh;border-radius:6px;" +
+          "box-shadow:0 4px 24px rgba(0,0,0,0.5);background:#fff;";
+        const hint = document.createElement("div");
+        hint.textContent = "Long-press the image to save it, or tap Download.";
+        hint.style.cssText =
+          "color:#fff;font-size:var(--fs-sm);text-align:center;max-width:92%;";
+        const row = document.createElement("div");
+        row.style.cssText = "display:flex;gap:10px;";
+        const dl = document.createElement("a");
+        dl.textContent = "Download";
+        dl.href = dataUrl;
+        dl.download = fileName;
+        dl.className = "btn btn--primary";
+        const close = document.createElement("button");
+        close.type = "button";
+        close.textContent = "Close";
+        close.className = "btn btn--ghost";
+        close.addEventListener("click", function () {
+          ov.remove();
+        });
+        row.appendChild(dl);
+        row.appendChild(close);
+        ov.appendChild(img);
+        ov.appendChild(hint);
+        ov.appendChild(row);
+        document.body.appendChild(ov);
+      }
       async function captureView() {
         const btn = document.getElementById("capture-btn");
         if (btn) {
@@ -13106,10 +13144,10 @@
           const hexInput = document.getElementById("pan-hex");
           const hexId =
             hexInput && hexInput.value ? hexInput.value.trim() : "hex";
-          const link = document.createElement("a");
-          link.download = `dolmenwood_${hexId}_${Date.now()}.png`;
-          link.href = square.toDataURL("image/png");
-          link.click();
+          showCaptureResult(
+            square.toDataURL("image/png"),
+            `dolmenwood_${hexId}_${Date.now()}.png`,
+          );
         } finally {
           if (btn) {
             btn.disabled = false;
@@ -14168,13 +14206,6 @@
         }
       }
 
-      function nameModalCancel() {
-        document.getElementById("name-modal").style.display = "none";
-        if (_nameModalResolve) {
-          _nameModalResolve(null);
-          _nameModalResolve = null;
-        }
-      }
 
       // ---- Color palette modal (reusable; resolves to a color string or null) ----
       let _colorModalResolve = null;
@@ -14245,6 +14276,22 @@
       }
 
       // Saved-journey card color dot -> recolor an existing journey anytime
+      // Click a saved journey's name to rename it (reuses the name modal).
+      async function cardNameClick(id) {
+        const tracks = trackLoadAll();
+        const t = tracks.find((x) => x.id === id);
+        if (!t) return;
+        const result = await trackPromptName(t.name || "Journey", t.color || TRACK_COLOR);
+        if (result !== null) {
+          t.name = (result.name && result.name.trim()) || t.name;
+          if (result.color) t.color = result.color;
+          trackSaveAll(tracks);
+          trackRenderList();
+          doLookAround();
+          if (typeof isInWorldMapView === "function" && isInWorldMapView())
+            renderWorldMap();
+        }
+      }
       async function cardDotClick(id) {
         const tracks = trackLoadAll();
         const t = tracks.find((x) => x.id === id);
@@ -14262,21 +14309,6 @@
 
       // Date modal state
       let _dateModalResolve = null;
-
-      function trackPromptDate() {
-        return new Promise((resolve) => {
-          _dateModalResolve = resolve;
-          document.getElementById("date-mm").value = "";
-          document.getElementById("date-dd").value = "";
-          document.getElementById("date-yyyy").value = "";
-          document.getElementById("date-modal-err").textContent = "";
-          document.getElementById("date-modal-title").textContent =
-            "Journey Date";
-          const modal = document.getElementById("date-modal");
-          modal.style.display = "flex";
-          setTimeout(() => document.getElementById("date-mm").focus(), 50);
-        });
-      }
 
       function dateModalConfirm() {
         const mm = document
@@ -14530,19 +14562,8 @@
       function tpBaseForSpeed(speed) {
         return Math.floor(speed / 5);
       }
-      function tpForcedBonus(base) {
-        return Math.floor(base * 0.5);
-      }
-
       // ---- Calendar-type modal ----
       let _calTypeModalResolve = null;
-      function trackPromptCalendarType() {
-        return new Promise((resolve) => {
-          _calTypeModalResolve = resolve;
-          const modal = document.getElementById("cal-type-modal");
-          if (modal) modal.style.display = "flex";
-        });
-      }
       function calTypeModalSelect(type) {
         const modal = document.getElementById("cal-type-modal");
         if (modal) modal.style.display = "none";
@@ -14793,18 +14814,6 @@
         };
       }
       // ---- Toggle Path / River travel mode (mutually exclusive; TP is default) ----
-      function journeyToggleMode(mode) {
-        const tracks = trackLoadAll();
-        const t = tracks.find((t) => t.id === _trackActiveId);
-        if (!t || !t.tpState) return;
-        _jrnMode = _jrnMode === mode ? "tp" : mode;
-        t.tpState.travelMode = _jrnMode;
-        _jrnLastRoadId = null;
-        _tpFlashHex = null;
-        trackSaveAll(tracks);
-        trackUpdateUI();
-        doLookAround();
-      }
       // Explicit travel-mode set (for the Wild|Path|River segmented control).
       function journeySetMode(mode) {
         const tracks = trackLoadAll();
@@ -15034,8 +15043,9 @@
       function jrnSegDeadT(seg) {
         return !seg.enter ? 0 : 1;
       }
-      // The party's resting position within a hex's segment: dead-end if it terminates
-      // here, otherwise the midpoint (0.5) for a pass-through.
+      // The party's resting position within a hex's segment: the segment's stop (its
+      // last stopsT entry) if it has any; otherwise the dead-end if it terminates
+      // here, or the midpoint (0.5) for a plain pass-through.
       function jrnSegInnerT(seg) {
         const _st = seg.stopsT;
         if (_st != null && _st.length) {
@@ -15260,6 +15270,9 @@
         t.tpState.tpRemaining = base;
         _jrnIgnoreRest = false;
         t.tpState.ignoreRest = false;
+        t.tpState.encounter = false; // Rest clears any showing encounter
+        _jrnEncounter = false;
+        t.tpState.encounterAct = null;
         t.tpState.lostClearedPending = false;
         t.tpState.lastLostAction = null;
         jrnActNext(t);
@@ -15303,6 +15316,9 @@
         t.tpState.tpRemaining = base;
         _jrnIgnoreRest = false;
         t.tpState.ignoreRest = false;
+        t.tpState.encounter = false; // Rest clears any showing encounter
+        _jrnEncounter = false;
+        t.tpState.encounterAct = null;
         t.tpState.lostClearedPending = false;
         t.tpState.lastLostAction = null;
         jrnActNext(t);
@@ -15391,11 +15407,23 @@
       // Referee clears the lost state once the party finds their way.
       // Encounter: rolled ONCE per day, the first time TP/miles reach or drop below
       // half the day's BASE total. Based purely on DESTINATION terrain (2TP=1/6,
-      // 3TP=2/6, 4TP=3/6) -- never affected by road/trail/river. Auto-clears on the
-      // next hex click. Mutates t (caller persists).
+      // 3TP=2/6, 4TP=3/6) -- never affected by road/trail/river. PERSISTS until the
+      // party Rests or manually clears it, and blocks new encounters until then.
+      // Mutates t (caller persists).
       function jrnRollEncounter(t, destHex) {
+        // WHEN AN ENCOUNTER IS CHECKED: post-commit, after a completed move into
+        // destHex, the FIRST time the day's remaining TP/miles fall to or below HALF of
+        // the day's base -- and then only ONCE per day.
+        // WHEN IT IS NOT CHECKED (each early-return below):
+        //  * no active journey / tpState;
+        //  * Ignore-Resting is on (resource mechanics paused -> no half threshold);
+        //  * an uncleared Encounter is still showing -- NO new encounter can be met
+        //    until the party Rests or clears the current one;
+        //  * the daily check was already spent this day (once per day);
+        //  * remaining is still ABOVE half the day's base (threshold not reached).
         if (!t || !t.tpState) return;
-        if (_jrnIgnoreRest) return; // resource mechanics paused -> no threshold
+        if (_jrnIgnoreRest) return;
+        if (t.tpState.encounter) return; // uncleared encounter blocks new checks
         if (t.tpState.encounterCheckedDay === t.tpState.day) return; // once per day
         const base = tpBaseForSpeed(t.tpState.speed);
         if (t.tpState.tpRemaining > base / 2 + 1e-9) return; // not yet at/below half
@@ -15406,6 +15434,8 @@
         if (Math.floor(Math.random() * 6) + 1 <= chance) {
           t.tpState.encounter = true;
           _jrnEncounter = true;
+          jrnActNext(t); // own action id so Undo can target just this event
+          t.tpState.encounterAct = t.tpState._curAct;
           jrnLogPush(
             t,
             jrnLogPrefix(t) + JRN_LOG.encounter(jrnLogHex(destHex)),
@@ -15491,6 +15521,9 @@
         t.tpState.tpRemaining = base;
         _jrnIgnoreRest = false;
         t.tpState.ignoreRest = false;
+        t.tpState.encounter = false; // Rest clears any showing encounter
+        _jrnEncounter = false;
+        t.tpState.encounterAct = null;
         t.tpState.lostClearedPending = false;
         t.tpState.lastLostAction = null;
         jrnActNext(t);
@@ -15685,6 +15718,7 @@
 
         _jrnSpeed = 30;
         _jrnForceMarch = false;
+        _jrnIgnoreRest = false; // fresh journey -> regular resting rules
         _jrnMode = "tp";
         _jrnLastRoadId = null;
         const tpBase = tpBaseForSpeed(_jrnSpeed);
@@ -15706,6 +15740,7 @@
             tpRemaining: tpBase,
             travelDaysSinceRest: 0,
             travelMode: "tp",
+            ignoreRest: false,
             actionSeq: 0,
           },
           journeyLog: [],
@@ -15753,6 +15788,7 @@
         _trackPrepend = false;
         _trackIsNew = false;
         _jrnForceMarch = false;
+        _jrnIgnoreRest = false;
         _jrnSpeed = 30;
         _jrnMode = "tp";
         _jrnLastRoadId = null;
@@ -15823,11 +15859,10 @@
         const t = tracks.find((t) => t.id === _trackActiveId);
         if (!t) return false;
 
-        // Encounter auto-clears the moment the party clicks another hex.
-        if (t.tpState && t.tpState.encounter) {
-          t.tpState.encounter = false;
-        }
-        _jrnEncounter = false;
+        // An Encounter PERSISTS until the party Rests or manually clears it -- it does
+        // NOT auto-clear on movement. Re-derive the banner flag from saved state so it
+        // survives navigation between hexes.
+        _jrnEncounter = !!(t.tpState && t.tpState.encounter);
 
         // Backwards compat: initialise tpState if missing (old saved tracks)
         if (!t.tpState) {
@@ -15967,8 +16002,8 @@
           }
           // --- Intermediate stop: check if any road in the current hex that touches
           // the exit edge has a stop between our position and that edge. This handles
-          // both same-road stops AND split-path stops (switching to a new road). ---
-          if (!_spSpecial && !_trackPrepend && _jrnLastRoadId) {
+          // both same-road stops AND road-switch stops (switching to a new road). ---
+          if (!_spSpecial && !_trackPrepend && (_jrnLastRoadId || _jrnMode !== "tp")) {
             const _isNet = jrnCurrentNetwork();
             const _curSegs = _isNet ? _isNet[currentHex] || [] : [];
             // Check all roads touching the exit edge (covers current road + any split candidate)
@@ -15992,18 +16027,46 @@
             for (const _seg of _exitCandidates) {
               // Determine our position on this segment
               let _curT;
-              if (_seg.id === _jrnLastRoadId) {
-                const _posT = jrnCurrentPosT(
+              const _posHere = jrnCurrentPosT(
+                currentHex,
+                _seg.id,
+                _jrnMode === "river",
+              );
+              if (_posHere != null) {
+                // Already positioned on this road (mid-journey) -> stay put.
+                _curT = _posHere;
+              } else if (!_jrnLastRoadId) {
+                // QUESTION A -- the single "where do I start on a road" rule.
+                // Stationary start: a fresh journey, or Path/River just toggled while
+                // sitting in a hex in Wild. We are at the hex centre with no active road,
+                // so board this road at its INTERSECT (jrnSegPit = the point nearest the
+                // centre). Any stop farther along stays AHEAD and is caught by the scan
+                // below, so leaving this hex pauses at it -- matching arrivals.
+                _curT = jrnSegPit(
                   currentHex,
                   _seg.id,
                   _jrnMode === "river",
+                  500,
+                  500,
+                  100,
                 );
-                _curT = _posT != null ? _posT : jrnSegInnerT(_seg);
+              } else if (_seg.id === _jrnLastRoadId) {
+                // Same road, no recorded position -> rest point.
+                _curT = jrnSegInnerT(_seg);
               } else {
-                // Switching roads: board the new road at the stop -- or, if it terminates,
-                // its dead-end -- physically nearest to where the road we came in on
-                // runs. Including the dead-end lets a road meeting another AT its
-                // dead-end board there, so stops further along are still met en route.
+                // Switching roads (QUESTION B -- a DIFFERENT question from "where do I
+                // start"; it is about how two roads connect, so it stays a separate rule).
+                // Two cases, both handled by this one search:
+                //  (1) The roads share a junction -- either an ANCHOR they both pass
+                //      through, or a common dead-end (e.g. Lankshorn in 0710, Odd in
+                //      1403). Because terminating roads land at that point, the nearest
+                //      stop-or-dead-end search naturally boards there -- we "travel
+                //      through" the shared point, exactly as a party would.
+                //  (2) The roads do NOT share a junction but converge (e.g. creek-path
+                //      & downs-road both exiting 0702 via NW): board the new road at the
+                //      stop/dead-end geometrically nearest where the old road runs.
+                // We include the dead-end as a candidate so case (1) works for
+                // terminating roads met at their dead-end.
                 const _BX = 500,
                   _BY = 500,
                   _BR = 100;
@@ -16047,9 +16110,30 @@
                 }
                 _curT = _board != null ? _board : jrnSegInnerT(_seg);
               }
-              const _exitFrac = jrnEdgeFrac(_seg, edgeAtoB);
-              if (_exitFrac === null) continue;
-              // Collect stops between current position and exit
+              let _exitFrac = jrnEdgeFrac(_seg, edgeAtoB);
+              // A terminating CURRENT road that does not reach the clicked edge is
+              // heading to a junction: its dead-end is itself a stop (the switch point),
+              // but only when another road actually continues out that edge. Without
+              // this, adding any stopsT to such a road orphans its dead-end junction.
+              let _termStop = null;
+              if (_exitFrac === null) {
+                if (
+                  _seg.id === _jrnLastRoadId &&
+                  jrnSegTerm(_seg) &&
+                  _curSegs.some(
+                    (s) =>
+                      s.id !== _seg.id &&
+                      ((s.enter && s.enter.edge === edgeAtoB) ||
+                        (s.exit && s.exit.edge === edgeAtoB)),
+                  )
+                ) {
+                  _termStop = jrnSegDeadT(_seg);
+                  _exitFrac = _termStop;
+                } else {
+                  continue;
+                }
+              }
+              // Collect stops strictly between current position and exit...
               const _stops = _seg.stopsT
                 .filter((v) => typeof v === "number")
                 .filter((v) =>
@@ -16057,6 +16141,9 @@
                     ? v > _curT + 1e-9 && v < _exitFrac - 1e-9
                     : v < _curT - 1e-9 && v > _exitFrac + 1e-9,
                 );
+              // ...plus the terminating dead-end itself (the junction), if not already there.
+              if (_termStop != null && Math.abs(_termStop - _curT) > 1e-6)
+                _stops.push(_termStop);
               if (_stops.length === 0) continue;
               _stops.sort((a, b) => (_exitFrac > _curT ? a - b : b - a));
               const _nextStop = _stops[0];
@@ -16404,7 +16491,7 @@
         // mode at the moment of the move; pathId is the shared road/river id (null in TP mode).
         const _moveMode = _jrnMode;
         const _movePathId = _jrnMode === "tp" ? null : _jrnLastRoadId;
-        const _resOutId = null; // split-path removed; kept for compat
+        const _resOutId = null; // road-switch out-id removed; kept for compat
         const _prevOutMode = _spSpecial ? _spOutMode : _moveMode;
         const _prevOutPathId = _spSpecial
           ? _spOutPath
@@ -16413,10 +16500,16 @@
         const _newInPathId = _spSpecial ? _spInPath : _movePathId;
 
         // ---- Lost check (off-road only; once per day) ----
-        // Validity + resource have already passed above. If the party gets lost, ABORT
-        // the move: refund the cost, add NO waypoint, stay put -- the roll IS the turn.
-        // Wild uses SOURCE terrain odds (2TP=1/6, 3TP=2/6, 4TP=3/6); trail is a flat 1/6.
-        // Roads and rivers never get lost and do not consume the daily check.
+        // WHEN LOST IS CHECKED: pre-commit, on a Wild move (any terrain) or a move along
+        // a TRAIL. If the party gets lost the move is ABORTED: refund the cost, add NO
+        // waypoint, stay put -- the roll IS the turn. Odds: Wild uses SOURCE terrain
+        // (2TP=1/6, 3TP=2/6, 4TP=3/6); a trail is a flat 1/6.
+        // WHEN IT IS NOT CHECKED:
+        //  * Edit-Origin (prepend) edits are exempt;
+        //  * the daily check was already spent this day (once per day);
+        //  * the party is already Lost;
+        //  * the move is along a ROAD or a RIVER -- these never get lost and do not
+        //    consume the daily check (enforced by the _lkind guard below).
         if (
           !_trackPrepend &&
           t.tpState &&
@@ -16499,8 +16592,11 @@
             actionId: t.tpState ? t.tpState._curAct : null,
           });
         }
-        // ---- Journey log: record this move (skip Edit-Origin corrections) ----
-        if (!_trackPrepend && t.tpState) {
+        // ---- Journey log: record this move. In Edit-Origin (prepend) mode the leg
+        // happened EARLIER in time, so its entry is PREPENDED to the front of the
+        // log; Undo then removes front-first (oldest-timeline entry first) via the
+        // removed waypoint's actionId filter. ----
+        if (t.tpState) {
           const _lgHex = jrnLogHex(targetHex);
           const _remain = jrnFmtMiles(
             jrnRoundHalf(t.tpState.tpRemaining * JRN_MILES_PER_TP),
@@ -16544,7 +16640,13 @@
                 ? JRN_LOG.riverMove(_nm, _lgHex, _remain, _total)
                 : JRN_LOG.pathMove(_nm, _lgHex, _remain, _total);
           }
-          jrnLogPush(t, jrnLogPrefix(t) + _lgLine);
+          const _logEntry = {
+            act: (t.tpState && t.tpState._curAct) || 0,
+            text: jrnLogPrefix(t) + _lgLine,
+          };
+          if (!t.journeyLog) t.journeyLog = [];
+          if (_trackPrepend) t.journeyLog.unshift(_logEntry);
+          else t.journeyLog.push(_logEntry);
         }
         if (_flipToTpAfter) {
           _jrnMode = "tp";
@@ -16568,6 +16670,24 @@
         const tracks = trackLoadAll();
         const t = tracks.find((t) => t.id === _trackActiveId);
         if (!t) return;
+
+        // Undo an Encounter first (most-recent event; adds no waypoint) -> clear the
+        // banner and refund the day's encounter check so it can roll again. A second
+        // Undo then removes the move itself.
+        if (t.tpState && t.tpState.encounter) {
+          t.tpState.encounter = false;
+          _jrnEncounter = false;
+          t.tpState.encounterCheckedDay = null;
+          if (t.tpState.encounterAct != null && t.journeyLog)
+            t.journeyLog = t.journeyLog.filter(
+              (e) => e.act !== t.tpState.encounterAct,
+            );
+          t.tpState.encounterAct = null;
+          trackSaveAll(tracks);
+          trackUpdateUI();
+          doLookAround();
+          return;
+        }
 
         // Undo a just-cleared Lost first (most-recent action) -> bring Lost back.
         if (t.tpState && t.tpState.lostClearedPending) {
@@ -16781,7 +16901,7 @@
             return `<li class="track-card${isActive ? " track-card--active" : ""}" style="border-left-color:${color};background:${color}14;">
       <div class="track-card-head">
         <button type="button" class="track-card-dot" title="Change color" onclick="cardDotClick('${t.id}')" style="background:${color};border:none;padding:0;cursor:pointer;"></button>
-        <span class="track-card-title">${escapeHtml(t.name)}</span>
+        <span class="track-card-title" title="Rename journey" onclick="cardNameClick('${t.id}')">${escapeHtml(t.name)}</span>
       </div>
       <div class="track-card-sub"><span>${dateLine}</span></div>
       <div class="track-card-sub">${escapeHtml(fromHex)} &#8594; ${escapeHtml(toHex)} &middot; ${hexCount} hex${hexCount !== 1 ? "es" : ""}</div>
@@ -17170,7 +17290,7 @@
                   );
                   if (d) segs.push({ d, color: _jc });
                 } else {
-                  // onboard: board at the dead-end if the road terminates here (Option X),
+                  // onboard: board at the dead-end if the road terminates here,
                   // else at the pathIntersect. Stub center -> board point, then board -> exit.
                   const boardT = jrnSegTerm(seg) ? jrnSegDeadT(seg) : pit;
                   const boardPt = jrnPointAtT(
@@ -17698,13 +17818,6 @@
         </div>
         <div class="modal__actions">
           <button
-            class="btn btn--ghost"
-            type="button"
-            onclick="nameModalCancel()"
-          >
-            Cancel
-          </button>
-          <button
             class="btn btn--primary"
             type="button"
             onclick="nameModalConfirm()"
@@ -17743,10 +17856,10 @@
             id="color-modal-custom"
             oninput="colorModalPick(this.value)"
             style="
-              width: 28px;
-              height: 28px;
+              width: 44px;
+              height: 26px;
               border: 1px solid var(--ink);
-              border-radius: 50%;
+              border-radius: 4px;
               overflow: hidden;
               background: transparent;
               cursor: pointer;
