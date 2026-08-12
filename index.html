@@ -102,7 +102,168 @@
         --t-fast: 120ms ease;
         --t: 150ms ease;
         --t-slow: 200ms ease;
+        /* ===== MAP & TOOLTIP COLORS (edit these + the night-mode block below) ===== */
+        --road: #d4aa30;
+        --road-dim: #e5cc83;
+        --road-dot: #9a7a20;
+        --road-dot-dim: #cdaf79;
+        --river: #6a8a9e;
+        --river-dim: #aebaba;
+        --lake: #6a8a9e;
+        --lake-dim: #aebaba;
+        --road-label: #ffe000;
+        --hex-center-fill: #2a2420;
+        --tooltip-bg1: rgba(249, 243, 227, 0.98);
+        --tooltip-bg2: rgba(232, 220, 195, 0.98);
+        --tooltip-border: rgba(107, 94, 78, 0.75);
+        --tooltip-inner-border: rgba(107, 94, 78, 0.2);
+        --prominent-bg: rgba(180, 140, 0, 0.7);
+        --prominent-bg-soft: rgba(180, 140, 0, 0.3);
+        --prominent-border: #966e00;
+        --prominent-text: #fff;
+        --hidden-bg: #e8e8e8;
+        --hidden-border: #2a2420;
+        --hex-center-edge: #000000;
+        --hex-center-edge-2: #1a1a1a;
+        --hex-center-outline: var(--border-strong);
+        --hex-center-text: #f9f3e3;
         /* ===== END DESIGN TOKENS ===== */
+
+      }
+      /* ===== NIGHT MODE (Settings > UI) — dark parchment palette. Overrides color tokens
+         only; spacing/fonts/radii unchanged. Journey colors are per-journey values, untouched. */
+      :root.night-mode {
+        /* Synthwave night: neon cyan / magenta / purple on deep navy-black. */
+        --ink: #eaf6ff;
+        --ink-soft: #b7c2ee;
+        --ink-faded: #8b8fd0;
+        --parchment: #12122a;
+        --parchment-deep: #0b0b1c;
+        --parchment-light: #1c1c3e;
+        --moss: #16c8d8;
+        --moss-deep: #0e93a6;
+        --ochre: #b06cf0;
+        --rust: #ff4d8d;
+        --sky: #4fb8ff;
+        --shadow: rgba(120, 40, 200, 0.35);
+        --border: #3a3a72;
+        --border-strong: #7a7ad0;
+        --focus-ring: #22e0ff;
+        --danger: #ff4d8d;
+        --danger-hover: #ff77a8;
+        --lost: #7a7ad0;
+        --lost-text: #cdd2ff;
+        --encounter: #ff2d7a;
+        --encounter-text: #ff77a8;
+        --meter-good: #22e0c0;
+        --meter-warn: #f5b942;
+        --meter-low: #ff3b6b;
+        --backdrop: rgba(8, 4, 24, 0.82);
+        --fill: #d63aa8;
+        --fill-text: #0b0b1c;
+        --fill-border: #ff5cc0;
+        --toggle-on-bg: #16c8d8;
+        --toggle-on-text: #08121a;
+        --toggle-on-border: #22e0ff;
+        --toggle-quiet-bg: rgba(176, 108, 240, 0.16);
+        --toggle-quiet-fg: #c79bff;
+        --toggle-quiet-border: #b06cf0;
+        --tab-active: #d63aa8;
+        --shadow-sm: 0 1px 3px rgba(120, 40, 200, 0.4);
+        --shadow-md: 0 4px 14px rgba(120, 40, 200, 0.45);
+        --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.7);
+        /* ----- map & tooltip colors (night) ----- */
+        --road: #c77dff;
+        --road-dim: #6a4a8a;
+        --road-dot: #e0b3ff;
+        --road-dot-dim: #7a5c9a;
+        --river: #22c8ff;
+        --river-dim: #2a5a7a;
+        --lake: #1f9fe0;
+        --lake-dim: #2a5a7a;
+        --road-label: #22e0ff;
+        --hex-center-fill: #e9e4ff;
+        --tooltip-bg1: rgba(28, 28, 62, 0.98);
+        --tooltip-bg2: rgba(11, 11, 28, 0.98);
+        --tooltip-border: #3a3a72;
+        --tooltip-inner-border: rgba(122, 122, 208, 0.35);
+        --prominent-bg: rgba(214, 58, 168, 0.85);
+        --prominent-bg-soft: rgba(214, 58, 168, 0.28);
+        --prominent-border: #ff5cc0;
+        --prominent-text: #fff;
+        --hidden-bg: #23233f;
+        --hidden-border: #4a4a72;
+        --hex-center-edge: #8f86c4;
+        --hex-center-edge-2: #a79edb;
+        --hex-center-text: #1c1c3e;
+      }
+      .segmented--3 .toggle { flex: 1; }
+      /* ===== MODERN THEME (Settings > UI) — white/gray Apple aesthetic, blue accent,
+         muted terrain, modern red for type tags + directions. Journey colors untouched. */
+      :root.modern-mode {
+        --ink: #1d1d1f;
+        --ink-soft: #515154;
+        --ink-faded: #86868b;
+        --parchment: #ffffff;
+        --parchment-deep: #f5f5f7;
+        --parchment-light: #fbfbfd;
+        --moss: #0071e3;
+        --moss-deep: #0058b0;
+        --ochre: #86868b;
+        --rust: #d70015;
+        --sky: #0071e3;
+        --shadow: rgba(0, 0, 0, 0.10);
+        --border: #d2d2d7;
+        --border-strong: #86868b;
+        --focus-ring: #0071e3;
+        --danger: #d70015;
+        --danger-hover: #b3000f;
+        --lost: #a1a1a6;
+        --lost-text: #6e6e73;
+        --encounter: #d70015;
+        --encounter-text: #b3000f;
+        --meter-good: #34c759;
+        --meter-warn: #ff9500;
+        --meter-low: #ff3b30;
+        --backdrop: rgba(0, 0, 0, 0.35);
+        --fill: #0071e3;
+        --fill-text: #ffffff;
+        --fill-border: #0071e3;
+        --toggle-on-bg: #0071e3;
+        --toggle-on-text: #ffffff;
+        --toggle-on-border: #0071e3;
+        --toggle-quiet-bg: rgba(0, 113, 227, 0.10);
+        --toggle-quiet-fg: #0071e3;
+        --toggle-quiet-border: #0071e3;
+        --tab-active: #0071e3;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.10);
+        --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.16);
+        /* map & tooltip (modern) */
+        --road: #c98a3e;
+        --road-dim: #e0c79a;
+        --road-dot: #9a6d2e;
+        --road-dot-dim: #cbb389;
+        --river: #7fb2d4;
+        --river-dim: #c2d8e4;
+        --lake: #7fb2d4;
+        --lake-dim: #c2d8e4;
+        --road-label: #0071e3;
+        --hex-center-fill: #ffffff;
+        --hex-center-edge: #d8d8dc;
+        --hex-center-edge-2: #e6e6ea;
+        --hex-center-outline: #0071e3;
+        --hex-center-text: #1d1d1f;
+        --tooltip-bg1: rgba(255, 255, 255, 0.98);
+        --tooltip-bg2: rgba(245, 245, 247, 0.98);
+        --tooltip-border: rgba(0, 0, 0, 0.14);
+        --tooltip-inner-border: rgba(0, 0, 0, 0.06);
+        --prominent-bg: rgba(255, 149, 0, 0.9);
+        --prominent-bg-soft: rgba(255, 149, 0, 0.14);
+        --prominent-border: #ff9500;
+        --prominent-text: #ffffff;
+        --hidden-bg: #f3eefc;
+        --hidden-border: #7c3aed;
       }
       * {
         box-sizing: border-box;
@@ -232,7 +393,7 @@
         content: "";
         position: absolute;
         inset: 3px;
-        border: 1px solid rgba(107, 94, 78, 0.2);
+        border: 1px solid var(--tooltip-inner-border);
         pointer-events: none;
         border-radius: 1px;
       }
@@ -252,9 +413,15 @@
       }
       .hex-search-field {
         position: relative;
-        flex: 1 1 220px;
-        min-width: 180px;
+        flex: 1 1 200px;
+        min-width: 150px;
       }
+      .settings-gear { flex: 0 0 auto; align-self: end; width: 40px; height: 40px; border: 1px solid var(--ink-faded); border-radius: 6px; background: var(--parchment-light); color: var(--ink); font-size: 20px; line-height: 1; cursor: pointer; }
+      .settings-gear:hover { background: rgba(44, 24, 16, 0.08); }
+      .settings-section { margin-bottom: 18px; }
+      .settings-head { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faded); border-bottom: 1px solid var(--ink-faded); padding-bottom: 4px; margin-bottom: 6px; }
+      .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: var(--fs-sm); color: var(--ink); cursor: pointer; }
+      .settings-row input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; flex: 0 0 auto; }
       .search-results {
         position: absolute;
         top: calc(100% + 2px);
@@ -478,11 +645,11 @@
         padding: 12px 14px;
         background: linear-gradient(
           180deg,
-          rgba(249, 243, 227, 0.98) 0%,
-          rgba(232, 220, 195, 0.98) 100%
+          var(--tooltip-bg1) 0%,
+          var(--tooltip-bg2) 100%
         );
         color: var(--ink);
-        border: 1px solid rgba(107, 94, 78, 0.75);
+        border: 1px solid var(--tooltip-border);
         border-radius: 2px;
         box-shadow: 0 8px 20px rgba(26, 22, 18, 0.22);
         pointer-events: none;
@@ -500,7 +667,7 @@
         content: "";
         position: absolute;
         inset: 3px;
-        border: 1px solid rgba(107, 94, 78, 0.2);
+        border: 1px solid var(--tooltip-inner-border);
         pointer-events: none;
       }
       .hex-tooltip-title {
@@ -548,11 +715,11 @@
         padding: 6px 10px;
         background: linear-gradient(
           180deg,
-          rgba(249, 243, 227, 0.98) 0%,
-          rgba(232, 220, 195, 0.98) 100%
+          var(--tooltip-bg1) 0%,
+          var(--tooltip-bg2) 100%
         );
         color: var(--ink);
-        border: 1px solid rgba(107, 94, 78, 0.75);
+        border: 1px solid var(--tooltip-border);
         border-radius: 2px;
         box-shadow: 0 4px 12px rgba(26, 22, 18, 0.22);
         pointer-events: none;
@@ -572,7 +739,7 @@
       }
       /* Road / anchor hover highlight */
       .road-highlight {
-        stroke: #ffe000 !important;
+        stroke: var(--road-label) !important;
         stroke-width: 3.5px !important;
       }
       .journey-highlight {
@@ -585,7 +752,7 @@
         fill: #00d4ff !important;
       }
       .anchor-highlight {
-        fill: #ffe000 !important;
+        fill: var(--road-label) !important;
       }
       .road-tooltip .road-type-label {
         font-family: var(--font-body);
@@ -660,7 +827,7 @@
         stroke-linejoin: round;
       }
       .hex-shape.center {
-        fill: #2a2420;
+        fill: var(--hex-center-fill);
         cursor: pointer;
       }
       .hex-shape.center:hover {
@@ -692,7 +859,7 @@
         font-weight: 600;
       }
       .hex-text.center-text {
-        fill: var(--parchment-light);
+        fill: var(--hex-center-text);
       }
       .hex-text.empty-text {
         fill: var(--ink-faded);
@@ -1808,6 +1975,9 @@
       .modal__panel--sm {
         max-width: 300px;
       }
+      #settings-modal .modal__panel {
+        max-width: var(--hud-w);
+      }
       .modal__panel--lg {
         max-width: 620px;
       }
@@ -1854,11 +2024,11 @@
       }
       .pv-hex-graphic {
         width: 100%;
-        max-width: 240px;
+        max-width: var(--hex-graphic-w);
         margin: 0 auto;
       }
       .pv-hex-graphic .neighbor-honeycomb {
-        max-width: 320px;
+        max-width: var(--hex-graphic-w);
       }
       .pv-row-top,
       .pv-row-bottom {
@@ -2199,6 +2369,7 @@
                 hidden
               ></div>
             </div>
+            <button type="button" id="settings-btn" class="settings-gear" title="Settings" aria-label="Settings" onclick="openSettings()">&#9881;</button>
             <input id="pan-hex" type="hidden" value="" />
             <input id="pan-vantage" type="hidden" value="6" />
             <input id="tog-fog" type="hidden" data-active="0" />
@@ -2916,7 +3087,7 @@
             {
               name: "The Crimson Bath",
               type: "POI",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "inn",
               desc: "Inn housing the head of the rebels seeking to overthrow Lord Murkin",
             },
           ],
@@ -3229,7 +3400,7 @@
               type: "Civilization",
               prominent: true,
               height: 70,
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "keep",
               desc: "Blocky dark stone keep upon rocky motte. Home to Lord Murkin",
             },
             {
@@ -3296,7 +3467,7 @@
             {
               name: "Nodding Castle",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "castle",
               desc: "Decaying castle home of Lord Nodlock surrounded by a moat of bog corpses",
             },
           ],
@@ -3680,7 +3851,7 @@
             {
               name: "Mother Goat's Place",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "inn",
               desc: "Friendly inn run by a shorthorn woman who has relations with a wolf",
             },
           ],
@@ -3932,7 +4103,7 @@
             {
               name: "Hamlet of Galblight",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "hamlet",
               desc: "A small goatfolk town ruled by Captain Cabruc Lockehorn, loyal to Ramius",
             },
           ],
@@ -3959,7 +4130,7 @@
               type: "Civilization",
               prominent: true,
               height: 130,
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "castle",
               desc: "Keep of Lord Ramius. Icy caverns, ancestral crypts, and monument below",
             },
           ],
@@ -4318,7 +4489,7 @@
             {
               name: "Inn of the Tankards",
               type: "Adventure Site",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "inn",
               desc: "Hostile cursed sentient inn that feeds off of terror, strife, and murder",
             },
           ],
@@ -4351,7 +4522,7 @@
               type: "Civilization",
               prominent: true,
               height: 110,
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "town",
               desc: "Capitol of the High Wold and home of Baron Hogwarsh",
             },
             {
@@ -4469,7 +4640,7 @@
               type: "Civilization",
               prominent: true,
               height: 80,
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "village",
               desc: "Old stone keep guarding the northern rivers",
             },
             {
@@ -4765,7 +4936,7 @@
             {
               name: "Drigbolton",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "hamlet",
               desc: "Small hamlet on the edge of the Tabledowns",
             },
             {
@@ -4801,7 +4972,7 @@
             {
               name: "Midgewarrow",
               type: "Adventure Site",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "ruins",
               desc: "Abandoned two century old town struck by plague",
             },
             {
@@ -4844,7 +5015,7 @@
             {
               name: "Secluded Manor",
               type: "POI",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "manor",
               desc: "Manor home of one of the reclusive high witches and aunt of Harrowmoor",
             },
           ],
@@ -4952,7 +5123,7 @@
             {
               name: "Hamlet of Shagsend",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "hamlet",
               desc: "Shorthorn village headed for conflict with the Drune",
             },
           ],
@@ -4977,7 +5148,7 @@
             {
               name: "Redwraith Manor",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "manor",
               desc: "Home of Lord Malbleat",
             },
             {
@@ -5007,7 +5178,7 @@
             {
               name: "Lankshorn",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "town",
               desc: "Large town at the edge of the Dolmenwood",
             },
             {
@@ -5043,7 +5214,7 @@
             {
               name: "Quivering Dolly",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "inn",
               desc: "Small local inn",
             },
             {
@@ -5232,7 +5403,7 @@
             {
               name: "Mallowhearts Repose",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "manor",
               prominent: true,
               height: 40,
               desc: "Decrepit manor house now turned into an inn",
@@ -5621,7 +5792,7 @@
               type: "Dungeon",
               prominent: true,
               height: 80,
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "abbey",
               desc: "Charmed children are in the area where an ancient crypt was destroyed by the forces of chaos",
             },
             {
@@ -5738,7 +5909,7 @@
             {
               name: "Jaunty Horn",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "inn",
               desc: "Bridgelike inn",
             },
             {
@@ -5799,7 +5970,7 @@
             {
               name: "Swinescombe",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "hamlet",
               desc: "Town recently taken over by pigs.",
             },
           ],
@@ -6088,7 +6259,7 @@
             {
               name: "House of Harridwn",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "inn",
               desc: "Haunted, but welcoming inn",
             },
             {
@@ -6298,7 +6469,7 @@
               type: "POI",
               prominent: true,
               height: 90,
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "keep",
               desc: "Ancestral home of the Harrowmoor family",
             },
           ],
@@ -6324,7 +6495,7 @@
             {
               name: "Prigwort",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "town",
               desc: "Town",
             },
             {
@@ -6417,14 +6588,14 @@
           SW: "1009",
           NW: "1008",
           features:
-            "Black water, copses, rolling mist; encampment beside river; at night, flame burns in church tower",
+            "Black water, copses, rolling mist; village beside river; at night, flame burns in church tower",
           modules: [
             {
               name: "Woodcutters Encampment",
               type: "Civilization",
               prominent: true,
               height: 40,
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "village",
               desc: "Town",
             },
             {
@@ -6472,7 +6643,7 @@
             {
               name: "Dreg",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "village",
               desc: "Town",
             },
           ],
@@ -6523,7 +6694,7 @@
             {
               name: "Falls of Nyf",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "waterfall",
               desc: "Ships are magically flown up and down the falls",
             },
             {
@@ -6640,7 +6811,7 @@
             {
               name: "Breath of the Kelpie",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "inn",
               desc: "Inn run by a notorious purveyor of information",
             },
             {
@@ -6793,7 +6964,7 @@
               type: "Civilization",
               prominent: true,
               height: 40,
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "manor",
               desc: "Home of Pollard, the head of the Woodcutters and his drug haunted manse",
             },
           ],
@@ -6821,7 +6992,7 @@
               type: "POI",
               prominent: true,
               height: 70,
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "manor",
               desc: "A depraved mushroom infested noble family slowly decaying and rotting",
             },
             {
@@ -6986,7 +7157,7 @@
             {
               name: "Hall of Sleep",
               type: "POI",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "manor",
               desc: "Manor home of Lord Guillefer",
             },
           ],
@@ -7075,7 +7246,7 @@
               type: "Civilization",
               prominent: true,
               height: 40,
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "monastery",
               desc: "A small roadside monastary with a common room",
             },
             {
@@ -7135,7 +7306,7 @@
             {
               name: "The Roost",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "treehouse",
               desc: "A relaxed treehouse inn among a trio of beeches",
             },
             {
@@ -7312,7 +7483,7 @@
             {
               name: "Odd",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "village",
               desc: "Town of Odd",
             },
           ],
@@ -7377,7 +7548,7 @@
               type: "Civilization",
               prominent: true,
               height: 60,
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "village",
               desc: "Center of Mossling culture",
             },
             {
@@ -7556,7 +7727,7 @@
             {
               name: "Ruined Hamlet",
               type: "POI",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "hamlet",
               desc: "Town filled with friendly skeletons who do not realize they are dead",
             },
           ],
@@ -7751,14 +7922,14 @@
           SW: "1408",
           NW: "1407",
           features:
-            "Tilled fields, farms, and hamlets; fortified castle and keep atop a hill, walled town below; hill with oak and heather trees, surrounded by barrows",
+            "Tilled fields, farms, and hamlets; fortified castle and keep atop a hill, walled city below; hill with oak and heather trees, surrounded by barrows",
           modules: [
             {
               name: "Castle Brackenwold",
               type: "Civilization",
               prominent: true,
               height: 140,
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "city",
               desc: "The fortified keep and castle of Duke of Brackenwold",
             },
             {
@@ -7916,7 +8087,7 @@
             {
               name: "Blackeswell",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "village",
               desc: "Half dericlict mining town",
             },
             {
@@ -8130,7 +8301,7 @@
             {
               name: "Meagre's Reach",
               type: "Civilization",
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "village",
               desc: "Village dedicated to clay work and brick making. Trapped out of time",
             },
             {
@@ -8330,7 +8501,7 @@
               type: "Civilization",
               prominent: true,
               height: 120,
-              isAnchor: true,
+              isAnchor: true, playerAnchorName: "manor",
               desc: "Home of the great fairy witch Ygraine",
             },
             {
@@ -8974,17 +9145,17 @@
         "0601": [["downs-road", "trail", "SE2", "NW1", null, "0,-0.3", 6.11]],
         "0604": [
           ["fort-road", "road", "SE3", null, "-0.1,0.8", null, 3.18],
-          ["creek-path", "trail", null, "NE3", "-0.1,0.8", "0,0", 7.61],
+          ["creek-path", "trail", null, "NE3", "-0.1,0.8", "0,0", 5.85],
         ],
         "0610": [["the-ditchway-trail", "trail", "SW3", "NE1", null, null, 7.19]],
         "0611": [["swallop-road", "road", "SW1", "NE1", null, null, 5.92]],
         "0702": [
-          ["creek-path", "trail", "S3", "NW2", "-0.4,0.5", null, 2.82, [0.284, 0.95], true],
+          ["creek-path", "trail", "S3", "NW2", "-0.4,0.5", null, 3.47, [0.284, 0.95], true],
           ["downs-road", "trail", "NE1", "NW2", null, "0,-0.3", 4.86, [0.2, 0.95]],
         ],
-        "0703": [["creek-path", "trail", "S1", "N1", null, "0.3,0", 3.2]],
+        "0703": [["creek-path", "trail", "S1", "N1", null, "0.3,0", 4.04]],
         "0704": [
-          ["creek-path", "trail", "N3", "SW1", "0,-0.3", null, 5.37, [0.352]],
+          ["creek-path", "trail", "N3", "SW1", "0,-0.3", null, 5.64, [0.352]],
           ["avernal-path", "trail", null, "NE2", "0,-0.3", "0,0", 3.11],
         ],
         "0705": [["fort-road", "road", "SE3", "NW1", null, "0,0.5", 8.91]],
@@ -9365,7 +9536,7 @@
         const el = document.getElementById("tog-playerview");
         el.dataset.active = el.dataset.active !== "1" ? "1" : "0";
         const fogEl = document.getElementById("tog-fog");
-        if (fogEl) fogEl.dataset.active = el.dataset.active;
+        if (fogEl) fogEl.dataset.active = (el.dataset.active === "1" && !settingsGet("disableFogInPlayerView")) ? "1" : "0";
         doLookAround();
         saveState();
       }
@@ -9609,6 +9780,14 @@
         if (fl) {
           fl.style.display = "";
         }
+        // Restore all Settings toggles to their defaults (literal key: const defined later).
+        try { localStorage.removeItem("dolmenwood-settings"); } catch (e) {}
+        _settings = null;
+        ["nightMode", "travelPointView", "listRoads", "vantageHidesRoads", "disableFogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) {
+          if (typeof settingsSyncSeg === "function") settingsSyncSeg(k, settingsGet(k));
+        });
+        // A disabled-resting override may have been cleared; recompute the ignore-rest flag.
+        _jrnIgnoreRest = false;
         renderWorldMap();
       } // end function clearSavedState
       // ============================================================================
@@ -9705,8 +9884,85 @@
         Meadow: "#a8b880",
         Hills: "#b5a078",
         Aquatic: "#6a8a9e",
-      }; // end const TERRAIN_COLOR
+      };
+      // Night-mode terrain palette (darker, moonlit). Same keys as TERRAIN_COLOR.
+      const TERRAIN_COLOR_NIGHT = {
+        // Moonlit neon terrain — saturated, cool-toned, distinct per type.
+        "Tangled Forest": "#1f8f7a",
+        "Craggy Forest": "#3f7fa8",
+        "Boggy Forest": "#4f6fb0",
+        "Hilly Forest": "#2f9f9a",
+        "Open Forest": "#3fb0a0",
+        "Fungal Forest": "#b048c8",
+        Bog: "#7a5cc8",
+        Swamp: "#2f5fa8",
+        Farmland: "#c85ca8",
+        Meadow: "#3f9fd0",
+        Hills: "#6f6fc0",
+        Aquatic: "#2f8fe0",
+      };
+      // Modern muted terrain — desaturated, light Apple-map tones.
+      const TERRAIN_COLOR_MODERN = {
+        // Modern terrain — close to Regular but slightly cleaner/lighter; NOT washed out.
+        "Tangled Forest": "#5c6f45",
+        "Craggy Forest": "#7b8672",
+        "Boggy Forest": "#79794d",
+        "Hilly Forest": "#889676",
+        "Open Forest": "#a1ae90",
+        "Fungal Forest": "#977a88",
+        Bog: "#988859",
+        Swamp: "#587373",
+        Farmland: "#c2b06e",
+        Meadow: "#aebc8d",
+        Hills: "#beac88",
+        Aquatic: "#7d9cae",
+      };
+      function isNightMode() { return getTheme() === "night"; } // end const TERRAIN_COLOR
+      const SETTINGS_KEY = "dolmenwood-settings";
+      const SETTINGS_DEFAULTS = { travelPointView:false, listRoads:true, alwaysDisableRest:false, disableEncounters:false, disableLost:false, lostFlipsPlayerView:false, disableFogInPlayerView:false, vantageHidesRoads:true, nightMode:false, theme:"regular" };
+      let _settings = null;
+      function settingsLoad() { if (_settings) return _settings; _settings = Object.assign({}, SETTINGS_DEFAULTS); try { const raw = localStorage.getItem(SETTINGS_KEY); if (raw) Object.assign(_settings, JSON.parse(raw)); } catch (e) {} return _settings; }
+      function settingsGet(key) { return settingsLoad()[key]; }
+      function settingsSave() { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settingsLoad())); } catch (e) {} }
+      function isTravelPointView() { return settingsGet("travelPointView"); }
+            function openSettings() { const s = settingsLoad(); ["nightMode", "travelPointView", "listRoads", "vantageHidesRoads", "disableFogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) { settingsSyncSeg(k, !!s[k]); }); settingsSyncTheme(); document.getElementById("settings-modal").style.display = "flex"; }
+      function closeSettings() { document.getElementById("settings-modal").style.display="none"; }
+      function getTheme() { var s = settingsLoad(); if (s.theme) return s.theme; return s.nightMode ? "night" : "regular"; }
+      function isModernMode() { return getTheme() === "modern"; }
+      function settingsSyncTheme() { var th = getTheme(); ["regular","modern","night"].forEach(function (mo) { var b = document.getElementById("set-theme-" + mo); if (b) b.classList.toggle("toggle--on", th === mo); }); }
+      function applyTheme() { try { var th = getTheme(); var r = document.documentElement.classList; r.toggle("night-mode", th === "night"); r.toggle("modern-mode", th === "modern"); settingsSyncTheme(); } catch (e) {} }
+      function applyNightMode() { applyTheme(); }
+      function settingsSetTheme(val) { settingsLoad().theme = val; settingsSave(); applyTheme(); if (typeof doLookAround === "function") doLookAround(); if (typeof trackUpdateUI === "function") trackUpdateUI(); }
+      function settingsSyncSeg(key, val) { const y = document.getElementById("set-" + key + "-yes"); const n = document.getElementById("set-" + key + "-no"); if (y) y.classList.toggle("toggle--on", !!val); if (n) n.classList.toggle("toggle--on", !val); }
+      function settingsToggle(key, val) { settingsLoad()[key]=!!val; settingsSave(); settingsSyncSeg(key, !!val); if (key==="nightMode") applyNightMode(); if (key==="alwaysDisableRest") { if (val) { _jrnIgnoreRest=true; } else { const tks=trackLoadAll(); const at=tks.find(function(x){return x.id===_trackActiveId;}); _jrnIgnoreRest=!!(at&&at.tpState&&at.tpState.ignoreRest); } } if (key==="disableEncounters" && val && typeof journeyClearEncounter==="function") journeyClearEncounter(); if (key==="disableLost" && val && typeof journeyClearLost==="function") { const _tks=trackLoadAll(); const _at=_tks.find(function(x){return x.id===_trackActiveId;}); if (_at&&_at.tpState&&_at.tpState.lost) journeyClearLost(); } if (key==="disableFogInPlayerView" && isPlayerView()) { const _fe=document.getElementById("tog-fog"); if(_fe) _fe.dataset.active = val ? "0" : "1"; } if (typeof trackUpdateUI==="function") trackUpdateUI(); if (typeof doLookAround==="function") doLookAround(); if (typeof isInWorldMapView==="function"&&isInWorldMapView()&&typeof renderWorldMap==="function") renderWorldMap(); }
+      // Terrain type -> Travel Point cost to enter that hex.
+      const TERRAIN_TP_COST = {
+        Aquatic: 2,
+        Farmland: 2,
+        "Fungal Forest": 2,
+        Hills: 2,
+        Meadow: 2,
+        "Open Forest": 2,
+        Bog: 3,
+        "Hilly Forest": 3,
+        "Tangled Forest": 3,
+        "Boggy Forest": 4,
+        "Craggy Forest": 4,
+        Swamp: 4,
+        "Thorny Forest": 4,
+      };
+
       function terrainColor(terrain) {
+        if (!isTravelPointView() && isNightMode()) return TERRAIN_COLOR_NIGHT[terrain] || "#0b0b1c";
+        if (!isTravelPointView() && isModernMode()) return TERRAIN_COLOR_MODERN[terrain] || "#e8e8ea";
+        if (isTravelPointView()) {
+          // Travel Point View: recolor by terrain TP cost (2=green,3=amber,4=red).
+          // No-TP-cost (blank) hexes keep their normal color.
+          const _c = TERRAIN_TP_COST[terrain];
+          if (_c === 2) return "#7f9a57";
+          if (_c === 3) return "#c6973f";
+          if (_c === 4) return "#b0553f";
+        }
         return TERRAIN_COLOR[terrain] || "#e8dcc3";
       }
       // Pick light or dark text for readability given a background hex colour.
@@ -10000,7 +10256,7 @@
             ? "(Hidden) " + (m.name || "")
             : m.name || "";
           if (prominent) {
-            html += `<li class="tooltip-entry-item" style="color:inherit;"><span style="background:rgba(150,110,0,0.7);color:#fff;padding:1px 5px;border-radius:3px;">${escapeHtml(displayName)}${m.type ? '<span class="module-type" style="color:#f1e9d8;">' + escapeHtml(m.type) + "</span>" : ""}</span></li>`;
+            html += `<li class="tooltip-entry-item" style="color:inherit;"><span style="background:var(--prominent-bg);color:var(--prominent-text);padding:1px 5px;border-radius:3px;">${escapeHtml(displayName)}${m.type ? '<span class="module-type" style="color:#f1e9d8;">' + escapeHtml(m.type) + "</span>" : ""}</span></li>`;
           } else {
             html += `<li class="tooltip-entry-item">${escapeHtml(displayName)}${m.type ? '<span class="module-type">' + escapeHtml(m.type) + "</span>" : ""}</li>`;
           }
@@ -10015,7 +10271,7 @@
             ? "(Hidden) " + (m.name || "")
             : m.name || "";
           if (prominent) {
-            html += `<li class="tooltip-entry-item" style="color:inherit;"><span style="background:rgba(180,140,0,0.7);color:#fff;padding:1px 5px;border-radius:3px;">${escapeHtml(displayName)}${m.type ? '<span class="module-type" style="color:#f1e9d8;">' + escapeHtml(m.type) + "</span>" : ""}</span></li>`;
+            html += `<li class="tooltip-entry-item" style="color:inherit;"><span style="background:var(--prominent-bg);color:var(--prominent-text);padding:1px 5px;border-radius:3px;">${escapeHtml(displayName)}${m.type ? '<span class="module-type" style="color:#f1e9d8;">' + escapeHtml(m.type) + "</span>" : ""}</span></li>`;
           } else {
             html += `<li class="tooltip-entry-item">${escapeHtml(displayName)}${m.type ? '<span class="module-type">' + escapeHtml(m.type) + "</span>" : ""}</li>`;
           }
@@ -10058,6 +10314,17 @@
         } else {
           body =
             '<div class="no-features">Forest / open terrain, no landmarks visible.</div>';
+        }
+        // Paths & rivers as Visible Features (Settings > List Paths & Rivers): appended to
+        // the bottom of the Visible Features list (they describe visible things).
+        if (!opts.blocked && typeof settingsGet === "function" && settingsGet("listRoads")) {
+          const _pl = hexPathsProse(opts.hexCode).concat(hexRiversProse(opts.hexCode));
+          if (_pl.length) {
+            const _lis = _pl.map((p) => `<li>${escapeHtml(p)}</li>`).join("");
+            const _cut = body.lastIndexOf("</ul>");
+            if (_cut >= 0) body = body.slice(0, _cut) + _lis + "</ul>";
+            else body = `<ul class="feature-list">${_lis}</ul>`;
+          }
         }
         if (!opts.blocked) body += tooltipEntriesHTML(h, opts.hexCode, false);
         const descHtml = "";
@@ -10306,6 +10573,121 @@
         attachRoadTooltipHandlers(out);
       } // end function doPanorama
 
+      // ── Paths in this Hex (prose) ─────────────────────
+      const PATH_DIR_RANK = { N: 0, NW: 1, NE: 2, S: 3, SW: 4, SE: 5, W: 6, E: 7 };
+      function hexRoadDir(e) { return e ? String(e.edge != null ? e.edge : e).replace(/[0-9]/g, "") : null; }
+      function hexAnchorName(hex) { const m = (HEXES[hex] && HEXES[hex].modules) || []; const a = m.find(function (x) { return x.isAnchor; }); return a ? a.name : null; }
+      // Player-facing generic label for a hex's anchor (e.g. "town", "manor"); a traveler sees
+      // the kind of place, not its proper name. Falls back to the real name if unset.
+      function hexAnchorPlayerName(hex) { const m = (HEXES[hex] && HEXES[hex].modules) || []; const a = m.find(function (x) { return x.isAnchor; }); return a ? (a.playerAnchorName || a.name) : null; }
+      // Prose sentences describing the roads/trails in a hex, for the "Paths in this Hex"
+      // card section. Rules: edge-to-edge -> "runs from the A to the B"; interior end at the
+      // hex's single named anchor -> "runs from <Anchor> to the ..." (multiple same-type roads
+      // sharing the anchor combine into one sentence); anchorless interior end -> reference the
+      // other road ("the road") or a lake ("the lake"). Directions ordered N,S,W,E (W before E).
+      function hexPathsProse(hex) {
+        const segs = (typeof HEX_ROADS !== "undefined" && HEX_ROADS[hex]) || [];
+        if (!segs.length) return [];
+        const anch = hexAnchorPlayerName(hex);
+        const out = [];
+        const e2e = [], interiorByType = { road: [], trail: [] }, fallbacks = [];
+        segs.forEach(function (s) {
+          const a = hexRoadDir(s.enter), b = hexRoadDir(s.exit);
+          if (a && b) { e2e.push({ t: s.type, a: a, b: b }); }
+          else { const edge = a || b; if (!edge) return;
+            if (anch) interiorByType[s.type === "trail" ? "trail" : "road"].push(edge);
+            else fallbacks.push({ t: s.type, edge: edge });
+          }
+        });
+        function W(t) { return t === "trail" ? "trail" : "road"; }
+        function joinDirs(ds) { ds = ds.slice().sort(function (a, b) { return PATH_DIR_RANK[a] - PATH_DIR_RANK[b]; }); if (ds.length === 1) return "the " + ds[0]; if (ds.length === 2) return "the " + ds[0] + " and " + ds[1]; return "the " + ds.slice(0, -1).join(", ") + ", and " + ds[ds.length - 1]; }
+        e2e.forEach(function (x) { const ds = [x.a, x.b].sort(function (p, q) { return PATH_DIR_RANK[p] - PATH_DIR_RANK[q]; }); out.push("A " + W(x.t) + " runs from the " + ds[0] + " to the " + ds[1] + "."); });
+        ["road", "trail"].forEach(function (tp) { const ds = interiorByType[tp]; if (!ds.length) return; const verb = ds.length > 1 ? (tp === "trail" ? "Trails run" : "Roads run") : ("A " + W(tp) + " runs"); out.push(verb + " from the " + anch + " to " + joinDirs(ds) + "."); });
+        if (fallbacks.length) {
+          const hasOtherRoad = segs.length > 1;
+          const hasLake = typeof HEX_LAKES !== "undefined" && (HEX_LAKES[hex] || []).length > 0;
+          const ref = hasOtherRoad ? "the road" : (hasLake ? "the lake" : null);
+          fallbacks.forEach(function (f) { out.push("A " + W(f.t) + " runs from " + (ref || "within the hex") + " to the " + f.edge + "."); });
+        }
+        return out;
+      }
+      // ── Rivers in this Hex (prose, flow-oriented) ────────────────
+      // Downstream (mouth) hex per river. Flow = source -> mouth. Most flow toward Lake
+      // Longmere; skull-creek, lower-hameth and ransom-creek flow the opposite way.
+      const RIVER_MOUTHS = { "river-shiver":"0805", "quaking-creek":"0604", "upper-hameth":"0505", "river-shub":"0805", "groaning-loch":"0906", "kewens-creek":"1204", "lower-hameth":"1112", "ransom-creek":"1109", "river-marshspur":"0403", "skull-creek":"0607" };
+      const RIVER_LAKE_HEXES = { "0605":1, "0606":1, "0706":1, "0707":1, "0806":1 }; // Longmere aquatic hexes
+      const RIVER_OPP_EDGE = { N:"S", S:"N", NE:"SW", SW:"NE", SE:"NW", NW:"SE" };
+      let _riverFlow = null; // key "hex|idx" -> { id, up, down } (up/down = edge dir or null=interior)
+      function riverFlowBuild() {
+        _riverFlow = {};
+        function edir(e) { return e ? String(e.edge != null ? e.edge : e).replace(/[0-9]/g, "") : null; }
+        const byRiver = {};
+        Object.keys(HEX_RIVERS).forEach(function (hx) {
+          (HEX_RIVERS[hx] || []).forEach(function (s, idx) {
+            (byRiver[s.id] = byRiver[s.id] || []).push({ hex: hx, idx: idx, a: edir(s.enter), b: edir(s.exit), id: s.id });
+          });
+        });
+        Object.keys(byRiver).forEach(function (id) {
+          const segs = byRiver[id]; const mouth = RIVER_MOUTHS[id];
+          function key(s) { return s.hex + "|" + s.idx; }
+          function neighborSeg(s, d) { if (!d) return null; const nh = HEXES[s.hex] && HEXES[s.hex][d]; if (!nh) return null; return segs.find(function (t) { return t.hex === nh && (t.a === RIVER_OPP_EDGE[d] || t.b === RIVER_OPP_EDGE[d]); }); }
+          const down = {}, seen = {}, q = [];
+          segs.filter(function (s) { return s.hex === mouth; }).forEach(function (s) {
+            let openEnd, hasOpen = false; [s.a, s.b].forEach(function (d) { if (!neighborSeg(s, d)) { openEnd = d; hasOpen = true; } });
+            down[key(s)] = hasOpen ? openEnd : s.b; seen[key(s)] = true; q.push(s);
+          });
+          while (q.length) {
+            const s = q.shift(); const ends = [s.a, s.b]; const dEnd = down[key(s)];
+            const uEnd = ends[0] === dEnd ? ends[1] : ends[0];
+            const n = neighborSeg(s, uEnd);
+            if (n && !seen[key(n)]) { down[key(n)] = RIVER_OPP_EDGE[uEnd]; seen[key(n)] = true; q.push(n); }
+          }
+          segs.forEach(function (s) {
+            const ends = [s.a, s.b];
+            if (!seen[key(s)]) { _riverFlow[key(s)] = { id: id, up: ends[0], down: ends[1] }; return; }
+            const dEnd = down[key(s)]; const uEnd = ends[0] === dEnd ? ends[1] : ends[0];
+            _riverFlow[key(s)] = { id: id, up: uEnd, down: dEnd };
+          });
+        });
+      }
+      function riverEndTok(hex, endDir, id) {
+        if (endDir) { const nb = HEXES[hex] && HEXES[hex][endDir]; if (nb && RIVER_LAKE_HEXES[nb]) return { t: "LAKE" }; return { t: "DIR", d: endDir }; }
+        if (typeof HEX_LAKES !== "undefined" && (HEX_LAKES[hex] || []).length) return { t: "LAKE" };
+        if ((HEX_RIVERS[hex] || []).some(function (s) { return s.id !== id; })) return { t: "CONFLUENCE" };
+        return { t: "PLAIN" };
+      }
+      function riverSentence(hex, id, f) {
+        const n = /creek/i.test(RIVER_NAMES[id] || id) ? "creek" : "river";
+        const U = riverEndTok(hex, f.up, id), D = riverEndTok(hex, f.down, id); const A = "A " + n + " ";
+        if (U.t === "DIR" && D.t === "DIR") return A + "flows from the " + U.d + " to the " + D.d + ".";
+        if (U.t === "DIR" && D.t === "LAKE") return A + "flows from the " + U.d + " out to the lake.";
+        if (U.t === "DIR" && D.t === "CONFLUENCE") return A + "flows from the " + U.d + " to join the river.";
+        if (U.t === "DIR" && D.t === "PLAIN") return A + "flows in from the " + U.d + ".";
+        if (U.t === "LAKE" && D.t === "DIR") return A + "flows from the lake to the " + D.d + ".";
+        if (U.t === "CONFLUENCE" && D.t === "DIR") return A + "continues to the " + D.d + ".";
+        if (U.t === "CONFLUENCE" && D.t === "LAKE") return A + "continues out to the lake.";
+        if (U.t === "PLAIN" && D.t === "DIR") return A + "flows to the " + D.d + ".";
+        if (U.t === "LAKE" && D.t === "LAKE") return A + "flows between lakes.";
+        return A + "flows to the " + (D.d || U.d || "") + ".";
+      }
+      function hexRiversProse(hex) {
+        if (!_riverFlow) riverFlowBuild();
+        const segs = (typeof HEX_RIVERS !== "undefined" && HEX_RIVERS[hex]) || [];
+        const out = [];
+        segs.forEach(function (s, idx) { const f = _riverFlow[hex + "|" + idx]; if (f) out.push(riverSentence(hex, f.id, f)); });
+        return out;
+      }
+      const LOST_FLIP_DIRS_CW = ["N", "NE", "SE", "S", "SW", "NW"];
+      function lostFlipRotateDir(dir, k) { const i = LOST_FLIP_DIRS_CW.indexOf(dir); if (i < 0) return dir; return LOST_FLIP_DIRS_CW[(((i + k) % 6) + 6) % 6]; }
+      // Deterministic rotation (1..5 * 60deg) per lost-event: seed = lost hex + real date.
+      function lostFlipK(centerHex) {
+        if (!(typeof settingsGet === "function" && settingsGet("lostFlipsPlayerView") && _jrnLost && isPlayerView())) return 0;
+        let date = "";
+        try { const t = trackLoadAll().find(function (x) { return x.id === _trackActiveId; }); if (t && t.tpState) date = (t.tpState.lostSeed != null ? t.tpState.lostSeed : t.tpState.currentDate) || ""; } catch (e) {}
+        const seed = String(centerHex) + "|" + date;
+        let hsh = 2166136261; for (let i = 0; i < seed.length; i++) { hsh ^= seed.charCodeAt(i); hsh = (hsh * 16777619) >>> 0; }
+        return 1 + (hsh % 5);
+      }
       function doDetail() {
         const input = document.getElementById("pan-hex").value;
         const hex = resolveHex(input);
@@ -10315,6 +10697,9 @@
           return;
         }
         const h = HEXES[hex];
+        const _flipK = lostFlipK(hex);
+        const _flipActive = _flipK > 0;
+        const _dispDir = (D) => (_flipActive ? lostFlipRotateDir(D, -_flipK) : D);
         let html = `<div class="card">`;
         html +=
           '<button id="capture-btn" class="capture-corner" onclick="captureView()" title="Capture image" aria-label="Capture image" data-html2canvas-ignore="true"><svg width="18" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="6" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="11" cy="12.5" r="3.5" stroke="currentColor" stroke-width="1.6"/><path d="M8 6 L9.5 3.5 H12.5 L14 6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="17" cy="9" r="1" fill="currentColor"/></svg></button>';
@@ -10379,13 +10764,13 @@
           html += '<div class="pv-row-top">';
           const pvTopDirs = ["NW", "N", "NE"];
           pvTopDirs.forEach((dir) => {
-            const adjCode = h[dir];
+            const adjCode = h[_dispDir(dir)];
             if (!adjCode || (HEXES[adjCode] && HEXES[adjCode].blank)) {
               html += '<div class="pv-card pv-card-empty"></div>';
               return;
             }
             const adjH = HEXES[adjCode];
-            const isBlocked = blockedDirs.has(dir);
+            const isBlocked = blockedDirs.has(_dispDir(dir));
             let cardContent = "";
             if (isBlocked) {
               const terrainPhrase =
@@ -10405,7 +10790,16 @@
                 '<div class="pv-card-empty-text">Open terrain, no landmarks.</div>';
             }
 
-            html += `<div class="pv-card"><div class="pv-card-title">${dir}</div>${cardContent}</div>`;
+            // Paths & rivers as visible features on the direction card (Settings > List
+            // Paths & Rivers), appended at the bottom — only when the hex is visible.
+            if (!isBlocked && !_flipActive && typeof settingsGet === "function" && settingsGet("listRoads")) {
+              const _pp = hexPathsProse(adjCode).concat(hexRiversProse(adjCode)).map((p) => `<li>${escapeHtml(p)}</li>`).join("");
+              if (_pp) {
+                if (cardContent.indexOf("pv-card-features") >= 0) cardContent = cardContent.replace(/<\/ul>\s*$/, _pp + "</ul>");
+                else cardContent = `<ul class="pv-card-features">${_pp}</ul>`;
+              }
+            }
+            html += `<div class="pv-card"><div class="pv-card-title">${_flipActive ? "" : dir}</div>${cardContent}</div>`;
           });
           html += "</div>";
           // Hex graphic
@@ -10416,13 +10810,13 @@
           html += '<div class="pv-row-bottom">';
           const pvBottomDirs = ["SW", "S", "SE"];
           pvBottomDirs.forEach((dir) => {
-            const adjCode = h[dir];
+            const adjCode = h[_dispDir(dir)];
             if (!adjCode || (HEXES[adjCode] && HEXES[adjCode].blank)) {
               html += '<div class="pv-card pv-card-empty"></div>';
               return;
             }
             const adjH = HEXES[adjCode];
-            const isBlocked = blockedDirs.has(dir);
+            const isBlocked = blockedDirs.has(_dispDir(dir));
             let cardContent = "";
             if (isBlocked) {
               const terrainPhrase =
@@ -10442,7 +10836,16 @@
                 '<div class="pv-card-empty-text">Open terrain, no landmarks.</div>';
             }
 
-            html += `<div class="pv-card"><div class="pv-card-title">${dir}</div>${cardContent}</div>`;
+            // Paths & rivers as visible features on the direction card (Settings > List
+            // Paths & Rivers), appended at the bottom — only when the hex is visible.
+            if (!isBlocked && !_flipActive && typeof settingsGet === "function" && settingsGet("listRoads")) {
+              const _pp = hexPathsProse(adjCode).concat(hexRiversProse(adjCode)).map((p) => `<li>${escapeHtml(p)}</li>`).join("");
+              if (_pp) {
+                if (cardContent.indexOf("pv-card-features") >= 0) cardContent = cardContent.replace(/<\/ul>\s*$/, _pp + "</ul>");
+                else cardContent = `<ul class="pv-card-features">${_pp}</ul>`;
+              }
+            }
+            html += `<div class="pv-card"><div class="pv-card-title">${_flipActive ? "" : dir}</div>${cardContent}</div>`;
           });
           html += "</div>";
 
@@ -10461,6 +10864,13 @@
             }
 
             html += '<div class="pv-row-top">';
+            if (!_flipActive && typeof settingsGet === "function" && settingsGet("listRoads")) {
+              const _pp = hexPathsProse(hex).concat(hexRiversProse(hex)).map((p) => `<li>${escapeHtml(p)}</li>`).join("");
+              if (_pp) {
+                if (centerContent.indexOf("pv-card-features") >= 0) centerContent = centerContent.replace(/<\/ul>\s*$/, _pp + "</ul>");
+                else centerContent = `<ul class="pv-card-features">${_pp}</ul>`;
+              }
+            }
             html += `<div class="pv-card pv-card-here"><div class="pv-card-title">HERE</div>${centerContent}</div>`;
             html += "</div>";
           }
@@ -10633,7 +11043,8 @@
             !!(
               _uT &&
               _uT.tpState &&
-              (_uT.tpState.lastLostAction === "gotLost" ||
+              ((_uT.tpState.lastLostAction === "gotLost" &&
+                !_uT.waypoints.some((w) => (w.actionId || 0) > (_uT.tpState.gotLostAct || 0))) ||
                 _uT.tpState.lostClearedPending ||
                 (_uT.tpState.fmUndoable && _uT.tpState.forcedMarch))
             ) || _restUndoable;
@@ -10723,10 +11134,10 @@
               const displayName = hidden ? "(Hidden) " + m.name : m.name;
               let moduleStyle = "";
               if (hidden) {
-                moduleStyle = "background:#e8e8e8;border-left-color:#2a2420;";
+                moduleStyle = "background:var(--hidden-bg);border-left-color:var(--hidden-border);";
               } else if (prominent) {
                 moduleStyle =
-                  "background:rgba(180,140,0,0.3);border-left-color:#966e00;";
+                  "background:var(--prominent-bg-soft);border-left-color:var(--prominent-border);";
               }
               html += `<div class="module" style="${moduleStyle}"><span class="module-name">${displayName}</span>${m.type ? '<span class="module-type">' + m.type + "</span>" : ""}${m.desc ? '<div class="module-desc">' + m.desc + "</div>" : ""}</div>`;
             });
@@ -10746,10 +11157,10 @@
                 : escapeHtml(m.name || "(unnamed)");
               let moduleStyle = "display:flex;align-items:flex-start;";
               if (hidden) {
-                moduleStyle += "background:#e8e8e8;border-left-color:#2a2420;";
+                moduleStyle += "background:var(--hidden-bg);border-left-color:var(--hidden-border);";
               } else if (prominent) {
                 moduleStyle +=
-                  "background:rgba(180,140,0,0.3);border-left-color:#966e00;";
+                  "background:var(--prominent-bg-soft);border-left-color:var(--prominent-border);";
               }
               const typeHTML = m.type
                 ? `<span class="module-type">${escapeHtml(m.type)}</span>`
@@ -10855,7 +11266,7 @@
         // fill-opacity (which makes hexes look ghostly at the full-map scale), blend
         // the terrain color toward the parchment background. Blend ratio 0.15 means
         // 15% terrain + 85% parchment — exactly the detail map's `blendColor(rawBg, rawBg === terrainColor("Aquatic") ? 0.5 : 0.15)`.
-        const FM_BG = "#f1e9d8";
+        const FM_BG = isNightMode() ? "#12122a" : (isModernMode() ? "#f5f5f7" : "#f1e9d8");
         function fmBlend(fgHex, ratio) {
           if (ratio >= 1) return fgHex;
           const parseCh = (hex, shift) =>
@@ -11042,10 +11453,10 @@
         }
         // Render roads/trails
         for (const seg of fmRoadSegs) {
-          const color = visible.has(seg.hexCode) ? "#d4aa30" : "#e5cc83";
+          const color = visible.has(seg.hexCode) ? "var(--road)" : "var(--road-dim)";
           const width = seg.type === "road" ? 1.2 : 0.8;
           const dash = seg.type === "trail" ? ' stroke-dasharray="2 1.5"' : "";
-          svg += `<path d="${seg.pathD}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${dash} pointer-events="none"/>`;
+          svg += `<path d="${seg.pathD}" fill="none" style="stroke:${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${dash} pointer-events="none"/>`;
           // Transparent hover hit-area so world-map roads show name + miles
           const fmRoadName = ROAD_NAMES[seg.id] || seg.id;
           const fmRoadType = seg.type === "trail" ? "Trail" : "Road";
@@ -11137,19 +11548,19 @@
             const lakeCx = cp.x + lake.center.x * fmRad;
             const lakeCy = cp.y + lake.center.y * fmRad;
             const lakeVisible = visible.has(code);
-            const lakeFill = lakeVisible ? "#6a8a9e" : "#aebaba";
+            const lakeFill = lakeVisible ? "var(--lake)" : "var(--lake-dim)";
             const lakeStroke = "none";
             const rot = lake.rotation
               ? ` transform="rotate(${lake.rotation} ${lakeCx.toFixed(1)} ${lakeCy.toFixed(1)})"`
               : "";
-            svg += `<ellipse cx="${lakeCx.toFixed(1)}" cy="${lakeCy.toFixed(1)}" rx="${lakeRx.toFixed(1)}" ry="${lakeRy.toFixed(1)}" fill="${lakeFill}" stroke="none"${rot} pointer-events="none"/>`;
+            svg += `<ellipse cx="${lakeCx.toFixed(1)}" cy="${lakeCy.toFixed(1)}" rx="${lakeRx.toFixed(1)}" ry="${lakeRy.toFixed(1)}" style="fill:${lakeFill}" stroke="none"${rot} pointer-events="none"/>`;
           }
         }
 
         // Render rivers
         for (const seg of fmRiverSegs) {
-          const fmRiverColor = visible.has(seg.hexCode) ? "#6a8a9e" : "#aebaba";
-          svg += `<path d="${seg.pathD}" fill="none" stroke="${fmRiverColor}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>`;
+          const fmRiverColor = visible.has(seg.hexCode) ? "var(--river)" : "var(--river-dim)";
+          svg += `<path d="${seg.pathD}" fill="none" style="stroke:${fmRiverColor}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>`;
           // Transparent hover hit-area so world-map rivers show name + miles (desktop hover only)
           const fmRiverName = RIVER_NAMES[seg.id] || seg.id;
           svg += `<path d="${seg.pathD}" fill="none" stroke="transparent" stroke-width="4" stroke-linecap="round" data-road-name="${escapeHtml(fmRiverName)}" data-road-type="River" data-road-hex="${seg.hexCode}" data-road-id="${escapeHtml(seg.id)}" data-hover-only="1" class="road-hit-area" style="cursor:pointer;pointer-events:stroke;"/>`;
@@ -11165,7 +11576,7 @@
         // Pass 2: thick outline for the current hex.
         if (centerData) {
           const p = pos(centerHex);
-          svg += `<path d="${hexPath(p.x, p.y, r * 0.95)}" fill="none" stroke="#1a1612" stroke-width="2" pointer-events="none"/>`;
+          svg += `<path d="${hexPath(p.x, p.y, r * 0.95)}" fill="none" style="stroke:var(--hex-center-outline)" stroke-width="2" pointer-events="none"/>`;
 
           // Pass 2b: trace the actual perimeter of the area the detail map shows.
           // Fog OFF → center + 1st ring + 2nd ring (interveners & targets)
@@ -11214,7 +11625,7 @@
             }
           }
           if (outline) {
-            svg += `<path d="${outline}" fill="none" stroke="#1a1612" stroke-width="1.0" stroke-dasharray="3 2" pointer-events="none" opacity="1.0"/>`;
+            svg += `<path d="${outline}" fill="none" style="stroke:var(--border-strong)" stroke-width="1.0" stroke-dasharray="3 2" pointer-events="none" opacity="1.0"/>`;
           }
         }
 
@@ -11269,11 +11680,19 @@
 
         // The center hex uses full visualHeight like all other hexes.
         const centerVisH = visualHeight(centerHexObj.hex);
+        // Lost Rotates Player View: rotate the neighborhood by feeding rotated adjacency to the
+        // UNCHANGED drawing rules. _dispDir(D) = the real direction whose hex is displayed in
+        // screen-direction D. Positions rotate to match; cliffs/labels use _dispDir so they stay correct.
+        const _flipK = lostFlipK(centerHexObj.hex);
+        const _flipActive = _flipK > 0;
+        const _dispDir = (D) => (_flipActive ? lostFlipRotateDir(D, -_flipK) : D);
 
         // Viewport — add vertical room for elevation range
         // Max possible elevation diff in Dolmenwood is ~600', so ±72px
         const elevPad = 50;
-        const pvCompact = isPlayerView() || isFogOn();
+        // Compact (ring1-only) box only for referee with fog on. Player View always uses the
+        // full 2-ring box (referee scale, no zoom) so ring2 shows when fog is off / when rotated.
+        const pvCompact = isFogOn() && !isPlayerView();
         const W = pvCompact ? 2 * colDx + 2 * r + 24 : 4 * colDx + 2 * r + 20;
         const H = pvCompact
           ? 2 * hexH + 2 * r + 24 + elevPad * 2
@@ -11357,7 +11776,7 @@
         // Blend a hex color with the background at a given opacity.
         // This produces the solid color you'd see if you drew `fgHex` at `opacity` over `bgHex`.
         // Formula: result = fg * opacity + bg * (1 - opacity)
-        const BG_COLOR = "#f9f3e3"; // --parchment-light (the .card background)
+        const BG_COLOR = isNightMode() ? "#1c1c3e" : (isModernMode() ? "#fbfbfd" : "#f9f3e3"); // --parchment-light (the .card background)
         function blendColor(fgHex, opacity) {
           if (opacity >= 1) return fgHex;
           const parseCh = (hex, shift) =>
@@ -11380,6 +11799,18 @@
 
         const [ccol, crow] = hexColRow(centerHexObj.hex);
         const [cxCart, cyCart] = hexCenter(ccol, crow);
+        // Flipped z-order: paint priority must follow the DISPLAY position (where a hex is
+        // drawn on screen after rotation), not its real board row/col. Invert the (un-elevated)
+        // base screen position back to lattice col/row, but keep the REAL hex's elevation.
+        const _SQ3 = Math.sqrt(3);
+        function layerFromDisp(baseX, baseY, realCode) {
+          const xCart = (baseX - cx) / r + cxCart;
+          const col = Math.round(xCart / 1.5);
+          const yCart = (baseY - cy) / r + cyCart;
+          const row = Math.round((yCart - (col % 2 === 0 ? _SQ3 / 2 : 0)) / _SQ3);
+          const hx = HEXES[realCode];
+          return row * 1000 + (hx ? hx.elev : 0) + (hx ? displayCanopy(hx.terrain) : 0) + col * 0.1;
+        }
         function hexScreenPos(hexCode) {
           const [col, row] = hexColRow(hexCode);
           const [xCart, yCart] = hexCenter(col, row);
@@ -11403,7 +11834,8 @@
           if (fog) continue;
           const h2 = HEXES[hex2];
           if (!h2) continue;
-          const pos = hexScreenPos(hex2);
+          let pos = hexScreenPos(hex2);
+          if (_flipActive) { const _a = _flipK * Math.PI / 3; const _dx = pos.x - cx, _dy = pos.y - cy; pos = { x: cx + _dx * Math.cos(_a) - _dy * Math.sin(_a), y: cy + _dx * Math.sin(_a) + _dy * Math.cos(_a) }; }
           const dy = elevY(visualHeight(hex2) - centerVisH);
           const rawBg = terrainColor(h2.terrain);
           const blocked = !!ring2Blocked[hex2];
@@ -11428,6 +11860,8 @@
             isEmpty: false,
             drawX: pos.x,
             drawY: pos.y + dy,
+            baseDrawX: pos.x,
+            baseDrawY: pos.y,
             solidBg,
             fg,
             tooltip,
@@ -11448,12 +11882,12 @@
           const p = positions[dir];
           const baseX = cx + p.dx,
             baseY = cy + p.dy;
-          const neighborHex = centerHexObj[dir];
+          const neighborHex = centerHexObj[_dispDir(dir)];
           if (neighborHex) {
             const nh = HEXES[neighborHex];
             const dy = nh ? elevY(visualHeight(neighborHex) - centerVisH) : 0;
             const rawBg = terrainColor(nh ? nh.terrain : null);
-            const isBlocked = blockedDirs.has(dir);
+            const isBlocked = blockedDirs.has(_dispDir(dir));
             const solidBg = isBlocked
               ? blendColor(
                   rawBg,
@@ -11476,6 +11910,8 @@
               isEmpty: false,
               drawX: baseX,
               drawY: baseY + dy,
+              baseDrawX: baseX,
+              baseDrawY: baseY,
               solidBg,
               fg,
               tooltip,
@@ -11524,6 +11960,8 @@
             isEmpty: false,
             drawX: cx,
             drawY: cy,
+            baseDrawX: cx,
+            baseDrawY: cy,
             solidBg: "#2a2420",
             fg: "var(--parchment-light)",
             tooltip,
@@ -11558,7 +11996,7 @@
 
         // Assign layer to all hex entries
         for (const h of allHexes) {
-          h.layer = h.hexCode ? hexLayer(h.hexCode) : 0;
+          h.layer = h.hexCode ? (_flipActive ? layerFromDisp(h.baseDrawX, h.baseDrawY, h.hexCode) : hexLayer(h.hexCode)) : 0;
         }
         // Blank/empty hexes get the highest layer of all hex shapes so they draw on top
         const maxHexLayer = Math.max(
@@ -11622,10 +12060,10 @@
                 ? curDraw.solidBg
                 : curDraw.rawBg || terrainColor(curData.terrain);
             const curV = hexVertices(curDraw.drawX, curDraw.drawY, r);
-            const curLayer = hexLayer(curCode);
+            const curLayer = _flipActive ? layerFromDisp(curDraw.baseDrawX, curDraw.baseDrawY, curCode) : hexLayer(curCode);
 
             // Get S neighbor info
-            const sCode = curData.S;
+            const sCode = curData[_dispDir("S")];
             const sInfo = getNeighborOrPhantom(curData, curDraw, sCode, "S");
             const hasSNeighborOnView = sCode && hexDrawInfo[sCode];
 
@@ -11642,7 +12080,7 @@
             };
 
             // SW cliff
-            const swCode = curData.SW;
+            const swCode = curData[_dispDir("SW")];
             const swInfo = getNeighborOrPhantom(curData, curDraw, swCode, "SW");
             const swVisH = neighborVisH(swCode, swInfo);
             let hasSWCliff = false;
@@ -11653,7 +12091,7 @@
                 .map((p) => p.x.toFixed(2) + "," + p.y.toFixed(2))
                 .join(" ");
               const swFill = isCenter
-                ? "#000000"
+                ? "var(--hex-center-edge)"
                 : lightenColor(cliffBaseColor, 0.4);
               cliffs.push({
                 layer: curLayer,
@@ -11672,7 +12110,7 @@
                 .map((p) => p.x.toFixed(2) + "," + p.y.toFixed(2))
                 .join(" ");
               const sFill = isCenter
-                ? "#1a1a1a"
+                ? "var(--hex-center-edge-2)"
                 : lightenColor(cliffBaseColor, 0.5);
               cliffs.push({
                 layer: curLayer,
@@ -11684,7 +12122,7 @@
             }
 
             // SE cliff
-            const seCode = curData.SE;
+            const seCode = curData[_dispDir("SE")];
             const seInfo = getNeighborOrPhantom(curData, curDraw, seCode, "SE");
             const seVisH = neighborVisH(seCode, seInfo);
             let hasSECliff = false;
@@ -11695,7 +12133,7 @@
                 .map((p) => p.x.toFixed(2) + "," + p.y.toFixed(2))
                 .join(" ");
               const seFill = isCenter
-                ? "#000000"
+                ? "var(--hex-center-edge)"
                 : lightenColor(cliffBaseColor, 0.4);
               cliffs.push({
                 layer: curLayer,
@@ -11728,7 +12166,7 @@
                   .map((p) => p.x.toFixed(2) + "," + p.y.toFixed(2))
                   .join(" ");
                 const fillColor = isCenter
-                  ? "#000000"
+                  ? "var(--hex-center-edge)"
                   : lightenColor(cliffBaseColor, 0.4);
                 cliffs.push({
                   layer: curLayer,
@@ -11757,7 +12195,7 @@
                   .map((p) => p.x.toFixed(2) + "," + p.y.toFixed(2))
                   .join(" ");
                 const fillColor = isCenter
-                  ? "#1a1a1a"
+                  ? "var(--hex-center-edge-2)"
                   : lightenColor(cliffBaseColor, 0.5);
                 cliffs.push({
                   layer: curLayer,
@@ -11787,7 +12225,7 @@
                   .map((p) => p.x.toFixed(2) + "," + p.y.toFixed(2))
                   .join(" ");
                 const fillColor = isCenter
-                  ? "#000000"
+                  ? "var(--hex-center-edge)"
                   : lightenColor(cliffBaseColor, 0.4);
                 cliffs.push({
                   layer: curLayer,
@@ -11844,7 +12282,7 @@
           const info = hexDrawInfo[hexCode];
           // Player View: a hex the party cannot currently see shows no roads;
           // revealing it via vantage reveals its roads too. Referee view is unaffected.
-          if (isPlayerView() && info && info.blocked) continue;
+          if (isPlayerView() && settingsGet("vantageHidesRoads") && info && info.blocked) continue;
           const verts = hexVertices(info.drawX, info.drawY, r);
           for (const seg of segments) {
             // Resolve anchor point if present
@@ -11956,6 +12394,7 @@
               // Player View: hide the inter-hex connector if EITHER hex is unseen.
               if (
                 isPlayerView() &&
+                settingsGet("vantageHidesRoads") &&
                 ((hexDrawInfo[hexCode] && hexDrawInfo[hexCode].blocked) ||
                   (hexDrawInfo[neighborCode] &&
                     hexDrawInfo[neighborCode].blocked))
@@ -12030,7 +12469,7 @@
           }
           return d;
         }
-        for (const seg of roadSegments) {
+        for (const seg of (_flipActive ? [] : roadSegments)) {
           const pathD = buildRoadPathD(seg);
           drawList.push({
             type: "road",
@@ -12038,7 +12477,7 @@
             data: { seg, pathD },
           });
         }
-        for (const dot of anchorDots) {
+        for (const dot of (_flipActive ? [] : anchorDots)) {
           drawList.push({
             type: "dot",
             layer: hexLayer(dot.hexCode) + 0.35,
@@ -12072,7 +12511,7 @@
           if (!segments) continue;
           const info = hexDrawInfo[hexCode];
           // Player View: an unseen hex shows no rivers (same rule as roads).
-          if (isPlayerView() && info && info.blocked) continue;
+          if (isPlayerView() && settingsGet("vantageHidesRoads") && info && info.blocked) continue;
           const verts = hexVertices(info.drawX, info.drawY, r);
           for (const seg of segments) {
             let startPt, endPt;
@@ -12125,6 +12564,7 @@
               // Player View: hide the inter-hex connector if EITHER hex is unseen.
               if (
                 isPlayerView() &&
+                settingsGet("vantageHidesRoads") &&
                 ((hexDrawInfo[hexCode] && hexDrawInfo[hexCode].blocked) ||
                   (hexDrawInfo[neighborCode] &&
                     hexDrawInfo[neighborCode].blocked))
@@ -12182,7 +12622,7 @@
           }
         }
         // Build river paths and add to drawList at layer + 0.25 (below roads)
-        for (const seg of riverSegments) {
+        for (const seg of (_flipActive ? [] : riverSegments)) {
           const pathD = buildRoadPathD(seg);
           drawList.push({
             type: "river",
@@ -12195,13 +12635,15 @@
         for (const hexCode of visibleHexCodes) {
           const info = hexDrawInfo[hexCode];
           const verts = hexVertices(info.drawX, info.drawY, r);
-          const tSegs = trackDetailSegments(
+          if (_flipActive && hexCode !== centerHexObj.hex) continue;
+          let tSegs = trackDetailSegments(
             hexCode,
             info.drawX,
             info.drawY,
             r,
             verts,
           );
+          if (_flipActive) tSegs = tSegs.filter((s) => s.dot);
           if (tSegs.length) {
             drawList.push({
               type: "track",
@@ -12216,7 +12658,7 @@
         // wild (TP) moves have no road to recolor, so bridge the inter-hex gap here
         // with an explicit journey-colored segment between the two edge midpoints.
         const _wildBridge = new Map(); // "hexA|hexB" -> highest-priority crossing
-        for (const _wtrack of jrnSortByPriority(trackLoadAll())) {
+        for (const _wtrack of (_flipActive ? [] : jrnSortByPriority(trackLoadAll()))) {
           const _wps = _wtrack.waypoints || [];
           const _wcol = _wtrack.color || TRACK_COLOR;
           const _wnm = _wtrack.name || "Journey";
@@ -12302,14 +12744,14 @@
           if (item.type === "cliff") {
             const c = item.data;
             const cliffCls = "hex-cliff" + (c.blocked ? " blocked" : "");
-            svg += `<polygon class="${cliffCls}" points="${c.points}" fill="${c.fill}" data-hex="${c.hexCode}"/>`;
+            svg += `<polygon class="${cliffCls}" points="${c.points}" style="fill:${c.fill}" data-hex="${c.hexCode}"/>`;
             continue;
           }
           if (item.type === "road") {
             const { seg, pathD } = item.data;
             const roadBlocked =
               hexDrawInfo[seg.hexCode] && hexDrawInfo[seg.hexCode].blocked;
-            let color = roadBlocked ? "#e5cc83" : "#d4aa30";
+            let color = roadBlocked ? "var(--road-dim)" : "var(--road)";
             const jInfo = seg.connector
               ? _jrnConnKeys.get(seg.connKey)
               : undefined;
@@ -12319,7 +12761,7 @@
               : "";
             const width = seg.type === "road" ? 2.5 : 2;
             const dash = seg.type === "trail" ? ' stroke-dasharray="4 3"' : "";
-            svg += `<path d="${pathD}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${dash}${jattr} pointer-events="none"/>`;
+            svg += `<path d="${pathD}" fill="none" style="stroke:${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${dash}${jattr} pointer-events="none"/>`;
             const roadName = ROAD_NAMES[seg.id] || seg.id;
             const roadType = seg.type === "trail" ? "Trail" : "Road";
             svg += `<path d="${pathD}" fill="none" stroke="transparent" stroke-width="12" stroke-linecap="round" data-road-name="${escapeHtml(roadName)}" data-road-type="${roadType}" data-road-hex="${seg.hexCode}" data-road-id="${escapeHtml(seg.id)}" class="road-hit-area" style="cursor:pointer;pointer-events:stroke;"/>`;
@@ -12334,13 +12776,13 @@
               : 0;
             const dotDim =
               dotBlocked && !(dot.prominent && dot.height > dotCanopy);
-            const dotFill = dotDim ? "#e5cc83" : "#d4aa30";
-            const dotStroke = dotDim ? "#cdaf79" : "#9a7a20";
+            const dotFill = dotDim ? "var(--road-dim)" : "var(--road)";
+            const dotStroke = dotDim ? "var(--road-dot-dim)" : "var(--road-dot)";
             if (dot.anchorName) {
-              svg += `<circle cx="${dot.x.toFixed(1)}" cy="${dot.y.toFixed(1)}" r="3.5" fill="${dotFill}" stroke="${dotStroke}" stroke-width="0.8" pointer-events="none"/>`;
+              svg += `<circle cx="${dot.x.toFixed(1)}" cy="${dot.y.toFixed(1)}" r="3.5" style="fill:${dotFill};stroke:${dotStroke}" stroke-width="0.8" pointer-events="none"/>`;
               svg += `<circle cx="${dot.x.toFixed(1)}" cy="${dot.y.toFixed(1)}" r="8" fill="transparent" class="road-hit-area" data-road-name="${escapeHtml(dot.anchorName)}" data-road-type="${escapeHtml(dot.anchorType)}" data-road-hex="${dot.hexCode}" style="cursor:pointer;"/>`;
             } else {
-              svg += `<circle cx="${dot.x.toFixed(1)}" cy="${dot.y.toFixed(1)}" r="3.5" fill="${dotFill}" stroke="${dotStroke}" stroke-width="0.8" pointer-events="none"/>`;
+              svg += `<circle cx="${dot.x.toFixed(1)}" cy="${dot.y.toFixed(1)}" r="3.5" style="fill:${dotFill};stroke:${dotStroke}" stroke-width="0.8" pointer-events="none"/>`;
             }
             continue;
           }
@@ -12348,13 +12790,13 @@
             const { lake, cx, cy, rx, ry, hexCode } = item.data;
             const lakeBlocked =
               hexDrawInfo[hexCode] && hexDrawInfo[hexCode].blocked;
-            const lakeFill = lakeBlocked ? "#b2bfc1" : "#6a8a9e";
+            const lakeFill = lakeBlocked ? "var(--lake-dim)" : "var(--lake)";
             const lakeStroke = "none";
             const rot = lake.rotation
               ? ` transform="rotate(${lake.rotation} ${cx.toFixed(1)} ${cy.toFixed(1)})"`
               : "";
             const lakeName = LAKE_NAMES[lake.id] || lake.id;
-            svg += `<ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="${lakeFill}" stroke="none"${rot} pointer-events="none"/>`;
+            svg += `<ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" style="fill:${lakeFill}" stroke="none"${rot} pointer-events="none"/>`;
             svg += `<ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${(rx + 4).toFixed(1)}" ry="${(ry + 4).toFixed(1)}" fill="transparent"${rot} class="road-hit-area" data-road-name="${escapeHtml(lakeName)}" data-road-type="Lake" data-road-hex="${hexCode}" style="cursor:pointer;pointer-events:fill;"/>`;
             continue;
           }
@@ -12362,7 +12804,7 @@
             const { seg, pathD } = item.data;
             const riverBlocked =
               hexDrawInfo[seg.hexCode] && hexDrawInfo[seg.hexCode].blocked;
-            let color = riverBlocked ? "#b2bfc1" : "#6a8a9e";
+            let color = riverBlocked ? "var(--river-dim)" : "var(--river)";
             const jInfo = seg.connector
               ? _jrnConnKeys.get(seg.connKey)
               : undefined;
@@ -12371,7 +12813,7 @@
               ? ` class="journey-line" data-journey-name="${escapeHtml(jInfo.name)}"`
               : "";
             const width = seg.width || 3.5;
-            svg += `<path d="${pathD}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${jattr} pointer-events="none"/>`;
+            svg += `<path d="${pathD}" fill="none" style="stroke:${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${jattr} pointer-events="none"/>`;
             const riverName = RIVER_NAMES[seg.id] || seg.id;
             svg += `<path d="${pathD}" fill="none" stroke="transparent" stroke-width="12" stroke-linecap="round" data-road-name="${escapeHtml(riverName)}" data-road-type="River" data-road-hex="${seg.hexCode}" data-road-id="${escapeHtml(seg.id)}" class="road-hit-area" style="cursor:pointer;pointer-events:stroke;"/>`;
             continue;
@@ -12387,38 +12829,38 @@
               h.hexCode && HEXES[h.hexCode] && HEXES[h.hexCode].blank;
             if (h.isCenter) {
               if (pv) {
-                svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 6}" style="fill:var(--parchment-deep);font-size:8px;font-weight:600;">HERE</text>`;
+                svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 6}" style="fill:var(--hex-center-text);font-size:8px;font-weight:600;">HERE</text>`;
               } else if (!pv) {
-                svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 18}" style="fill:var(--parchment-deep);font-size:7px;">This hex</text>`;
+                svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 18}" style="fill:var(--hex-center-text);font-size:7px;">This hex</text>`;
                 const tAbbrev = terrainAbbrevOf(h.hexCode);
                 const centerProminent = hexHasProminentEntry(h.hexCode);
                 if (_blank) {
                 } else if (centerProminent) {
-                  svg += `<rect x="${h.drawX - 15}" y="${h.drawY - 16}" width="30" height="15" rx="3" ry="3" fill="rgba(180,140,0,0.7)" pointer-events="none"/>`;
+                  svg += `<rect x="${h.drawX - 15}" y="${h.drawY - 16}" width="30" height="15" rx="3" ry="3" style="fill:var(--prominent-bg)" pointer-events="none"/>`;
                   svg += `<text class="hex-text center-text" x="${h.drawX}" y="${h.drawY - 6}" style="fill:#ffffff;font-size:11px">${h.hexCode}</text>`;
                 } else {
                   svg += `<text class="hex-text center-text" x="${h.drawX}" y="${h.drawY - 6}" style="font-size:11px">${h.hexCode}</text>`;
                 }
                 if (tAbbrev)
-                  svg += `<text class="hex-name" x="${h.drawX}" y="${h.drawY + 4}" style="fill:var(--parchment-deep);font-size:7px;font-style:normal;">${tAbbrev}</text>`;
+                  svg += `<text class="hex-name" x="${h.drawX}" y="${h.drawY + 4}" style="fill:var(--hex-center-text);font-size:7px;font-style:normal;">${tAbbrev}</text>`;
                 const cName = hexNameOf(h.hexCode);
                 if (cName) {
                   const [cln1, cln2] = wrapHexName(cName, 14);
-                  svg += `<text class="hex-name" x="${h.drawX}" y="${h.drawY + 13}" style="fill:var(--parchment-deep);font-size:7px;">${cln1}</text>`;
+                  svg += `<text class="hex-name" x="${h.drawX}" y="${h.drawY + 13}" style="fill:var(--hex-center-text);font-size:7px;">${cln1}</text>`;
                   if (cln2)
-                    svg += `<text class="hex-name" x="${h.drawX}" y="${h.drawY + 21}" style="fill:var(--parchment-deep);font-size:7px;">${cln2}</text>`;
+                    svg += `<text class="hex-name" x="${h.drawX}" y="${h.drawY + 21}" style="fill:var(--hex-center-text);font-size:7px;">${cln2}</text>`;
                 }
               }
             } else {
               // Direction labels always visible (even in Player View)
               if (!(pv && _blank))
-                svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 18}" style="fill:${h.fg};font-size:7px;opacity:0.75">${h.dir}</text>`;
+                svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 18}" style="fill:${h.fg};font-size:7px;opacity:0.75">${_flipActive ? "" : h.dir}</text>`;
               if (!pv) {
                 const tAbbrev = terrainAbbrevOf(h.hexCode);
                 const prominent = hexHasProminentEntry(h.hexCode);
                 if (_blank) {
                 } else if (prominent) {
-                  svg += `<rect x="${h.drawX - 15}" y="${h.drawY - 17}" width="30" height="15" rx="3" ry="3" fill="rgba(180,140,0,0.7)" pointer-events="none"/>`;
+                  svg += `<rect x="${h.drawX - 15}" y="${h.drawY - 17}" width="30" height="15" rx="3" ry="3" style="fill:var(--prominent-bg)" pointer-events="none"/>`;
                   svg += `<text class="hex-text" x="${h.drawX}" y="${h.drawY - 6}" style="fill:#ffffff;font-size:11px">${h.hexCode}</text>`;
                 } else {
                   svg += `<text class="hex-text" x="${h.drawX}" y="${h.drawY - 6}" style="fill:${h.fg};font-size:11px">${h.hexCode}</text>`;
@@ -12440,7 +12882,7 @@
           const h = item.data;
           if (h.isEmpty) {
             svg += `<path class="${h.classes}" d="${hexPath(h.drawX, h.drawY, r)}"/>`;
-            svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 5}" style="font-size:7px">${h.dir}</text>`;
+            svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 5}" style="font-size:7px">${_flipActive ? "" : h.dir}</text>`;
             if (!isPlayerView())
               svg += `<text class="hex-text empty-text" x="${h.drawX}" y="${h.drawY + 8}" style="font-size:11px">\u2014</text>`;
             continue;
@@ -12515,6 +12957,7 @@
       // Main render entry point (re-draws detail + world map) and the Vantage (eye-height) input handlers.
       // ============================================================================
       function doLookAround() {
+        if (settingsGet("alwaysDisableRest")) _jrnIgnoreRest = true;
         doDetail(); // doDetail populates world map internally if visible
         doPanorama();
         saveState();
@@ -13613,6 +14056,7 @@
       }
 
       document.addEventListener("DOMContentLoaded", initHexSearch);
+      document.addEventListener("DOMContentLoaded", applyNightMode);
 
       // ============================================================================
       // TOOLTIPS, SELECTOR OVERLAY & ROUTE HIGHLIGHTING
@@ -14542,22 +14986,6 @@
         return fn(track.tpState.currentDate, days);
       }
 
-      // Terrain type -> Travel Point cost to enter that hex.
-      const TERRAIN_TP_COST = {
-        Aquatic: 2,
-        Farmland: 2,
-        "Fungal Forest": 2,
-        Hills: 2,
-        Meadow: 2,
-        "Open Forest": 2,
-        Bog: 3,
-        "Hilly Forest": 3,
-        "Tangled Forest": 3,
-        "Boggy Forest": 4,
-        "Craggy Forest": 4,
-        Swamp: 4,
-        "Thorny Forest": 4,
-      };
 
       function tpBaseForSpeed(speed) {
         return Math.floor(speed / 5);
@@ -15208,9 +15636,10 @@
       }
       // Total miles a journey covered = sum of each move's deducted cost (TP units) * 3.
       function jrnTrackMiles(track) {
-        let tp = 0;
-        for (const wp of track.waypoints || []) tp += wp.costTp || 0;
-        return Math.round(tp * JRN_MILES_PER_TP * 2) / 2;
+        // Hover total = TRUE ground distance, matching the saved-journey card total.
+        // Uses jrnJourneyStats so wild legs count as terrain-independent distance
+        // (6 mi/hex) rather than terrain-weighted TP x 3. Rounded to the nearest 0.5.
+        return Math.round(jrnJourneyStats(track).total * 2) / 2;
       }
 
       function flashInsufficientTP(targetHex, msg) {
@@ -15423,6 +15852,7 @@
         //  * remaining is still ABOVE half the day's base (threshold not reached).
         if (!t || !t.tpState) return;
         if (_jrnIgnoreRest) return;
+        if (settingsGet("disableEncounters")) return; // Settings: encounters disabled
         if (t.tpState.encounter) return; // uncleared encounter blocks new checks
         if (t.tpState.encounterCheckedDay === t.tpState.day) return; // once per day
         const base = tpBaseForSpeed(t.tpState.speed);
@@ -15492,6 +15922,21 @@
           lastLostAction: t.tpState.lastLostAction,
           travelLogLen: t.travelLog ? t.travelLog.length : 0,
         };
+        if (settingsGet("alwaysDisableRest")) {
+          // Resting disabled: Rest ONLY advances the day; no resource gating, no forced rest-day.
+          t.tpState.currentDate = journeyDateAdvance(t, 1);
+          t.tpState.day += 1;
+          _jrnForceMarch = false; t.tpState.forcedMarch = false; _tpFlashHex = null;
+          const _base = tpBaseForSpeed(t.tpState.speed);
+          t.tpState.tpTotal = _base; t.tpState.tpRemaining = _base;
+          _jrnIgnoreRest = true; t.tpState.ignoreRest = true;
+          t.tpState.encounter = false; _jrnEncounter = false; t.tpState.encounterAct = null;
+          jrnActNext(t);
+          if (!t.tpState.restUndoStack) t.tpState.restUndoStack = [];
+          t.tpState.restUndoStack.push({ act: t.tpState._curAct, snap: _restSnapshot });
+          jrnLogPush(t, jrnLogPrefix(t) + JRN_LOG.rest(t.tpState.tpTotal, t.tpState.speed));
+          trackSaveAll(tracks); trackUpdateUI(); doLookAround(); return;
+        }
         if (!t.travelLog) t.travelLog = [];
         t.travelLog.push({
           day: t.tpState.day,
@@ -15842,6 +16287,7 @@
       // ---- Move party ----
       // Called by the patched jumpToDetail when a track is active.
       function trackHandleHexClick(targetHex) {
+        if (settingsGet("alwaysDisableRest")) _jrnIgnoreRest = true;
         const currentHex = resolveHex(document.getElementById("pan-hex").value);
         if (!currentHex || targetHex === currentHex) return false;
 
@@ -16154,64 +16600,10 @@
                 ? Infinity
                 : t.tpState.tpRemaining * JRN_MILES_PER_TP;
               if (haveMiles + 1e-9 < _costMiles) {
-                // Not enough miles: partial advance toward the stop
-                if (haveMiles < 0.01) {
-                  flashInsufficientTP(targetHex, JRN_MSG.noMiles());
-                  return false;
-                }
-                const frac = haveMiles / _dist;
-                const newT = _curT + frac * (_nextStop - _curT);
-                const spentTp = t.tpState.tpRemaining;
-                t.tpState.tpRemaining = 0;
-                const prev = t.waypoints[t.waypoints.length - 1];
-                const fromT =
-                  _seg.id !== _jrnLastRoadId
-                    ? _curT // road switch: start at board point on the NEW road (not prev road frac)
-                    : prev.positionT != null
-                      ? prev.positionT
-                      : jrnSegInnerT(_seg);
-                prev.exitEdge = null;
-                prev.outMode = _jrnMode;
-                prev.outPathId =
-                  _seg.id === _jrnLastRoadId ? _jrnLastRoadId : _jrnLastRoadId;
-                t.waypoints.push({
-                  hex: currentHex,
-                  entryEdge: null,
-                  exitEdge: null,
-                  inMode: _jrnMode,
-                  inPathId: _usePathId,
-                  outMode: null,
-                  outPathId: null,
-                  costTp: spentTp,
-                  positionT: newT,
-                  fromT: fromT,
-                });
-                _jrnLastRoadId = _usePathId;
-                if (t.tpState) {
-                  t.waypoints[t.waypoints.length - 1].actionId =
-                    t.tpState._curAct;
-                  jrnLogPush(
-                    t,
-                    jrnLogPrefix(t) +
-                      JRN_LOG.partialAdvance(
-                        (_jrnMode === "river"
-                          ? RIVER_NAMES[_usePathId]
-                          : ROAD_NAMES[_usePathId]) || _usePathId,
-                        jrnFmtMiles(
-                          jrnRoundHalf(
-                            t.tpState.tpRemaining * JRN_MILES_PER_TP,
-                          ),
-                        ),
-                        jrnFmtMiles(
-                          jrnRoundHalf(t.tpState.tpTotal * JRN_MILES_PER_TP),
-                        ),
-                      ),
-                  );
-                }
-                jrnRollEncounter(t, currentHex);
-                trackSaveAll(tracks);
-                trackUpdateUI();
-                doLookAround();
+                // Insufficient miles to reach the next stop -> no partial advance.
+                // Show the insufficient-miles modal (it offers Ignore Resting). The old
+                // "one last push" partial-advance was removed by design.
+                flashInsufficientTP(targetHex, JRN_MSG.noMiles());
                 return false;
               }
               // Enough miles: advance to the intermediate stop
@@ -16253,94 +16645,6 @@
             ? null
             : jrnResolveSharedPath(currentHex, targetHex, jrnCurrentNetwork());
           if (!_spSpecial && !res.ok) {
-            // If the current road reaches the exit edge, allow partial advance toward it
-            // even if the destination has no continuing path.
-            const network = jrnCurrentNetwork();
-            const curSegs = network ? network[currentHex] || [] : [];
-            const curSeg = _jrnLastRoadId
-              ? curSegs.find(
-                  (s) =>
-                    s.id === _jrnLastRoadId &&
-                    ((s.enter && s.enter.edge === edgeAtoB) ||
-                      (s.exit && s.exit.edge === edgeAtoB)),
-                )
-              : null;
-            if (curSeg && !_trackPrepend) {
-              const haveMiles = _jrnIgnoreRest
-                ? Infinity
-                : t.tpState.tpRemaining * JRN_MILES_PER_TP;
-              if (haveMiles < 0.01) {
-                flashInsufficientTP(targetHex, JRN_MSG.noMiles());
-                return false;
-              }
-              const edgeFrac = jrnEdgeFrac(curSeg, edgeAtoB);
-              const startT = jrnCurrentPosT(
-                currentHex,
-                _jrnLastRoadId,
-                _jrnMode === "river",
-              );
-              const innerT = startT != null ? startT : jrnSegInnerT(curSeg);
-              const distToEdge =
-                Math.abs(innerT - edgeFrac) * (curSeg.abLength || 0);
-              if (haveMiles < distToEdge - 1e-9) {
-                // Partial advance within current hex toward the edge
-                const spentTp = t.tpState.tpRemaining;
-                t.tpState.tpRemaining = 0;
-                const frac = haveMiles / distToEdge;
-                const newT = innerT + frac * (edgeFrac - innerT);
-                const prev = t.waypoints[t.waypoints.length - 1];
-                const fromT =
-                  prev.positionT != null
-                    ? prev.positionT
-                    : jrnSegInnerT(curSeg);
-                prev.exitEdge = null;
-                prev.outMode = _jrnMode;
-                prev.outPathId = _jrnLastRoadId;
-                t.waypoints.push({
-                  hex: currentHex,
-                  entryEdge: null,
-                  exitEdge: null,
-                  inMode: _jrnMode,
-                  inPathId: _jrnLastRoadId,
-                  outMode: null,
-                  outPathId: null,
-                  costTp: spentTp,
-                  positionT: newT,
-                  fromT: fromT,
-                });
-                jrnRollEncounter(t, currentHex);
-                trackSaveAll(tracks);
-                trackUpdateUI();
-                doLookAround();
-                return false; // stay in current hex, don't let jumpToDetail navigate
-              }
-              // Has enough to reach edge but nothing on the other side — stop at edge
-              const spentTp = distToEdge / JRN_MILES_PER_TP;
-              if (!_jrnIgnoreRest) t.tpState.tpRemaining -= spentTp;
-              const prev = t.waypoints[t.waypoints.length - 1];
-              const fromT =
-                prev.positionT != null ? prev.positionT : jrnSegInnerT(curSeg);
-              prev.exitEdge = null;
-              prev.outMode = _jrnMode;
-              prev.outPathId = _jrnLastRoadId;
-              t.waypoints.push({
-                hex: currentHex,
-                entryEdge: null,
-                exitEdge: null,
-                inMode: _jrnMode,
-                inPathId: _jrnLastRoadId,
-                outMode: null,
-                outPathId: null,
-                costTp: spentTp,
-                positionT: edgeFrac,
-                fromT: fromT,
-              });
-              jrnRollEncounter(t, currentHex);
-              trackSaveAll(tracks);
-              trackUpdateUI();
-              doLookAround();
-              return false; // stay in current hex, don't let jumpToDetail navigate
-            }
             const msg =
               res.reason === "nopath"
                 ? JRN_MSG.noPath(lc, modeLabel)
@@ -16349,136 +16653,22 @@
             return false;
           }
           if (!_spSpecial && !_trackPrepend) {
+            // Enter-and-pause: if the destination segment carries a stop between its
+            // entry edge and its far side, CAP this move at that first stop -- BEFORE the
+            // affordability check. Miles are then judged against reaching the STOP, not
+            // the full crossing, so a party can enter and pause at a stop they can afford
+            // (even if they could not afford the whole hex). Sets _entryStopT + res.costMiles.
+            if (!_spSpecial && res && res.ok) { const _netB = jrnCurrentNetwork(); const _segB = ((_netB && _netB[targetHex]) || []).find((s) => s.id === res.id); if (_segB && Array.isArray(_segB.stopsT) && _segB.stopsT.length) { const _enT = jrnEdgeFrac(_segB, edgeBtoA); if (_enT != null) { const _farT = _enT === 0 ? 1 : 0; const _js = _segB.stopsT.filter((v) => typeof v === "number").filter((v) => _farT > _enT ? v > _enT + 1e-9 && v < _farT - 1e-9 : v < _enT - 1e-9 && v > _farT + 1e-9).sort((a, b) => (_farT > _enT ? a - b : b - a)); if (_js.length) { _entryStopT = _js[0]; res.costMiles = jrnRoundHalf(res.distA + Math.abs(_entryStopT - _enT) * (_segB.abLength || 0)); } } } }
             const haveMiles = _jrnIgnoreRest
               ? Infinity
               : t.tpState.tpRemaining * JRN_MILES_PER_TP;
             if (haveMiles + 1e-9 < res.costMiles) {
-              // --- Partial advance: spend all remaining miles, advance as far as possible ---
-              if (haveMiles < 0.01) {
-                flashInsufficientTP(targetHex, JRN_MSG.noMiles());
-                return false;
-              }
-              const spentMiles = haveMiles;
-              const spentTp = t.tpState.tpRemaining;
-              t.tpState.tpRemaining = 0;
-              // Determine where we end up: in hex A (didn't reach edge) or hex B (crossed)
-              const outPathId = res.outId || res.id;
-              const inPathId = res.id;
-              const network = jrnCurrentNetwork();
-              const segA = (network[currentHex] || []).find(
-                (s) => s.id === outPathId,
-              );
-              const edgeAB_frac = segA ? jrnEdgeFrac(segA, edgeAtoB) : null;
-              const startT = jrnSegInnerT(segA);
-              const distToEdge =
-                res.distA != null
-                  ? res.distA
-                  : Math.abs(startT - edgeAB_frac) * (segA ? segA.abLength : 0);
-              if (spentMiles < distToEdge - 1e-9) {
-                // Partial advance WITHIN current hex (didn't reach edge)
-                const frac = spentMiles / distToEdge; // 0..1, how far toward edge
-                const newT = startT + frac * (edgeAB_frac - startT);
-                // Add waypoint in SAME hex at the new position
-                const prev = t.waypoints[t.waypoints.length - 1];
-                const fromT =
-                  prev.positionT != null ? prev.positionT : jrnSegInnerT(segA);
-                prev.exitEdge = null; // didn't leave
-                prev.outMode = _jrnMode;
-                prev.outPathId = outPathId;
-                t.waypoints.push({
-                  hex: currentHex,
-                  entryEdge: null,
-                  exitEdge: null,
-                  inMode: _jrnMode,
-                  inPathId: outPathId,
-                  outMode: null,
-                  outPathId: null,
-                  costTp: spentTp,
-                  positionT: newT,
-                  fromT: fromT, // where we started this partial (for rendering)
-                });
-                _jrnLastRoadId = outPathId;
-              } else {
-                // Crossed into hex B, partial advance within destination hex
-                const remainMiles = spentMiles - distToEdge;
-                const segB = (network[targetHex] || []).find(
-                  (s) => s.id === inPathId,
-                );
-                const edgeB_frac = segB
-                  ? jrnEdgeFrac(segB, TRACK_OPPOSITE_EDGE[edgeAtoB])
-                  : 0;
-                const destInnerT = segB ? jrnSegInnerT(segB) : 0.5;
-                const totalDistB =
-                  res.distB != null
-                    ? res.distB
-                    : Math.abs(edgeB_frac - destInnerT) *
-                      (segB ? segB.abLength : 0);
-                let newT;
-                if (totalDistB < 1e-9) {
-                  newT = destInnerT;
-                } else {
-                  const frac = Math.min(remainMiles / totalDistB, 1.0);
-                  newT = edgeB_frac + frac * (destInnerT - edgeB_frac);
-                }
-                // Waypoint: leave current hex, arrive partially in target hex
-                const prev = t.waypoints[t.waypoints.length - 1];
-                prev.exitEdge = edgeAtoB;
-                prev.outMode = _jrnMode;
-                prev.outPathId = outPathId;
-                t.waypoints.push({
-                  hex: targetHex,
-                  entryEdge: edgeBtoA,
-                  exitEdge: null,
-                  inMode: _jrnMode,
-                  inPathId: inPathId,
-                  outMode: null,
-                  outPathId: null,
-                  costTp: spentTp,
-                  positionT: newT,
-                });
-                _jrnLastRoadId = inPathId;
-              }
-              const _partialHex = t.waypoints[t.waypoints.length - 1].hex;
-              if (t.tpState) {
-                t.waypoints[t.waypoints.length - 1].actionId =
-                  t.tpState._curAct;
-                jrnLogPush(
-                  t,
-                  jrnLogPrefix(t) +
-                    JRN_LOG.partialAdvance(
-                      (_jrnMode === "river"
-                        ? RIVER_NAMES[_jrnLastRoadId]
-                        : ROAD_NAMES[_jrnLastRoadId]) || _jrnLastRoadId,
-                      jrnFmtMiles(
-                        jrnRoundHalf(t.tpState.tpRemaining * JRN_MILES_PER_TP),
-                      ),
-                      jrnFmtMiles(
-                        jrnRoundHalf(t.tpState.tpTotal * JRN_MILES_PER_TP),
-                      ),
-                    ),
-                );
-              }
-              if (_partialHex !== targetHex) {
-                // Stayed in current hex - don't let jumpToDetail navigate away
-                jrnRollEncounter(t, currentHex);
-                trackSaveAll(tracks);
-                trackUpdateUI();
-                doLookAround();
-                return false;
-              }
-              document.getElementById("pan-hex").value = _partialHex;
-              if (t.tpState) {
-                t.tpState.lostClearedPending = false;
-                t.tpState.lastLostAction = null;
-                t.tpState.fmUndoable = false;
-              }
-              jrnRollEncounter(t, _partialHex);
-              trackSaveAll(tracks);
-              trackUpdateUI();
-              doLookAround();
-              return true;
+              // Not enough miles to reach even the first stop / entry point -> abort.
+              // Show the insufficient-miles modal (it offers Ignore Resting). No partial
+              // advance -- the party cannot stop at arbitrary points along a path.
+              flashInsufficientTP(targetHex, JRN_MSG.noMiles());
+              return false;
             }
-            if (!_spSpecial && res && res.ok) { const _netB = jrnCurrentNetwork(); const _segB = ((_netB && _netB[targetHex]) || []).find((s) => s.id === res.id); if (_segB && Array.isArray(_segB.stopsT) && _segB.stopsT.length) { const _enT = jrnEdgeFrac(_segB, edgeBtoA); if (_enT != null) { const _farT = _enT === 0 ? 1 : 0; const _js = _segB.stopsT.filter((v) => typeof v === "number").filter((v) => _farT > _enT ? v > _enT + 1e-9 && v < _farT - 1e-9 : v < _enT - 1e-9 && v > _farT + 1e-9).sort((a, b) => (_farT > _enT ? a - b : b - a)); if (_js.length) { _entryStopT = _js[0]; res.costMiles = jrnRoundHalf(res.distA + Math.abs(_entryStopT - _enT) * (_segB.abLength || 0)); } } } }
             if (!_jrnIgnoreRest)
               t.tpState.tpRemaining -= res.costMiles / JRN_MILES_PER_TP;
             _moveCostTp = res.costMiles / JRN_MILES_PER_TP;
@@ -16514,7 +16704,8 @@
           !_trackPrepend &&
           t.tpState &&
           t.tpState.lostCheckedDay !== t.tpState.day &&
-          !t.tpState.lost
+          !t.tpState.lost &&
+          !settingsGet("disableLost")
         ) {
           let _lkind = null;
           if (_moveMode === "tp") _lkind = "wild";
@@ -16536,6 +16727,9 @@
               if (!_jrnIgnoreRest) t.tpState.tpRemaining += _moveCostTp; // refund the cost
               t.tpState.lost = true;
               t.tpState.lastLostAction = "gotLost";
+              // Freeze the rotation seed for Lost Rotates Player View: capture the date now so
+              // resting (which advances currentDate) does NOT re-scramble the view until cleared.
+              t.tpState.lostSeed = t.tpState.currentDate;
               t.tpState.lostClearedPending = false;
               t.tpState.gotLostAct = t.tpState._curAct;
               _jrnLost = true;
@@ -16655,7 +16849,11 @@
         }
         if (t.tpState) {
           t.tpState.lostClearedPending = false;
-          t.tpState.lastLostAction = null;
+          // Keep the got-lost undo hook alive while the party is still lost, so undoing
+          // back through later moves can eventually reverse the Lost itself (LIFO).
+          if (!(t.tpState.lastLostAction === "gotLost" && t.tpState.lost)) {
+            t.tpState.lastLostAction = null;
+          }
           t.tpState.fmUndoable = false;
         }
         jrnRollEncounter(t, targetHex);
@@ -16706,7 +16904,11 @@
         }
 
         // Undo a "got lost" result -> un-lose and refund the day's lost-check (retry-able).
-        if (t.tpState && t.tpState.lastLostAction === "gotLost") {
+        if (
+          t.tpState &&
+          t.tpState.lastLostAction === "gotLost" &&
+          !t.waypoints.some((w) => (w.actionId || 0) > (t.tpState.gotLostAct || 0))
+        ) {
           t.tpState.lost = false;
           t.tpState.lastLostAction = null;
           t.tpState.lostCheckedDay = null; // refund the daily check so it can roll again
@@ -16855,19 +17057,31 @@
       function jrnJourneyStats(t) {
         let wild = 0,
           path = 0,
-          river = 0;
+          river = 0,
+          wildTp = 0;
         const wps = t.waypoints || [];
         for (let i = 0; i < wps.length; i++) {
           const wp = wps[i];
           if (wp.costTp == null) continue;
-          const miles = wp.costTp * JRN_MILES_PER_TP;
           let mode = wp.inMode;
           if (!mode && i > 0) mode = wps[i - 1].outMode;
-          if (mode === "river") river += miles;
-          else if (mode === "path") path += miles;
-          else wild += miles;
+          if (mode === "river") river += wp.costTp * JRN_MILES_PER_TP;
+          else if (mode === "path") path += wp.costTp * JRN_MILES_PER_TP;
+          else {
+            // WILD: two different quantities.
+            //  TP    = terrain-weighted effort (2/3/4 per hex) = costTp, summed.
+            //  MILES = TRUE ground distance, terrain-INDEPENDENT. A full hex crossing is
+            //          6 mi (the 2-TP baseline x 3 mi/TP). We derive the fraction of the
+            //          hex actually traversed as costTp / (that hex terrain's base cost),
+            //          so a FULL move is always 6 mi regardless of terrain, and a partial
+            //          (legacy) move scales proportionally (e.g. 2 of 4 TP in swamp = 3 mi).
+            const _terr = HEXES[wp.hex] && HEXES[wp.hex].terrain;
+            const _base = _terr != null ? (TERRAIN_TP_COST[_terr] ?? 2) : 2;
+            wild += (wp.costTp / _base) * 6;
+            wildTp += wp.costTp;
+          }
         }
-        return { total: wild + path + river, wild, path, river };
+        return { total: wild + path + river, wild, path, river, wildTp };
       }
 
       function trackRenderList() {
@@ -16907,7 +17121,7 @@
       <div class="track-card-sub">${escapeHtml(fromHex)} &#8594; ${escapeHtml(toHex)} &middot; ${hexCount} hex${hexCount !== 1 ? "es" : ""}</div>
       <div class="track-card-stats">
         <span class="jrn-stat jrn-stat--total">Total ${fmt(stats.total)} mi</span>
-        <span class="jrn-stat">Wild ${fmt(stats.wild)} mi</span>
+        <span class="jrn-stat">Wild ${fmt(stats.wild)} mi (${fmt(stats.wildTp)} TP)</span>
         <span class="jrn-stat">Path ${fmt(stats.path)} mi</span>
         <span class="jrn-stat">River ${fmt(stats.river)} mi</span>
       </div>
@@ -16936,6 +17150,7 @@
 
       // ---- Toggle button UI ----
       function trackUpdateUI() {
+        if (settingsGet("alwaysDisableRest")) _jrnIgnoreRest = true;
         // The Track button lives in the dynamic hex column - re-query each call since
         // doLookAround() rebuilds that HTML on every navigation.
         const btn = document.getElementById("track-toggle-btn");
@@ -18158,6 +18373,30 @@
             Save
           </button>
         </div>
+      </div>
+    </div>
+    <div id="settings-modal" class="modal" style="display: none; z-index: 10005">
+      <div class="modal__panel modal__panel--sm">
+        <div class="modal__title">Settings</div>
+        <div class="settings-section">
+          <div class="settings-head">UI</div>
+          <div class="settings-row"><span>Theme</span><div class="segmented segmented--3"><button id="set-theme-regular" class="toggle" onclick="settingsSetTheme('regular')">Regular</button><button id="set-theme-modern" class="toggle" onclick="settingsSetTheme('modern')">Modern</button><button id="set-theme-night" class="toggle" onclick="settingsSetTheme('night')">Night</button></div></div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-head">Hex Map</div>
+          <div class="settings-row"><span>Travel Point View</span><div class="segmented"><button id="set-travelPointView-yes" class="toggle toggle--yes" onclick="settingsToggle('travelPointView', true)">Yes</button><button id="set-travelPointView-no" class="toggle toggle--no" onclick="settingsToggle('travelPointView', false)">No</button></div></div>
+          <div class="settings-row"><span>List Paths &amp; Rivers</span><div class="segmented"><button id="set-listRoads-yes" class="toggle toggle--yes" onclick="settingsToggle('listRoads', true)">Yes</button><button id="set-listRoads-no" class="toggle toggle--no" onclick="settingsToggle('listRoads', false)">No</button></div></div>
+          <div class="settings-row"><span>Vantage Hides Roads</span><div class="segmented"><button id="set-vantageHidesRoads-yes" class="toggle toggle--yes" onclick="settingsToggle('vantageHidesRoads', true)">Yes</button><button id="set-vantageHidesRoads-no" class="toggle toggle--no" onclick="settingsToggle('vantageHidesRoads', false)">No</button></div></div>
+          <div class="settings-row"><span>Disable Fog in Player View</span><div class="segmented"><button id="set-disableFogInPlayerView-yes" class="toggle toggle--yes" onclick="settingsToggle('disableFogInPlayerView', true)">Yes</button><button id="set-disableFogInPlayerView-no" class="toggle toggle--no" onclick="settingsToggle('disableFogInPlayerView', false)">No</button></div></div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-head">Journeys</div>
+          <div class="settings-row"><span>Always Disable Resting</span><div class="segmented"><button id="set-alwaysDisableRest-yes" class="toggle toggle--yes" onclick="settingsToggle('alwaysDisableRest', true)">Yes</button><button id="set-alwaysDisableRest-no" class="toggle toggle--no" onclick="settingsToggle('alwaysDisableRest', false)">No</button></div></div>
+          <div class="settings-row"><span>Disable Encounters</span><div class="segmented"><button id="set-disableEncounters-yes" class="toggle toggle--yes" onclick="settingsToggle('disableEncounters', true)">Yes</button><button id="set-disableEncounters-no" class="toggle toggle--no" onclick="settingsToggle('disableEncounters', false)">No</button></div></div>
+          <div class="settings-row"><span>Disable Getting Lost</span><div class="segmented"><button id="set-disableLost-yes" class="toggle toggle--yes" onclick="settingsToggle('disableLost', true)">Yes</button><button id="set-disableLost-no" class="toggle toggle--no" onclick="settingsToggle('disableLost', false)">No</button></div></div>
+          <div class="settings-row"><span>Lost Rotates Player View</span><div class="segmented"><button id="set-lostFlipsPlayerView-yes" class="toggle toggle--yes" onclick="settingsToggle('lostFlipsPlayerView', true)">Yes</button><button id="set-lostFlipsPlayerView-no" class="toggle toggle--no" onclick="settingsToggle('lostFlipsPlayerView', false)">No</button></div></div>
+        </div>
+        <div class="modal__actions"><button class="btn btn--primary" type="button" onclick="closeSettings()">Done</button></div>
       </div>
     </div>
     <div id="ui-modal" class="modal" style="display: none; z-index: 10003">
