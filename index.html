@@ -49,7 +49,7 @@
         --toggle-on-text: var(--fill-text);
         --toggle-on-border: var(--fill-border);
         /* Quiet 'on' state for set-and-forget toggles (Player/2D/World): subtle ochre wash. */
-        --toggle-quiet-bg: rgba(168, 120, 56, 0.1);
+        --toggle-quiet-bg: #eadec8;
         --toggle-quiet-fg: var(--ochre);
         --toggle-quiet-border: var(--ochre);
         --tab-active: var(
@@ -113,12 +113,12 @@
         --lake-dim: #aebaba;
         --road-label: #ffe000;
         --hex-center-fill: #2a2420;
-        --tooltip-bg1: rgba(249, 243, 227, 0.98);
-        --tooltip-bg2: rgba(232, 220, 195, 0.98);
+        --tooltip-bg1: #f9f3e3;
+        --tooltip-bg2: #e8dcc3;
         --tooltip-border: rgba(107, 94, 78, 0.75);
         --tooltip-inner-border: rgba(107, 94, 78, 0.2);
-        --prominent-bg: rgba(180, 140, 0, 0.7);
-        --prominent-bg-soft: rgba(180, 140, 0, 0.3);
+        --prominent-bg: #c6a841;
+        --prominent-bg-soft: #dfcd97;
         --prominent-border: #966e00;
         --prominent-text: #fff;
         --hidden-bg: #e8e8e8;
@@ -134,9 +134,9 @@
          only; spacing/fonts/radii unchanged. Journey colors are per-journey values, untouched. */
       :root.night-mode {
         /* VS Dark: neutral dark grays + muted blue accents (Visual Studio dark theme feel). */
-        --ink: #d4d4d4;
+        --ink: #b5b5b5;
         --ink-soft: #b5b5b5;
-        --ink-faded: #858585;
+        --ink-faded: #b5b5b5;
         --parchment: #1e1e1e;
         --parchment-deep: #252526;
         --parchment-light: #2d2d30;
@@ -146,12 +146,12 @@
         --rust: #d16969;
         --sky: #569cd6;
         --shadow: rgba(0, 0, 0, 0.4);
-        --border: #3f3f46;
+        --border: #6e6e70;
         --border-strong: #6e6e70;
         --focus-ring: #007acc;
         --danger: #f14c4c;
         --danger-hover: #ff6b6b;
-        --lost: #6e6e70;
+        --lost: #cccccc;
         --lost-text: #cccccc;
         --encounter: #f14c4c;
         --encounter-text: #ff8080;
@@ -165,7 +165,7 @@
         --toggle-on-bg: #0e639c;
         --toggle-on-text: #ffffff;
         --toggle-on-border: #1177bb;
-        --toggle-quiet-bg: rgba(14, 99, 156, 0.18);
+        --toggle-quiet-bg: #1b2a35;
         --toggle-quiet-fg: #569cd6;
         --toggle-quiet-border: #0e639c;
         --tab-active: #007acc;
@@ -183,21 +183,22 @@
         --lake-dim: #33506b;
         --road-label: #4da8ff;
         --hex-center-fill: #cdd6e0;
-        --tooltip-bg1: rgba(45, 45, 48, 0.98);
-        --tooltip-bg2: rgba(30, 30, 30, 0.98);
+        --tooltip-bg1: #2d2d30;
+        --tooltip-bg2: #1e1e1e;
         --tooltip-border: #3f3f46;
         --tooltip-inner-border: rgba(255, 255, 255, 0.06);
-        --prominent-bg: rgba(199, 161, 74, 0.85);
-        --prominent-bg-soft: rgba(199, 161, 74, 0.22);
+        --prominent-bg: #ae8d43;
+        --prominent-bg-soft: #433b28;
         --prominent-border: #c7a14a;
         --prominent-text: #1e1e1e;
-        --hidden-bg: #2d2d30;
+        --hidden-bg: #2e2942;
         --hidden-border: #7a6ea8;
         --hex-center-edge: #8a95a3;
         --hex-center-edge-2: #9aa5b3;
         --hex-center-text: #1e1e1e;
       }
       .segmented--3 .toggle { flex: 1; }
+      .settings-row--theme .segmented { flex: 1; }
       /* ===== MODERN THEME (Settings > UI) — white/gray Apple aesthetic, blue accent,
          muted terrain, modern red for type tags + directions. Journey colors untouched. */
       :root.modern-mode {
@@ -232,7 +233,7 @@
         --toggle-on-bg: #0071e3;
         --toggle-on-text: #ffffff;
         --toggle-on-border: #0071e3;
-        --toggle-quiet-bg: rgba(0, 113, 227, 0.10);
+        --toggle-quiet-bg: #e6f1fc;
         --toggle-quiet-fg: #0071e3;
         --toggle-quiet-border: #0071e3;
         --tab-active: #0071e3;
@@ -254,12 +255,12 @@
         --hex-center-edge-2: #e6e6ea;
         --hex-center-outline: #0071e3;
         --hex-center-text: #1d1d1f;
-        --tooltip-bg1: rgba(255, 255, 255, 0.98);
-        --tooltip-bg2: rgba(245, 245, 247, 0.98);
+        --tooltip-bg1: #ffffff;
+        --tooltip-bg2: #f5f5f7;
         --tooltip-border: rgba(0, 0, 0, 0.14);
         --tooltip-inner-border: rgba(0, 0, 0, 0.06);
-        --prominent-bg: rgba(255, 149, 0, 0.9);
-        --prominent-bg-soft: rgba(255, 149, 0, 0.14);
+        --prominent-bg: #ffa01a;
+        --prominent-bg-soft: #fff0db;
         --prominent-border: #ff9500;
         --prominent-text: #ffffff;
         --hidden-bg: #f3eefc;
@@ -317,7 +318,7 @@
       header {
         text-align: center;
         padding: 30px 10px 24px;
-        border-bottom: 1px solid var(--ink-faded);
+        border-bottom: 1px solid var(--border);
         margin-bottom: 24px;
       }
       h1 {
@@ -382,7 +383,7 @@
       }
       .card {
         background: var(--parchment-light);
-        border: 1px solid var(--ink-faded);
+        border: 1px solid var(--border);
         border-radius: 2px;
         padding: 24px 28px;
         margin-bottom: 18px;
@@ -416,10 +417,10 @@
         flex: 1 1 200px;
         min-width: 150px;
       }
-      .settings-gear { flex: 0 0 auto; align-self: end; width: 40px; height: 40px; border: 1px solid var(--ink-faded); border-radius: 6px; background: var(--parchment-light); color: var(--ink); font-size: 20px; line-height: 1; cursor: pointer; }
+      .settings-gear { flex: 0 0 auto; align-self: end; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 6px; background: var(--parchment-light); color: var(--ink); line-height: 1; cursor: pointer; }
       .settings-gear:hover { background: rgba(44, 24, 16, 0.08); }
       .settings-section { margin-bottom: 18px; }
-      .settings-head { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faded); border-bottom: 1px solid var(--ink-faded); padding-bottom: 4px; margin-bottom: 6px; }
+      .settings-head { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faded); border-bottom: 1px solid var(--border); padding-bottom: 4px; margin-bottom: 6px; }
       .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: var(--fs-sm); color: var(--ink); cursor: pointer; }
       .settings-row input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; flex: 0 0 auto; }
       .search-results {
@@ -430,7 +431,7 @@
         max-height: 320px;
         overflow-y: auto;
         background: var(--parchment-light);
-        border: 1px solid var(--ink-faded);
+        border: 1px solid var(--border);
         border-radius: 4px;
         box-shadow: 0 6px 18px var(--shadow);
         z-index: 20;
@@ -520,7 +521,7 @@
         font-family: var(--font-display);
         font-size: var(--fs-lg);
         letter-spacing: 0.04em;
-        border-bottom: 1px solid var(--ink-faded);
+        border-bottom: 1px solid var(--border);
         padding-bottom: 8px;
         margin-bottom: 14px;
         color: var(--ink);
@@ -635,7 +636,7 @@
         max-height: 360px;
       }
       .full-map-svg path[data-fullmap-hex]:hover {
-        stroke: var(--ink);
+        stroke: var(--border-strong);
         stroke-width: 1.2;
       }
       .hex-tooltip {
@@ -1090,7 +1091,7 @@
       }
       button.ue-io:hover {
         color: var(--ink);
-        border-color: var(--ink-faded);
+        border-color: var(--border);
       }
       #ue-file-input {
         display: none;
@@ -1230,7 +1231,7 @@
         text-align: left;
         cursor: pointer;
         background: var(--parchment-light);
-        border: 1px solid var(--ink-faded);
+        border: 1px solid var(--border);
         border-radius: 6px;
         padding: 9px 12px;
         font-family: inherit;
@@ -1260,7 +1261,7 @@
       .hex-tab-bar {
         display: flex;
         gap: 2px;
-        border-bottom: 2px solid var(--ink-faded);
+        border-bottom: 2px solid var(--border);
         margin-bottom: 16px;
         flex-wrap: nowrap;
       }
@@ -1389,14 +1390,14 @@
         max-width: 420px;
         margin: 0 auto 10px;
         padding: 8px 14px;
-        background: rgba(192, 26, 18, 0.16);
-        border: 1px solid #c01a12;
+        background: color-mix(in srgb, var(--encounter) 16%, transparent);
+        border: 1px solid var(--encounter);
         border-radius: 8px;
       }
       .encounter-banner-txt {
         font-family: var(--font-display);
         font-size: var(--fs-base);
-        color: #8f1410;
+        color: var(--encounter-text);
         letter-spacing: 0.02em;
       }
       .lost-banner {
@@ -1407,14 +1408,14 @@
         max-width: 420px;
         margin: 0 auto 10px;
         padding: 8px 14px;
-        background: rgba(124, 130, 138, 0.2);
-        border: 1px solid #7c828a;
+        background: color-mix(in srgb, var(--lost) 20%, transparent);
+        border: 1px solid var(--lost);
         border-radius: 8px;
       }
       .lost-banner-txt {
         font-family: var(--font-display);
         font-size: var(--fs-base);
-        color: #40454d;
+        color: var(--lost-text);
         letter-spacing: 0.02em;
       }
       .track-card {
@@ -1436,7 +1437,7 @@
         align-items: center;
         gap: 5px;
         background: transparent;
-        border: 1px solid var(--ink-faded);
+        border: 1px solid var(--border);
         border-radius: 3px;
         padding: 3px 10px;
         cursor: pointer;
@@ -1449,7 +1450,7 @@
       }
       .track-act:hover {
         color: var(--ink);
-        border-color: var(--ink);
+        border-color: var(--border-strong);
       }
       .track-act svg {
         display: block;
@@ -1481,7 +1482,7 @@
         line-height: 1.5;
         color: var(--ink);
         background: var(--parchment-light);
-        border: 1px solid var(--ink);
+        border: 1px solid var(--border-strong);
         border-radius: 5px;
         padding: 10px;
         box-sizing: border-box;
@@ -1548,7 +1549,7 @@
         gap: 10px;
         padding: 12px;
         background: var(--parchment-deep);
-        border: 1px solid var(--ink-faded);
+        border: 1px solid var(--border);
         border-radius: 9px;
         box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
       }
@@ -1591,7 +1592,7 @@
         font-size: var(--fs-base);
         text-align: center;
         font-family: var(--font-body);
-        border: var(--bw) solid var(--ink-faded);
+        border: var(--bw) solid var(--border);
         border-radius: 5px;
         background: var(--parchment);
         color: var(--ink);
@@ -1746,7 +1747,7 @@
         width: 66.67%;
         height: 100%;
         background: rgba(107, 94, 78, 0.18);
-        border: 1px solid var(--ink-faded);
+        border: 1px solid var(--border);
         border-radius: 6px;
         box-sizing: border-box;
       }
@@ -1787,7 +1788,7 @@
         width: 2px;
         height: calc(100% + 2px);
         margin-left: -1px;
-        background: var(--ink);
+        background: var(--border-strong);
         border-radius: 1px;
         z-index: 3;
       }
@@ -1871,7 +1872,7 @@
         justify-content: center;
         gap: var(--sp-1);
         padding: var(--pad-btn);
-        border: var(--bw) solid var(--ink-faded);
+        border: var(--bw) solid var(--border);
         border-radius: var(--r-pill);
         background: var(--parchment-deep);
         color: var(--ink-faded);
@@ -1885,7 +1886,7 @@
       }
       .toggle:hover {
         color: var(--ink);
-        border-color: var(--ink);
+        border-color: var(--border-strong);
       }
       .toggle:focus-visible {
         outline: var(--bw-strong) solid var(--focus-ring);
@@ -1964,7 +1965,7 @@
       }
       .modal__panel {
         background: var(--parchment);
-        border: var(--bw-strong) solid var(--ink);
+        border: var(--bw-strong) solid var(--border-strong);
         border-radius: var(--r-md);
         box-shadow: var(--shadow-lg);
         padding: var(--sp-5);
@@ -2005,6 +2006,47 @@
         justify-content: center;
       }
       /* ===== END MODAL SHELL ===== */
+      /* Lost-direction compass selector (referee picks the players' "north"). */
+      .lost-compass {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: var(--sp-2) auto var(--sp-1);
+      }
+      .lost-compass__hub {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--ink-soft);
+        opacity: 0.5;
+        transform: translate(-50%, -50%);
+      }
+      .lost-compass .dir {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        min-width: 46px;
+        padding: 6px 8px;
+        border-color: var(--border);
+        color: var(--ink-faded);
+        background: var(--parchment);
+      }
+      .lost-compass .dir:hover:not(.dir--locked):not(.is-sel) {
+        border-color: var(--border-strong);
+        color: var(--ink);
+      }
+      .lost-compass .dir.is-sel {
+        background: var(--fill);
+        color: var(--fill-text);
+        border-color: var(--fill-border);
+      }
+      .lost-compass .dir--locked {
+        border-style: dashed;
+        opacity: 0.55;
+        cursor: default;
+      }
       /* World/Vantage toggles + Capture action stretch evenly across the bar. */
       @media (pointer: coarse) {
         .road-hit-area {
@@ -2107,7 +2149,7 @@
         font-family: inherit;
         font-size: var(--fs-sm);
         padding: 3px 6px;
-        border: 1px solid var(--ink-faded);
+        border: 1px solid var(--border);
         border-radius: 4px;
         background: var(--parchment);
         color: var(--ink);
@@ -2189,12 +2231,12 @@
       }
       /* Ghost = secondary (outline). */
       .btn--ghost {
-        border-color: var(--ink-faded);
+        border-color: var(--border);
         color: var(--ink-faded);
       }
       .btn--ghost:hover {
         color: var(--ink);
-        border-color: var(--ink);
+        border-color: var(--border-strong);
       }
       /* Danger = destructive/irreversible only. */
       .btn--danger {
@@ -2206,7 +2248,7 @@
         cursor: default;
         border-style: dashed;
         color: var(--ink-faded);
-        border-color: var(--ink-faded);
+        border-color: var(--border);
         opacity: 0.7;
       }
       .btn--danger:hover {
@@ -2243,7 +2285,7 @@
         font-family: inherit;
         font-size: var(--fs-sm);
         padding: 5px 14px;
-        border: 1px solid var(--ink-faded);
+        border: 1px solid var(--border);
         border-radius: 4px;
         background: transparent;
         color: var(--ink);
@@ -2251,7 +2293,7 @@
         transition: all 0.15s ease;
       }
       .jrn-btn:hover {
-        border-color: var(--ink);
+        border-color: var(--border-strong);
         background: rgba(107, 94, 78, 0.08);
       }
       .jrn-btn--on {
@@ -2277,9 +2319,10 @@
         font-size: var(--fs-base);
       }
       .jrn-ico {
-        font-size: var(--fs-sm);
-        margin-right: 2px;
-        vertical-align: -1px;
+        display: inline-flex;
+        align-items: center;
+        margin-right: 4px;
+        vertical-align: -2px;
       }
       .tp-val {
         font-weight: bold;
@@ -2369,7 +2412,7 @@
                 hidden
               ></div>
             </div>
-            <button type="button" id="settings-btn" class="settings-gear" title="Settings" aria-label="Settings" onclick="openSettings()">&#9881;</button>
+            <button type="button" id="settings-btn" class="settings-gear" title="Settings" aria-label="Settings" onclick="openSettings()"><svg width="22" height="22" viewBox="-2 -2 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <input id="pan-hex" type="hidden" value="" />
             <input id="pan-vantage" type="hidden" value="6" />
             <input id="tog-fog" type="hidden" data-active="0" />
@@ -9536,7 +9579,7 @@
         const el = document.getElementById("tog-playerview");
         el.dataset.active = el.dataset.active !== "1" ? "1" : "0";
         const fogEl = document.getElementById("tog-fog");
-        if (fogEl) fogEl.dataset.active = (el.dataset.active === "1" && !settingsGet("disableFogInPlayerView")) ? "1" : "0";
+        if (fogEl) fogEl.dataset.active = (el.dataset.active === "1" && settingsGet("fogInPlayerView")) ? "1" : "0";
         doLookAround();
         saveState();
       }
@@ -9783,7 +9826,7 @@
         // Restore all Settings toggles to their defaults (literal key: const defined later).
         try { localStorage.removeItem("dolmenwood-settings"); } catch (e) {}
         _settings = null;
-        ["nightMode", "travelPointView", "listRoads", "vantageHidesRoads", "disableFogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) {
+        ["nightMode", "travelPointView", "listRoads", "vantageHidesRoads", "fogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) {
           if (typeof settingsSyncSeg === "function") settingsSyncSeg(k, settingsGet(k));
         });
         // A disabled-resting override may have been cleared; recompute the ignore-rest flag.
@@ -9919,13 +9962,13 @@
       };
       function isNightMode() { return getTheme() === "night"; } // end const TERRAIN_COLOR
       const SETTINGS_KEY = "dolmenwood-settings";
-      const SETTINGS_DEFAULTS = { travelPointView:false, listRoads:true, alwaysDisableRest:false, disableEncounters:false, disableLost:false, lostFlipsPlayerView:false, disableFogInPlayerView:false, vantageHidesRoads:true, nightMode:false, theme:"regular" };
+      const SETTINGS_DEFAULTS = { travelPointView:false, listRoads:true, alwaysDisableRest:false, disableEncounters:false, disableLost:false, lostFlipsPlayerView:false, fogInPlayerView:true, vantageHidesRoads:true, nightMode:false, theme:"regular" };
       let _settings = null;
       function settingsLoad() { if (_settings) return _settings; _settings = Object.assign({}, SETTINGS_DEFAULTS); try { const raw = localStorage.getItem(SETTINGS_KEY); if (raw) Object.assign(_settings, JSON.parse(raw)); } catch (e) {} return _settings; }
       function settingsGet(key) { return settingsLoad()[key]; }
       function settingsSave() { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settingsLoad())); } catch (e) {} }
       function isTravelPointView() { return settingsGet("travelPointView"); }
-            function openSettings() { const s = settingsLoad(); ["nightMode", "travelPointView", "listRoads", "vantageHidesRoads", "disableFogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) { settingsSyncSeg(k, !!s[k]); }); settingsSyncTheme(); document.getElementById("settings-modal").style.display = "flex"; }
+            function openSettings() { const s = settingsLoad(); ["nightMode", "travelPointView", "listRoads", "vantageHidesRoads", "fogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) { settingsSyncSeg(k, !!s[k]); }); settingsSyncTheme(); document.getElementById("settings-modal").style.display = "flex"; }
       function closeSettings() { document.getElementById("settings-modal").style.display="none"; }
       function getTheme() { var s = settingsLoad(); if (s.theme) return s.theme; return s.nightMode ? "night" : "regular"; }
       function isModernMode() { return getTheme() === "modern"; }
@@ -9934,7 +9977,7 @@
       function applyNightMode() { applyTheme(); }
       function settingsSetTheme(val) { settingsLoad().theme = val; settingsSave(); applyTheme(); if (typeof doLookAround === "function") doLookAround(); if (typeof trackUpdateUI === "function") trackUpdateUI(); }
       function settingsSyncSeg(key, val) { const y = document.getElementById("set-" + key + "-yes"); const n = document.getElementById("set-" + key + "-no"); if (y) y.classList.toggle("toggle--on", !!val); if (n) n.classList.toggle("toggle--on", !val); }
-      function settingsToggle(key, val) { settingsLoad()[key]=!!val; settingsSave(); settingsSyncSeg(key, !!val); if (key==="nightMode") applyNightMode(); if (key==="alwaysDisableRest") { if (val) { _jrnIgnoreRest=true; } else { const tks=trackLoadAll(); const at=tks.find(function(x){return x.id===_trackActiveId;}); _jrnIgnoreRest=!!(at&&at.tpState&&at.tpState.ignoreRest); } } if (key==="disableEncounters" && val && typeof journeyClearEncounter==="function") journeyClearEncounter(); if (key==="disableLost" && val && typeof journeyClearLost==="function") { const _tks=trackLoadAll(); const _at=_tks.find(function(x){return x.id===_trackActiveId;}); if (_at&&_at.tpState&&_at.tpState.lost) journeyClearLost(); } if (key==="disableFogInPlayerView" && isPlayerView()) { const _fe=document.getElementById("tog-fog"); if(_fe) _fe.dataset.active = val ? "0" : "1"; } if (typeof trackUpdateUI==="function") trackUpdateUI(); if (typeof doLookAround==="function") doLookAround(); if (typeof isInWorldMapView==="function"&&isInWorldMapView()&&typeof renderWorldMap==="function") renderWorldMap(); }
+      function settingsToggle(key, val) { settingsLoad()[key]=!!val; settingsSave(); settingsSyncSeg(key, !!val); if (key==="nightMode") applyNightMode(); if (key==="alwaysDisableRest") { if (val) { _jrnIgnoreRest=true; } else { const tks=trackLoadAll(); const at=tks.find(function(x){return x.id===_trackActiveId;}); _jrnIgnoreRest=!!(at&&at.tpState&&at.tpState.ignoreRest); } } if (key==="disableEncounters" && val && typeof journeyClearEncounter==="function") journeyClearEncounter(); if (key==="disableLost" && val && typeof journeyClearLost==="function") { const _tks=trackLoadAll(); const _at=_tks.find(function(x){return x.id===_trackActiveId;}); if (_at&&_at.tpState&&_at.tpState.lost) journeyClearLost(); } if (key==="fogInPlayerView" && isPlayerView()) { const _fe=document.getElementById("tog-fog"); if(_fe) _fe.dataset.active = val ? "1" : "0"; } if (key==="lostFlipsPlayerView" && val) { const _rtk=trackLoadAll(); const _rat=_rtk.find(function(x){return x.id===_trackActiveId;}); if (_rat&&_rat.tpState&&_rat.tpState.lost && typeof promptLostNorthDir==="function") { _rat.tpState.lostNorthDir=null; trackSaveAll(_rtk); promptLostNorthDir(); } } if (typeof trackUpdateUI==="function") trackUpdateUI(); if (typeof doLookAround==="function") doLookAround(); if (typeof isInWorldMapView==="function"&&isInWorldMapView()&&typeof renderWorldMap==="function") renderWorldMap(); }
       // Terrain type -> Travel Point cost to enter that hex.
       const TERRAIN_TP_COST = {
         Aquatic: 2,
@@ -9956,12 +9999,12 @@
         if (!isTravelPointView() && isNightMode()) return TERRAIN_COLOR_NIGHT[terrain] || "#0b0b1c";
         if (!isTravelPointView() && isModernMode()) return TERRAIN_COLOR_MODERN[terrain] || "#e8e8ea";
         if (isTravelPointView()) {
-          // Travel Point View: recolor by terrain TP cost (2=green,3=amber,4=red).
+          // Travel Point View: recolor by terrain TP cost (2=yellow,3=orange,4=brown; colorblind-safe).
           // No-TP-cost (blank) hexes keep their normal color.
           const _c = TERRAIN_TP_COST[terrain];
-          if (_c === 2) return "#7f9a57";
-          if (_c === 3) return "#c6973f";
-          if (_c === 4) return "#b0553f";
+          if (_c === 2) return "#f4e37a";
+          if (_c === 3) return "#e69f00";
+          if (_c === 4) return "#9c3d00";
         }
         return TERRAIN_COLOR[terrain] || "#e8dcc3";
       }
@@ -10679,14 +10722,59 @@
       }
       const LOST_FLIP_DIRS_CW = ["N", "NE", "SE", "S", "SW", "NW"];
       function lostFlipRotateDir(dir, k) { const i = LOST_FLIP_DIRS_CW.indexOf(dir); if (i < 0) return dir; return LOST_FLIP_DIRS_CW[(((i + k) % 6) + 6) % 6]; }
-      // Deterministic rotation (1..5 * 60deg) per lost-event: seed = lost hex + real date.
+      // Chosen real direction -> k so that direction lands on N (top): k = (6 - dirIndex) mod 6,
+      // using LOST_FLIP_DIRS_CW = [N,NE,SE,S,SW,NW]. (N is not selectable; dismiss = random seed.)
+      const LOST_NORTH_K = { NE: 5, SE: 4, S: 3, SW: 2, NW: 1 };
+      // Rotation (1..5 * 60deg) per lost-event. If the referee chose a "north" (lostNorthDir),
+      // use it; if they dismissed the prompt (or haven't chosen), fall back to a deterministic
+      // seed = lost hex + real date.
       function lostFlipK(centerHex) {
         if (!(typeof settingsGet === "function" && settingsGet("lostFlipsPlayerView") && _jrnLost && isPlayerView())) return 0;
-        let date = "";
-        try { const t = trackLoadAll().find(function (x) { return x.id === _trackActiveId; }); if (t && t.tpState) date = (t.tpState.lostSeed != null ? t.tpState.lostSeed : t.tpState.currentDate) || ""; } catch (e) {}
+        let t = null;
+        try { t = trackLoadAll().find(function (x) { return x.id === _trackActiveId; }); } catch (e) {}
+        const dir = t && t.tpState ? t.tpState.lostNorthDir : null;
+        if (LOST_NORTH_K[dir]) return LOST_NORTH_K[dir]; // referee's explicit choice
+        const date = (t && t.tpState) ? ((t.tpState.lostSeed != null ? t.tpState.lostSeed : t.tpState.currentDate) || "") : "";
         const seed = String(centerHex) + "|" + date;
         let hsh = 2166136261; for (let i = 0; i < seed.length; i++) { hsh ^= seed.charCodeAt(i); hsh = (hsh * 16777619) >>> 0; }
         return 1 + (hsh % 5);
+      }
+      // ---- Lost-direction modal (referee picks which real direction the players call North) ----
+      let _lostNorthResolve = null;
+      let _lostNorthPending = null;
+      function showLostNorthModal() {
+        return new Promise(function (resolve) {
+          _lostNorthResolve = resolve;
+          _lostNorthPending = null;
+          document.querySelectorAll("#lost-north-modal .dir[onclick]").forEach(function (b) { b.classList.remove("is-sel"); });
+          const ok = document.getElementById("lost-north-confirm");
+          if (ok) ok.disabled = true;
+          document.getElementById("lost-north-modal").style.display = "flex";
+        });
+      }
+      function lostNorthPick(dir) {
+        _lostNorthPending = dir;
+        document.querySelectorAll("#lost-north-modal .dir[onclick]").forEach(function (b) {
+          b.classList.toggle("is-sel", (b.getAttribute("onclick") || "").indexOf("'" + dir + "'") !== -1);
+        });
+        const ok = document.getElementById("lost-north-confirm");
+        if (ok) ok.disabled = false;
+      }
+      function lostNorthClose(result) {
+        document.getElementById("lost-north-modal").style.display = "none";
+        const r = _lostNorthResolve;
+        _lostNorthResolve = null;
+        if (r) r(result);
+      }
+      function lostNorthConfirm() { lostNorthClose(_lostNorthPending); }
+      function lostNorthDismiss() { lostNorthClose("none"); } // no rotation this lost episode
+      async function promptLostNorthDir() {
+        const dir = await showLostNorthModal();
+        const tracks = trackLoadAll();
+        const t = tracks.find(function (x) { return x.id === _trackActiveId; });
+        if (t && t.tpState) { t.tpState.lostNorthDir = dir || "none"; trackSaveAll(tracks); }
+        if (typeof trackUpdateUI === "function") trackUpdateUI();
+        if (typeof doLookAround === "function") doLookAround();
       }
       function doDetail() {
         const input = document.getElementById("pan-hex").value;
@@ -10892,10 +10980,10 @@
         if (_trackActive) {
           if (_jrnEncounter)
             html +=
-              '<div class="encounter-banner"><span class="encounter-banner-txt"><span class="jrn-ico">⚔</span> Encounter Appears!</span><button class="btn btn--encounter" onclick="journeyClearEncounter()">Clear</button></div>';
-          if (_jrnLost)
+              '<div class="encounter-banner"><span class="encounter-banner-txt"><span class="jrn-ico"><svg width="16" height="16" viewBox="-4 -4 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3v5l-11 9l-4 4l-3 -3l4 -4l9 -11z"/><path d="M5 13l6 6"/><path d="M14.32 17.32l3.68 3.68l3 -3l-3.68 -3.68"/><path d="M13 19l6 -6"/></svg></span> Encounter Appears!</span><button class="btn btn--encounter" onclick="journeyClearEncounter()">Clear</button></div>';
+          if (_jrnLost && !isPlayerView())
             html +=
-              '<div class="lost-banner"><span class="lost-banner-txt"><span class="jrn-ico">⚑</span> Party Is Lost</span><button class="btn btn--lost" onclick="journeyClearLost()">Recover</button></div>';
+              '<div class="lost-banner"><span class="lost-banner-txt"><span class="jrn-ico"><svg width="16" height="16" viewBox="-4 -4 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h12l-3 4 3 4H5"/></svg></span> Party Is Lost</span><button class="btn btn--lost" onclick="journeyClearLost()">Recover</button></div>';
         }
         html += "</div>";
         // ── Journey Console (all travel controls in one panel while tracking) ──
@@ -11022,7 +11110,7 @@
             jrnFmLabel(_jtp) +
             "</button>";
           html +=
-            '<button id="jrn-rest-btn" class="btn btn--ghost" onclick="journeyRest()"><span class="jrn-ico">☾</span> Rest</button>';
+            '<button id="jrn-rest-btn" class="btn btn--ghost" onclick="journeyRest()"><span class="jrn-ico"><svg width="16" height="16" viewBox="-4 -4 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6.4 6.4 0 0 0 9 9a9 9 0 1 1 -9 -9z"/></svg></span> Rest</button>';
           html += "</div>";
 
           // Row 6: Undo + Save & End (unchanged).
@@ -11690,9 +11778,9 @@
         // Viewport — add vertical room for elevation range
         // Max possible elevation diff in Dolmenwood is ~600', so ±72px
         const elevPad = 50;
-        // Compact (ring1-only) box only for referee with fog on. Player View always uses the
-        // full 2-ring box (referee scale, no zoom) so ring2 shows when fog is off / when rotated.
-        const pvCompact = isFogOn() && !isPlayerView();
+        // Compact (ring1-only) box whenever fog is on (referee OR player) so the map zooms in to
+        // fill the screen. Exception: when rotated (Lost Rotates Player View) keep the full 2-ring box.
+        const pvCompact = isFogOn() && !_flipActive;
         const W = pvCompact ? 2 * colDx + 2 * r + 24 : 4 * colDx + 2 * r + 20;
         const H = pvCompact
           ? 2 * hexH + 2 * r + 24 + elevPad * 2
@@ -13556,16 +13644,17 @@
             return;
           }
 
+          const capBg = (getComputedStyle(document.documentElement).getPropertyValue("--parchment-light") || "#ffffff").trim() || "#ffffff";
           const scale = Math.min(Math.max(window.devicePixelRatio || 2, 2), 4);
 
           const raw = await html2canvas(honeycomb, {
-            backgroundColor: "#ffffff",
+            backgroundColor: capBg,
             scale: scale,
             useCORS: true,
             logging: false,
             onclone: function (clonedDoc) {
               clonedDoc.querySelectorAll(".pv-card").forEach((card) => {
-                card.style.background = "#ffffff";
+                card.style.background = capBg;
               });
             },
           });
@@ -13577,7 +13666,7 @@
           square.width = side;
           square.height = side;
           const ctx = square.getContext("2d");
-          ctx.fillStyle = "#ffffff";
+          ctx.fillStyle = capBg;
           ctx.fillRect(0, 0, side, side);
           // Center the raw capture within the square
           const dx = Math.round((side - raw.width) / 2);
@@ -14271,6 +14360,7 @@
               ".road-highlight, .anchor-highlight, .water-highlight, .water-fill-highlight, .journey-highlight",
             )
             .forEach((el) => {
+              const wasJourney = el.classList.contains("journey-highlight");
               el.classList.remove(
                 "road-highlight",
                 "anchor-highlight",
@@ -14278,7 +14368,7 @@
                 "water-fill-highlight",
                 "journey-highlight",
               );
-              el.style.removeProperty("stroke");
+              if (wasJourney) el.style.removeProperty("stroke");
             });
         }
         function highlightJourneyByName(name) {
@@ -14681,7 +14771,7 @@
             '" style="width:28px;height:28px;border-radius:50%;background:' +
             col +
             ";cursor:pointer;padding:0;border:" +
-            (sel ? "3px solid var(--ink)" : "1px solid rgba(0,0,0,0.35)") +
+            (sel ? "3px solid var(--border-strong)" : "1px solid rgba(0,0,0,0.35)") +
             ';"></button>'
           );
         }).join("");
@@ -15888,6 +15978,7 @@
         const t = tracks.find((x) => x.id === _trackActiveId);
         if (t && t.tpState) {
           t.tpState.lost = false;
+          t.tpState.lostNorthDir = null; // cleared -> referee re-prompted next time they get lost
           t.tpState.lostClearedPending = true; // Undo restores Lost until another action supersedes it
           t.tpState.lastLostAction = null;
           jrnActNext(t);
@@ -16730,6 +16821,7 @@
               // Freeze the rotation seed for Lost Rotates Player View: capture the date now so
               // resting (which advances currentDate) does NOT re-scramble the view until cleared.
               t.tpState.lostSeed = t.tpState.currentDate;
+              t.tpState.lostNorthDir = null; // fresh lost event -> referee re-prompted (if input mode on)
               t.tpState.lostClearedPending = false;
               t.tpState.gotLostAct = t.tpState._curAct;
               _jrnLost = true;
@@ -16745,6 +16837,8 @@
               trackSaveAll(tracks);
               trackUpdateUI();
               doLookAround();
+              // Referee-input rotation: prompt for the players' "north" (async; re-renders on pick).
+              if (settingsGet("lostFlipsPlayerView")) promptLostNorthDir();
               return false; // stay put; no waypoint, no TP/miles spent
             }
           }
@@ -16918,6 +17012,7 @@
               (e) => e.act !== t.tpState.gotLostAct,
             );
           t.tpState.gotLostAct = null;
+          t.tpState.lostNorthDir = null; // clear referee's chosen north when un-losing
           trackSaveAll(tracks);
           trackUpdateUI();
           doLookAround();
@@ -18024,7 +18119,7 @@
               width: 22px;
               height: 22px;
               border-radius: 50%;
-              border: 1px solid var(--ink);
+              border: 1px solid var(--border-strong);
               cursor: pointer;
               padding: 0;
               background: #8b0000;
@@ -18073,7 +18168,7 @@
             style="
               width: 44px;
               height: 26px;
-              border: 1px solid var(--ink);
+              border: 1px solid var(--border-strong);
               border-radius: 4px;
               overflow: hidden;
               background: transparent;
@@ -18124,7 +18219,7 @@
               text-align: center;
               font-size: var(--fs-lg);
               padding: 6px 2px;
-              border: 1px solid var(--ink);
+              border: 1px solid var(--border-strong);
               border-radius: 4px;
               background: transparent;
               color: inherit;
@@ -18143,7 +18238,7 @@
               text-align: center;
               font-size: var(--fs-lg);
               padding: 6px 2px;
-              border: 1px solid var(--ink);
+              border: 1px solid var(--border-strong);
               border-radius: 4px;
               background: transparent;
               color: inherit;
@@ -18162,7 +18257,7 @@
               text-align: center;
               font-size: var(--fs-lg);
               padding: 6px 2px;
-              border: 1px solid var(--ink);
+              border: 1px solid var(--border-strong);
               border-radius: 4px;
               background: transparent;
               color: inherit;
@@ -18379,24 +18474,44 @@
       <div class="modal__panel modal__panel--sm">
         <div class="modal__title">Settings</div>
         <div class="settings-section">
-          <div class="settings-head">UI</div>
-          <div class="settings-row"><span>Theme</span><div class="segmented segmented--3"><button id="set-theme-regular" class="toggle" onclick="settingsSetTheme('regular')">Regular</button><button id="set-theme-modern" class="toggle" onclick="settingsSetTheme('modern')">Modern</button><button id="set-theme-night" class="toggle" onclick="settingsSetTheme('night')">Night</button></div></div>
+          <div class="settings-head">Theme</div>
+          <div class="settings-row settings-row--theme"><div class="segmented segmented--3"><button id="set-theme-regular" class="toggle" onclick="settingsSetTheme('regular')">Regular</button><button id="set-theme-modern" class="toggle" onclick="settingsSetTheme('modern')">Modern</button><button id="set-theme-night" class="toggle" onclick="settingsSetTheme('night')">Night</button></div></div>
         </div>
         <div class="settings-section">
           <div class="settings-head">Hex Map</div>
-          <div class="settings-row"><span>Travel Point View</span><div class="segmented"><button id="set-travelPointView-yes" class="toggle toggle--yes" onclick="settingsToggle('travelPointView', true)">Yes</button><button id="set-travelPointView-no" class="toggle toggle--no" onclick="settingsToggle('travelPointView', false)">No</button></div></div>
           <div class="settings-row"><span>List Paths &amp; Rivers</span><div class="segmented"><button id="set-listRoads-yes" class="toggle toggle--yes" onclick="settingsToggle('listRoads', true)">Yes</button><button id="set-listRoads-no" class="toggle toggle--no" onclick="settingsToggle('listRoads', false)">No</button></div></div>
           <div class="settings-row"><span>Vantage Hides Roads</span><div class="segmented"><button id="set-vantageHidesRoads-yes" class="toggle toggle--yes" onclick="settingsToggle('vantageHidesRoads', true)">Yes</button><button id="set-vantageHidesRoads-no" class="toggle toggle--no" onclick="settingsToggle('vantageHidesRoads', false)">No</button></div></div>
-          <div class="settings-row"><span>Disable Fog in Player View</span><div class="segmented"><button id="set-disableFogInPlayerView-yes" class="toggle toggle--yes" onclick="settingsToggle('disableFogInPlayerView', true)">Yes</button><button id="set-disableFogInPlayerView-no" class="toggle toggle--no" onclick="settingsToggle('disableFogInPlayerView', false)">No</button></div></div>
+          <div class="settings-row"><span>Fog in Player View</span><div class="segmented"><button id="set-fogInPlayerView-yes" class="toggle toggle--yes" onclick="settingsToggle('fogInPlayerView', true)">Yes</button><button id="set-fogInPlayerView-no" class="toggle toggle--no" onclick="settingsToggle('fogInPlayerView', false)">No</button></div></div>
+          <div class="settings-row"><span>Travel Point View</span><div class="segmented"><button id="set-travelPointView-yes" class="toggle toggle--yes" onclick="settingsToggle('travelPointView', true)">Yes</button><button id="set-travelPointView-no" class="toggle toggle--no" onclick="settingsToggle('travelPointView', false)">No</button></div></div>
         </div>
         <div class="settings-section">
           <div class="settings-head">Journeys</div>
-          <div class="settings-row"><span>Always Disable Resting</span><div class="segmented"><button id="set-alwaysDisableRest-yes" class="toggle toggle--yes" onclick="settingsToggle('alwaysDisableRest', true)">Yes</button><button id="set-alwaysDisableRest-no" class="toggle toggle--no" onclick="settingsToggle('alwaysDisableRest', false)">No</button></div></div>
+          <div class="settings-row"><span>Infinite Travel Points</span><div class="segmented"><button id="set-alwaysDisableRest-yes" class="toggle toggle--yes" onclick="settingsToggle('alwaysDisableRest', true)">Yes</button><button id="set-alwaysDisableRest-no" class="toggle toggle--no" onclick="settingsToggle('alwaysDisableRest', false)">No</button></div></div>
           <div class="settings-row"><span>Disable Encounters</span><div class="segmented"><button id="set-disableEncounters-yes" class="toggle toggle--yes" onclick="settingsToggle('disableEncounters', true)">Yes</button><button id="set-disableEncounters-no" class="toggle toggle--no" onclick="settingsToggle('disableEncounters', false)">No</button></div></div>
           <div class="settings-row"><span>Disable Getting Lost</span><div class="segmented"><button id="set-disableLost-yes" class="toggle toggle--yes" onclick="settingsToggle('disableLost', true)">Yes</button><button id="set-disableLost-no" class="toggle toggle--no" onclick="settingsToggle('disableLost', false)">No</button></div></div>
           <div class="settings-row"><span>Lost Rotates Player View</span><div class="segmented"><button id="set-lostFlipsPlayerView-yes" class="toggle toggle--yes" onclick="settingsToggle('lostFlipsPlayerView', true)">Yes</button><button id="set-lostFlipsPlayerView-no" class="toggle toggle--no" onclick="settingsToggle('lostFlipsPlayerView', false)">No</button></div></div>
         </div>
         <div class="modal__actions"><button class="btn btn--primary" type="button" onclick="closeSettings()">Done</button></div>
+      </div>
+    </div>
+    <div id="lost-north-modal" class="modal" style="display: none; z-index: 10004">
+      <div class="modal__panel modal__panel--sm">
+        <div class="lost-banner" style="max-width: none; margin: 0 0 var(--sp-3)"><span class="lost-banner-txt"><span class="jrn-ico"><svg width="16" height="16" viewBox="-4 -4 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h12l-3 4 3 4H5"/></svg></span> The Party Is Lost</span></div>
+        <div class="modal__body" style="text-align: center; margin-bottom: var(--sp-3)">Choose which direction the players now believe is North.</div>
+        <div class="lost-compass">
+          <div class="lost-compass__hub"></div>
+          <button type="button" class="btn dir dir--locked" style="left: 50%; top: 8%" title="True north — shown for reference only" disabled>N</button>
+          <button type="button" class="btn dir" style="left: 88%; top: 29%" onclick="lostNorthPick('NE')">NE</button>
+          <button type="button" class="btn dir" style="left: 88%; top: 71%" onclick="lostNorthPick('SE')">SE</button>
+          <button type="button" class="btn dir" style="left: 50%; top: 92%" onclick="lostNorthPick('S')">S</button>
+          <button type="button" class="btn dir" style="left: 12%; top: 71%" onclick="lostNorthPick('SW')">SW</button>
+          <button type="button" class="btn dir" style="left: 12%; top: 29%" onclick="lostNorthPick('NW')">NW</button>
+        </div>
+        <div class="modal__body" style="text-align: center; font-size: var(--fs-xs); color: var(--ink-soft); margin-top: var(--sp-3)">Dismiss to let the map rotate at random.</div>
+        <div class="modal__actions">
+          <button class="btn btn--ghost" type="button" onclick="lostNorthDismiss()">Dismiss</button>
+          <button id="lost-north-confirm" class="btn btn--primary" type="button" disabled onclick="lostNorthConfirm()">Confirm</button>
+        </div>
       </div>
     </div>
     <div id="ui-modal" class="modal" style="display: none; z-index: 10003">
