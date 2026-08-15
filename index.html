@@ -117,12 +117,12 @@
         --tooltip-bg2: #e8dcc3;
         --tooltip-border: rgba(107, 94, 78, 0.75);
         --tooltip-inner-border: rgba(107, 94, 78, 0.2);
-        --prominent-bg: #c6a841;
-        --prominent-bg-soft: #dfcd97;
-        --prominent-border: #966e00;
+        --prominent-bg: #e0bd49;
+        --prominent-bg-soft: #e0c983;
+        --prominent-border: #7b5b00;
         --prominent-text: #fff;
-        --hidden-bg: #e8e8e8;
-        --hidden-border: #2a2420;
+        --hidden-bg: #e4d5e2;
+        --hidden-border: #52279c;
         --hex-center-edge: #000000;
         --hex-center-edge-2: #1a1a1a;
         --hex-center-outline: var(--border-strong);
@@ -173,19 +173,19 @@
         --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
         --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
         /* ----- map & tooltip colors (night) ----- */
-        --road: #bf9d4f;
-        --road-dim: #6b5a3a;
-        --road-dot: #d4b86a;
-        --road-dot-dim: #5e5030;
+        --road: #d4aa30;
+        --road-dim: #978759;
+        --road-dot: #9a7a20;
+        --road-dot-dim: #9b855c;
         --river: #5a9bd4;
         --river-dim: #33506b;
         --lake: #5a9bd4;
         --lake-dim: #33506b;
-        --road-label: #4da8ff;
-        --hex-center-fill: #cdd6e0;
+        --road-label: #ffe000;
+        --hex-center-fill: #ffd166;
         --tooltip-bg1: #2d2d30;
         --tooltip-bg2: #1e1e1e;
-        --tooltip-border: #3f3f46;
+        --tooltip-border: #6e6e70;
         --tooltip-inner-border: rgba(255, 255, 255, 0.06);
         --prominent-bg: #ae8d43;
         --prominent-bg-soft: #433b28;
@@ -193,8 +193,9 @@
         --prominent-text: #1e1e1e;
         --hidden-bg: #2e2942;
         --hidden-border: #7a6ea8;
-        --hex-center-edge: #8a95a3;
-        --hex-center-edge-2: #9aa5b3;
+        --hex-center-edge: #a86e00;
+        --hex-center-edge-2: #d49a22;
+        --hex-center-outline: #fcfcfc;
         --hex-center-text: #1e1e1e;
       }
       .segmented--3 .toggle { flex: 1; }
@@ -241,15 +242,15 @@
         --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.10);
         --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.16);
         /* map & tooltip (modern) */
-        --road: #c98a3e;
-        --road-dim: #e0c79a;
-        --road-dot: #9a6d2e;
+        --road: #d4aa30;
+        --road-dim: #e5cc83;
+        --road-dot: #9a7a20;
         --road-dot-dim: #cbb389;
         --river: #7fb2d4;
         --river-dim: #c2d8e4;
         --lake: #7fb2d4;
         --lake-dim: #c2d8e4;
-        --road-label: #0071e3;
+        --road-label: #ffe000;
         --hex-center-fill: #ffffff;
         --hex-center-edge: #d8d8dc;
         --hex-center-edge-2: #e6e6ea;
@@ -1700,18 +1701,99 @@
       .jc-actions-2 {
         justify-content: center;
         gap: 8px;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
       }
       .jc-actions-2 .btn {
         white-space: nowrap;
         font-size: var(--fs-sm);
-        padding: 8px 10px;
+        padding: 8px 9px;
       }
       .jc-actions-2 #jrn-fm-btn {
-        flex: 1;
+        flex: 0 0 auto;
       }
       .jc-actions-2 #jrn-rest-btn {
         flex: 0 0 auto;
+      }
+      .jc-day-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+      }
+      .jc-weather {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .wx-bubble {
+        font-family: var(--font-display);
+        font-size: var(--fs-xs);
+        line-height: 1;
+        width: 19px;
+        height: 19px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--r-pill);
+        border: var(--bw) solid var(--border);
+        background: var(--parchment-deep);
+        color: var(--ink-faded);
+        cursor: pointer;
+        padding: 0;
+      }
+      .wx-bubble--impeded {
+        background: var(--danger);
+        border-color: var(--danger);
+        color: #fff;
+      }
+      .wx-bubble--vis {
+        background: var(--river);
+        border-color: var(--river);
+        color: #fff;
+      }
+      .wx-bubble--off {
+        opacity: 0.5;
+      }
+      .wx-bubble--off:hover {
+        opacity: 0.8;
+      }
+      /* Token-styled hover tooltip — matches the .hex-tooltip design language. Desktop hover only. */
+      .tip {
+        position: relative;
+      }
+      @media (hover: hover) and (pointer: fine) {
+        .tip[data-tip]::after {
+          content: attr(data-tip);
+          position: absolute;
+          top: calc(100% + 8px);
+          left: 50%;
+          transform: translateX(-50%) translateY(4px);
+          white-space: nowrap;
+          padding: 6px 9px;
+          background: linear-gradient(
+            180deg,
+            var(--tooltip-bg1) 0%,
+            var(--tooltip-bg2) 100%
+          );
+          color: var(--ink);
+          border: 1px solid var(--tooltip-border);
+          border-radius: 2px;
+          box-shadow: 0 8px 20px rgba(26, 22, 18, 0.22);
+          font-family: var(--font-display);
+          font-size: var(--fs-xs);
+          letter-spacing: 0.08em;
+          pointer-events: none;
+          opacity: 0;
+          transition:
+            opacity 0.12s ease,
+            transform 0.12s ease;
+          z-index: 40;
+        }
+        .tip[data-tip]:hover::after,
+        .tip[data-tip]:focus-visible::after {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
       }
       .jc-bar-val {
         font-family: var(--font-display);
@@ -2323,6 +2405,11 @@
         align-items: center;
         margin-right: 4px;
         vertical-align: -2px;
+      }
+      .jrn-ico svg {
+        width: 16px;
+        height: 16px;
+        flex: none;
       }
       .tp-val {
         font-weight: bold;
@@ -9155,8 +9242,7 @@
           ["well-path", "trail", "S1", null, "0.3,0.3", null, 0.96, null, false],
         ],
         "0210": [
-          ["west-road", "road", "SW2", "S3", "-0.6,0.35", null, 2.4],
-          ["west-road", "road", null, "S3", "-0.6,0.35", null, 2.14],
+          ["west-road", "road", "SW2", "S3", "-0.6,0.35", null, 4.58,[0.216]],
         ],
         "0209": [["well-path", "trail", "N3", null, "0,-0.3", null, 1.04]],
         "0211": [["west-road", "road", "N1", "SE1", null, null, 5.98]],
@@ -9187,7 +9273,7 @@
         ],
         "0601": [["downs-road", "trail", "SE2", "NW1", null, "0,-0.3", 6.11]],
         "0604": [
-          ["fort-road", "road", "SE3", null, "-0.1,0.8", null, 3.18],
+          ["fort-road", "road", "SE3", null, "-0.1,0.8", null, 2.69],
           ["creek-path", "trail", null, "NE3", "-0.1,0.8", "0,0", 5.85],
         ],
         "0610": [["the-ditchway-trail", "trail", "SW3", "NE1", null, null, 7.19]],
@@ -9196,12 +9282,12 @@
           ["creek-path", "trail", "S3", "NW2", "-0.4,0.5", null, 3.47, [0.284, 0.95], true],
           ["downs-road", "trail", "NE1", "NW2", null, "0,-0.3", 4.86, [0.2, 0.95]],
         ],
-        "0703": [["creek-path", "trail", "S1", "N1", null, "0.3,0", 4.04]],
+        "0703": [["creek-path", "trail", "S1", "N1", null, "0.3,0", 6.5]],
         "0704": [
           ["creek-path", "trail", "N3", "SW1", "0,-0.3", null, 5.64, [0.352]],
           ["avernal-path", "trail", null, "NE2", "0,-0.3", "0,0", 3.11],
         ],
-        "0705": [["fort-road", "road", "SE3", "NW1", null, "0,0.5", 8.91]],
+        "0705": [["fort-road", "road", "SE3", "NW1", null, "0,0.5", 5.78]],
         "0708": [["fishers-path", "trail", "S1", "N1", "0.3,0.6", null, 7.03, [0.147]]],
         "0709": [
           ["manor-road", "road", "S1", null, "0.2,0", null, 2.91],
@@ -9223,13 +9309,13 @@
         ],
         "0802": [["avernal-path", "trail", "S3", "N3", null, "-1.3,0", 8.07]],
         "0803": [["avernal-path", "trail", "SW2", "N1", null, "0.3,-0.6", 5.68]],
-        "0805": [["fort-road", "road", "SE3", "NW1", "0.3,0.5", null, 4.39]],
+        "0805": [["fort-road", "road", "SE3", "NW1", "0.3,0.5", null, 5.7, [0.206]]],
         "0809": [["the-ditchway", "road", "SW1", "SE3", null, null, 5.48]],
         "0811": [["swinescombe-road", "trail", "NW3", "SE1", null, null, 6.87]],
         "0901": [["downs-road", "trail", "NE2", "SW2", null, "0,.2", 6.09]],
         "0906": [
           ["swinney-road", "road", "NE3", null, "0,0.1", null, 3.26],
-          ["fort-road", "road", null, "NW1", "0,0.1", null, 2.52],
+          ["fort-road", "road", null, "NW1", "0,0.1", null, 4.83],
         ],
         "0910": [["the-ditchway", "road", "NW1", "SE1", "-.3,0", null, 5.43, [0.34]]],
         "0912": [["swinescombe-road", "trail", "NW3", null, "0.6,-0.35", null, 5.01]],
@@ -9272,7 +9358,7 @@
         "1301": [["downs-road", "trail", "SW2", "SE1", null, "0,0", 5.87]],
         "1303": [["manor-road-2", "trail", "SE3", "S1", null, "0.4,0.3", 1.64, null, false]],
         "1304": [
-          ["lochsbreth-road", "road", "NE3", "SW1", null, ".7,0.5", 4.79],
+          ["lochsbreth-road", "road", "NE3", "SW1", null, ".7,0.5", 6.24],
           ["manor-road-2", "trail", "N3", null, "0,0", null, 2.28],
         ],
         "1306": [["mulchers-path", "trail", "SW1", "SE1", null, null, 5.59]],
@@ -9285,8 +9371,8 @@
         "1401": [["downs-road", "trail", "N3", "NW3", null, "0,-0.5", 3.37]],
         "1403": [
           ["follyegg-road", "road", "NE3", null, "0.1,0.2", null, 3.45],
-          ["lochsbreth-road", "road", null, "SW1", "0.1,0.2", null, 5.45, [0.55]],
-          ["manor-road-2", "trail", "NW1", null, "-0.3,0.45", "0,.5", 2.58, null, false],
+          ["lochsbreth-road", "road", null, "SW1", "0.1,0.2", null, 4, [0.75]],
+          ["manor-road-2", "trail", "NW1", null, "-0.5,0.6", null, 2.58, null, false],
         ],
         "1405": [
           ["mulchers-path", "trail", null, "S3", "0.4,0.6", null, 2.51],
@@ -9930,35 +10016,35 @@
       };
       // Night-mode terrain palette (darker, moonlit). Same keys as TERRAIN_COLOR.
       const TERRAIN_COLOR_NIGHT = {
-        // Muted dark-map terrain (VS-dark friendly) — darkened, desaturated; readable, not neon.
-        "Tangled Forest": "#35402a",
-        "Craggy Forest": "#4a5248",
-        "Boggy Forest": "#4c4c30",
-        "Hilly Forest": "#545e46",
-        "Open Forest": "#6a7360",
-        "Fungal Forest": "#63505c",
-        Bog: "#635839",
-        Swamp: "#38504f",
-        Farmland: "#7d7042",
-        Meadow: "#6f7a52",
-        Hills: "#7a6d4c",
-        Aquatic: "#4a6473",
+        // Vaporwave Atlas — vivid pink, violet, blue, and cyan on the dark UI.
+        "Tangled Forest": "#421c86",
+        "Craggy Forest": "#3554c7",
+        "Boggy Forest": "#6b2aa6",
+        "Hilly Forest": "#526ce8",
+        "Open Forest": "#6a9bf4",
+        "Fungal Forest": "#d02eae",
+        Bog: "#8d26bf",
+        Swamp: "#148cb8",
+        Farmland: "#f04498",
+        Meadow: "#50d2da",
+        Hills: "#8564a8",
+        Aquatic: "#19b5e5",
       };
       // Modern muted terrain — desaturated, light Apple-map tones.
       const TERRAIN_COLOR_MODERN = {
-        // Modern terrain — close to Regular but slightly cleaner/lighter; NOT washed out.
-        "Tangled Forest": "#5c6f45",
-        "Craggy Forest": "#7b8672",
-        "Boggy Forest": "#79794d",
-        "Hilly Forest": "#889676",
-        "Open Forest": "#a1ae90",
-        "Fungal Forest": "#977a88",
-        Bog: "#988859",
-        Swamp: "#587373",
-        Farmland: "#c2b06e",
-        Meadow: "#aebc8d",
-        Hills: "#beac88",
-        Aquatic: "#7d9cae",
+        // Apple Topographic — natural, quiet daylight colors for the Modern UI.
+        "Tangled Forest": "#6f8f72",
+        "Craggy Forest": "#8a929c",
+        "Boggy Forest": "#8b9b6e",
+        "Hilly Forest": "#88a27d",
+        "Open Forest": "#a9bca4",
+        "Fungal Forest": "#b88ea5",
+        Bog: "#b2a16e",
+        Swamp: "#6c9f9c",
+        Farmland: "#d2b56b",
+        Meadow: "#a8c98c",
+        Hills: "#c2aa86",
+        Aquatic: "#78add0",
       };
       function isNightMode() { return getTheme() === "night"; } // end const TERRAIN_COLOR
       const SETTINGS_KEY = "dolmenwood-settings";
@@ -9968,16 +10054,17 @@
       function settingsGet(key) { return settingsLoad()[key]; }
       function settingsSave() { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settingsLoad())); } catch (e) {} }
       function isTravelPointView() { return settingsGet("travelPointView"); }
-            function openSettings() { const s = settingsLoad(); ["nightMode", "travelPointView", "listRoads", "vantageHidesRoads", "fogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) { settingsSyncSeg(k, !!s[k]); }); settingsSyncTheme(); document.getElementById("settings-modal").style.display = "flex"; }
+            function openSettings() { const s = settingsLoad(); ["nightMode", "travelPointView", "listRoads", "vantageHidesRoads", "fogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) { settingsSyncSeg(k, !!s[k]); }); settingsSyncTheme(); settingsSyncLostFlipVis(); document.getElementById("settings-modal").style.display = "flex"; }
       function closeSettings() { document.getElementById("settings-modal").style.display="none"; }
       function getTheme() { var s = settingsLoad(); if (s.theme) return s.theme; return s.nightMode ? "night" : "regular"; }
       function isModernMode() { return getTheme() === "modern"; }
       function settingsSyncTheme() { var th = getTheme(); ["regular","modern","night"].forEach(function (mo) { var b = document.getElementById("set-theme-" + mo); if (b) b.classList.toggle("toggle--on", th === mo); }); }
       function applyTheme() { try { var th = getTheme(); var r = document.documentElement.classList; r.toggle("night-mode", th === "night"); r.toggle("modern-mode", th === "modern"); settingsSyncTheme(); } catch (e) {} }
       function applyNightMode() { applyTheme(); }
-      function settingsSetTheme(val) { settingsLoad().theme = val; settingsSave(); applyTheme(); if (typeof doLookAround === "function") doLookAround(); if (typeof trackUpdateUI === "function") trackUpdateUI(); }
+      function settingsSetTheme(val) { settingsLoad().theme = val; settingsSave(); applyTheme(); if (typeof doLookAround === "function") doLookAround(); if (typeof trackUpdateUI === "function") trackUpdateUI(); if (typeof trackRenderList === "function") trackRenderList(); if (typeof isInWorldMapView === "function" && isInWorldMapView() && typeof renderWorldMap === "function") renderWorldMap(); var _cm = document.getElementById("color-modal"); if (_cm && _cm.style.display === "flex" && typeof colorModalRenderPresets === "function") colorModalRenderPresets(); }
       function settingsSyncSeg(key, val) { const y = document.getElementById("set-" + key + "-yes"); const n = document.getElementById("set-" + key + "-no"); if (y) y.classList.toggle("toggle--on", !!val); if (n) n.classList.toggle("toggle--on", !val); }
-      function settingsToggle(key, val) { settingsLoad()[key]=!!val; settingsSave(); settingsSyncSeg(key, !!val); if (key==="nightMode") applyNightMode(); if (key==="alwaysDisableRest") { if (val) { _jrnIgnoreRest=true; } else { const tks=trackLoadAll(); const at=tks.find(function(x){return x.id===_trackActiveId;}); _jrnIgnoreRest=!!(at&&at.tpState&&at.tpState.ignoreRest); } } if (key==="disableEncounters" && val && typeof journeyClearEncounter==="function") journeyClearEncounter(); if (key==="disableLost" && val && typeof journeyClearLost==="function") { const _tks=trackLoadAll(); const _at=_tks.find(function(x){return x.id===_trackActiveId;}); if (_at&&_at.tpState&&_at.tpState.lost) journeyClearLost(); } if (key==="fogInPlayerView" && isPlayerView()) { const _fe=document.getElementById("tog-fog"); if(_fe) _fe.dataset.active = val ? "1" : "0"; } if (key==="lostFlipsPlayerView" && val) { const _rtk=trackLoadAll(); const _rat=_rtk.find(function(x){return x.id===_trackActiveId;}); if (_rat&&_rat.tpState&&_rat.tpState.lost && typeof promptLostNorthDir==="function") { _rat.tpState.lostNorthDir=null; trackSaveAll(_rtk); promptLostNorthDir(); } } if (typeof trackUpdateUI==="function") trackUpdateUI(); if (typeof doLookAround==="function") doLookAround(); if (typeof isInWorldMapView==="function"&&isInWorldMapView()&&typeof renderWorldMap==="function") renderWorldMap(); }
+      function settingsSyncLostFlipVis() { var r = document.getElementById("row-lostFlipsPlayerView"); if (r) r.style.display = settingsLoad().disableLost ? "none" : ""; }
+      function settingsToggle(key, val) { settingsLoad()[key]=!!val; settingsSave(); settingsSyncSeg(key, !!val); if (key==="nightMode") applyNightMode(); if (key==="alwaysDisableRest") { if (val) { _jrnIgnoreRest=true; } else { const tks=trackLoadAll(); const at=tks.find(function(x){return x.id===_trackActiveId;}); _jrnIgnoreRest=!!(at&&at.tpState&&at.tpState.ignoreRest); } } if (key==="disableEncounters" && val && typeof journeyClearEncounter==="function") journeyClearEncounter(); if (key==="disableLost" && val && typeof journeyClearLost==="function") { const _tks=trackLoadAll(); const _at=_tks.find(function(x){return x.id===_trackActiveId;}); if (_at&&_at.tpState&&_at.tpState.lost) journeyClearLost(); } if (key==="disableLost" && typeof settingsSyncLostFlipVis==="function") settingsSyncLostFlipVis(); if (key==="fogInPlayerView" && isPlayerView()) { const _fe=document.getElementById("tog-fog"); if(_fe) _fe.dataset.active = val ? "1" : "0"; } if (key==="lostFlipsPlayerView" && val) { const _rtk=trackLoadAll(); const _rat=_rtk.find(function(x){return x.id===_trackActiveId;}); if (_rat&&_rat.tpState&&_rat.tpState.lost && typeof promptLostNorthDir==="function") { _rat.tpState.lostNorthDir=null; trackSaveAll(_rtk); promptLostNorthDir(); } } if (typeof trackUpdateUI==="function") trackUpdateUI(); if (typeof doLookAround==="function") doLookAround(); if (typeof isInWorldMapView==="function"&&isInWorldMapView()&&typeof renderWorldMap==="function") renderWorldMap(); }
       // Terrain type -> Travel Point cost to enter that hex.
       const TERRAIN_TP_COST = {
         Aquatic: 2,
@@ -10980,7 +11067,7 @@
         if (_trackActive) {
           if (_jrnEncounter)
             html +=
-              '<div class="encounter-banner"><span class="encounter-banner-txt"><span class="jrn-ico"><svg width="16" height="16" viewBox="-4 -4 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3v5l-11 9l-4 4l-3 -3l4 -4l9 -11z"/><path d="M5 13l6 6"/><path d="M14.32 17.32l3.68 3.68l3 -3l-3.68 -3.68"/><path d="M13 19l6 -6"/></svg></span> Encounter Appears!</span><button class="btn btn--encounter" onclick="journeyClearEncounter()">Clear</button></div>';
+              '<div class="encounter-banner"><span class="encounter-banner-txt"><span class="jrn-ico"><svg width="16" height="16" viewBox="-4 -4 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4L18 18"/><path d="M20 4L6 18"/><path d="M13 17L17 13"/><path d="M7 13L11 17"/></svg></span> Encounter Appears!</span><button class="btn btn--encounter" onclick="journeyClearEncounter()">Clear</button></div>';
           if (_jrnLost && !isPlayerView())
             html +=
               '<div class="lost-banner"><span class="lost-banner-txt"><span class="jrn-ico"><svg width="16" height="16" viewBox="-4 -4 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h12l-3 4 3 4H5"/></svg></span> Party Is Lost</span><button class="btn btn--lost" onclick="journeyClearLost()">Recover</button></div>';
@@ -11005,7 +11092,7 @@
           // Row 1: Day (left) + Speed (right) — always one line.
           html += '<div class="jc-row jc-header">';
           html +=
-            '<span id="jrn-day-val" class="jc-day">' +
+            '<span class="jc-day-wrap"><span id="jrn-day-val" class="jc-day">' +
             (_jtp
               ? '<span class="jc-day-num">Day ' +
                 _jtp.day +
@@ -11013,7 +11100,11 @@
                 _jtp.currentDate +
                 "</span>"
               : "") +
-            "</span>";
+            "</span>" +
+            '<span class="jc-weather" id="jrn-weather-bubbles">' +
+            (_jtp ? '<button type="button" class="wx-bubble tip' + (_jtp.weatherImpeded ? ' wx-bubble--impeded' : ' wx-bubble--off') + '" data-tip="Travel Impeded" onclick="weatherBubbleToggle(&#39;impeded&#39;)">I</button>' : "") +
+            (_jtp ? '<button type="button" class="wx-bubble tip' + (_jtp.weatherPoorVis ? ' wx-bubble--vis' : ' wx-bubble--off') + '" data-tip="Poor Visibility" onclick="weatherBubbleToggle(&#39;vis&#39;)">V</button>' : "") +
+            '</span></span>';
           html +=
             '<label class="jrn-lbl">Speed <select id="jrn-speed-sel" class="jrn-sel" onchange="journeySetSpeed(this.value)">';
           [10, 20, 30, 40, 50, 60].forEach((s) => {
@@ -11106,7 +11197,7 @@
           html +=
             '<button id="jrn-fm-btn" class="btn ' +
             (_jrnForceMarch ? "btn--locked" : "btn--ghost") +
-            '" onclick="journeyToggleForceMarch()">' +
+            '" onclick="journeyToggleForceMarch()">Forced ' +
             jrnFmLabel(_jtp) +
             "</button>";
           html +=
@@ -14604,22 +14695,50 @@
       // ============================================================================
 
       const TRACK_KEY = "dolmenwood-tracks";
-      const TRACK_COLORS = [
-        "#9b2335",
-        "#6b3a7d",
-        "#2a7a6a",
-        "#c85a3a",
-        "#c23a7a",
-      ]; // Crimson, Violet, Teal, Coral, Rose
-      const TRACK_COLOR = TRACK_COLORS[0]; // ← single colour for all tracks; change here to update everywhere
+      // Journey palette: 6 families x 3 themes. A journey stores its family id
+      // (t.colorFamily); the render color (t.color) is re-resolved to the active
+      // theme on every load. Off-palette picks store no family (frozen custom).
+      const TRACK_FAMILIES = ["vermilion", "crimson", "rose", "magenta", "violet", "indigo"];
+      const TRACK_COLOR_MAP = {
+        regular: { vermilion: "#c1501f", crimson: "#c11f2a", rose: "#c11f6b", magenta: "#c11fab", violet: "#911fc1", indigo: "#4b1fc1" },
+        modern:  { vermilion: "#da5116", crimson: "#da1623", rose: "#da1671", magenta: "#da16c0", violet: "#9f16da", indigo: "#4a16da" },
+        night:   { vermilion: "#e29573", crimson: "#e2737b", rose: "#e273a7", magenta: "#e273d4", violet: "#c173e2", indigo: "#9173e2" },
+      };
+      // Legacy raw-hex -> family (migrate pre-existing saved journeys).
+      // Teal (#2a7a6a) and Coral (#c85a3a) have no new family -> kept as frozen custom.
+      const TRACK_LEGACY_FAMILY = { "#9b2335": "crimson", "#6b3a7d": "violet", "#c23a7a": "rose" };
+      const TRACK_COLOR = "#c11f2a"; // legacy fallback constant (regular Crimson)
+      function trackTheme() { try { var t = (typeof getTheme === "function" ? getTheme() : "regular") || "regular"; return TRACK_COLOR_MAP[t] ? t : "regular"; } catch (e) { return "regular"; } }
+      function trackFamilyColor(fam) { var m = TRACK_COLOR_MAP[trackTheme()]; return (m && m[fam]) || null; }
+      function trackPalette() { var m = TRACK_COLOR_MAP[trackTheme()]; return TRACK_FAMILIES.map(function (f) { return m[f]; }); }
+      function trackFamilyOf(hex) { var h = (hex || "").toLowerCase(); for (var th in TRACK_COLOR_MAP) { var m = TRACK_COLOR_MAP[th]; for (var i = 0; i < TRACK_FAMILIES.length; i++) { if (m[TRACK_FAMILIES[i]].toLowerCase() === h) return TRACK_FAMILIES[i]; } } return null; }
+      function trackApplyColor(t, hex) { if (!t || !hex) return; t.color = hex; var f = trackFamilyOf(hex); if (f) t.colorFamily = f; else delete t.colorFamily; }
 
       // ---- State (hoisted to top of script) ----
 
       // ---- Persistence helpers ----
+      function trackMigrateColors(tracks) {
+        if (!Array.isArray(tracks)) return;
+        for (var i = 0; i < tracks.length; i++) {
+          var t = tracks[i];
+          if (!t) continue;
+          if (!t.colorFamily) {
+            var raw = (t.color || "").toLowerCase();
+            var fam = TRACK_LEGACY_FAMILY[raw] || trackFamilyOf(raw);
+            if (fam) t.colorFamily = fam; // else stays custom (Teal/Coral/off-palette)
+          }
+          if (t.colorFamily) {
+            var c = trackFamilyColor(t.colorFamily);
+            if (c) t.color = c; // re-sync render color to the active theme
+          }
+        }
+      }
       function trackLoadAll() {
         try {
           const raw = localStorage.getItem(TRACK_KEY);
-          return raw ? JSON.parse(raw) : [];
+          const tracks = raw ? JSON.parse(raw) : [];
+          trackMigrateColors(tracks);
+          return tracks;
         } catch (e) {
           return [];
         }
@@ -14760,7 +14879,7 @@
       function colorModalRenderPresets() {
         const wrap = document.getElementById("color-modal-presets");
         if (!wrap) return;
-        wrap.innerHTML = TRACK_COLORS.map((col) => {
+        wrap.innerHTML = trackPalette().map((col) => {
           const sel =
             col.toLowerCase() === (_colorModalPending || "").toLowerCase();
           return (
@@ -14818,7 +14937,7 @@
         const result = await trackPromptName(t.name || "Journey", t.color || TRACK_COLOR);
         if (result !== null) {
           t.name = (result.name && result.name.trim()) || t.name;
-          if (result.color) t.color = result.color;
+          if (result.color) trackApplyColor(t, result.color);
           trackSaveAll(tracks);
           trackRenderList();
           doLookAround();
@@ -14832,7 +14951,7 @@
         if (!t) return;
         const picked = await openColorModal(t.color || TRACK_COLOR);
         if (picked) {
-          t.color = picked;
+          trackApplyColor(t, picked);
           trackSaveAll(tracks);
           trackRenderList();
           doLookAround();
@@ -15080,6 +15199,14 @@
       function tpBaseForSpeed(speed) {
         return Math.floor(speed / 5);
       }
+      // The Travel Points a fresh/rested day STARTS with (the "remaining" fill): the daily total
+      // minus the Travel Impeded penalty (2 TP, floored at 0). tpTotal stays the true base; only the
+      // starting/refilled REMAINING is capped by this. Forced march is added on top afterward.
+      function tpDayBase(speed, tpState) {
+        let base = tpBaseForSpeed(speed);
+        if (tpState && tpState.weatherImpeded) base = Math.max(0, base - 2);
+        return base;
+      }
       // ---- Calendar-type modal ----
       let _calTypeModalResolve = null;
       function calTypeModalSelect(type) {
@@ -15106,11 +15233,11 @@
         tooFar: (hex) =>
           `${hex} is too far away for the party to reach in one travel turn. Click on an adjacent hex to continue the current journey or click Save to end your journey.`,
         notEnoughTP: (hex, terrain, cost, have) =>
-          `Not enough Travel Points to enter ${hex} (${terrain || "unknown terrain"}, costs ${cost} TP). You have ${have} TP remaining. Rest to replenish or enable Forced March. \n\nIf you wish, you can also choose to ignore Resting mechanics until your next Rest.`,
+          `Not enough Travel Points to enter ${hex} (${terrain || "unknown terrain"}, costs ${cost} TP). You have ${have} TP remaining. Rest to replenish or enable Forced March. \n\nIf you wish, you can also choose to ignore TP until your next Rest.`,
         notEnoughMiles: (hex, lc, need, have) =>
-          `Not enough miles to travel to ${hex} on this ${lc} (needs ${need} mi, you have ${have} mi). Rest to replenish or enable Forced March. \n\nIf you wish, you can also choose to ignore Resting mechanics until your next Rest.`,
+          `Not enough miles to travel to ${hex} on this ${lc} (needs ${need} mi, you have ${have} mi). Rest to replenish or enable Forced March. \n\nIf you wish, you can also choose to ignore miles required until your next Rest.`,
         noMiles: () =>
-          "No miles remaining. Rest to replenish or enable Forced March. \n\nIf you wish, you can also choose to ignore Resting mechanics until your next Rest.",
+          "No miles remaining. Rest to replenish or enable Forced March. \n\nIf you wish, you can also choose to ignore TP until your next Rest.",
         noPath: (lc, mode) =>
           `This hex has no ${lc} on it. Pick a different adjacent hex to stay on the ${lc}, or turn off ${mode} to travel normally.`,
         noShared: (lc, mode) =>
@@ -15120,9 +15247,9 @@
         riverNoShared: () =>
           "No river meets the shared edge. Pick an adjacent hex whose river reaches this one, or turn off River.",
         offboardNoMiles: (hex, need, have) =>
-          `Not enough miles to offboard onto ${hex} (needs ${need} mi, you have ${have} mi). Rest or enable Forced March. \n\nIf you wish, you can also choose to ignore Resting mechanics until your next Rest.`,
+          `Not enough miles to offboard onto ${hex} (needs ${need} mi, you have ${have} mi). Rest or enable Forced March. \n\nIf you wish, you can also choose to ignore TP until your next Rest.`,
         onboardNoMiles: (hex, need, have) =>
-          `Not enough miles to board the river at ${hex} (needs ${need} mi, you have ${have} mi). Rest or enable Forced March. \n\nIf you wish, you can also choose to ignore Resting mechanics until your next Rest.`,
+          `Not enough miles to board the river at ${hex} (needs ${need} mi, you have ${have} mi). Rest or enable Forced March. \n\nIf you wish, you can also choose to ignore TP until your next Rest.`,
       };
 
       // ---- Journey Log line templates (all in one place; edit wording here) ----
@@ -15164,11 +15291,15 @@
           `Hex ${code} (${hexName}) already has ${count} user entr${count === 1 ? "y" : "ies"}.\n\nOK = Merge (add imported entries to existing)\nCancel = Replace (overwrite with imported entries)`,
       };
       const JRN_MILES_PER_TP = 3; // 2 TP = 6 miles
-      function jrnRoundHalf(x) {
-        return Math.round(x * 2) / 2;
+      function jrnRoundQtr(x) {
+        return Math.round(x * 4) / 4;
       }
       function jrnFmtMiles(m) {
-        return Number.isInteger(m) ? String(m) : m.toFixed(1);
+        var w = Math.floor(m + 1e-9);
+        var fr = m - w;
+        var g = fr < 0.125 ? '' : fr < 0.375 ? '¼' : fr < 0.625 ? '½' : fr < 0.875 ? '¾' : '';
+        if (fr >= 0.875) { w += 1; g = ''; }
+        return g === '' ? String(w) : (w === 0 ? g : w + ' ' + g);
       }
       function jrnResourceDisplay(tpRemaining) {
         if (_jrnIgnoreRest) {
@@ -15182,7 +15313,7 @@
           const n = Math.floor((tpRemaining || 0) + 1e-9);
           return { label: "TP:", text: String(n), low: n <= 1 };
         }
-        const miles = jrnRoundHalf((tpRemaining || 0) * JRN_MILES_PER_TP);
+        const miles = jrnRoundQtr((tpRemaining || 0) * JRN_MILES_PER_TP);
         return { label: "Miles:", text: jrnFmtMiles(miles), low: miles <= 3 };
       }
       // Battery-bar state: fill % of remaining/total + colour tier.
@@ -15224,17 +15355,17 @@
       }
       // Forced March button label with a live preview of the resource it would add.
       function jrnFmLabel(tp) {
-        if (_jrnForceMarch || !tp) return "Forced March";
-        const bonusMiles = jrnRoundHalf(
-          (tp.tpRemaining || 0) * JRN_MILES_PER_TP * 0.5,
+        if (_jrnForceMarch || !tp) return "March";
+        const bonusMiles = jrnRoundQtr(
+          (tp.tpTotal || 0) * JRN_MILES_PER_TP * 0.5,
         );
         if (_jrnMode === "tp")
           return (
-            "Forced March (+" +
+            "March (+" +
             jrnFmtMiles(bonusMiles / JRN_MILES_PER_TP) +
             " TP)"
           );
-        return "Forced March (+" + jrnFmtMiles(bonusMiles) + " mi)";
+        return "March (+" + jrnFmtMiles(bonusMiles) + " mi)";
       }
       function jrnCurrentNetwork() {
         return _jrnMode === "river"
@@ -15328,7 +15459,7 @@
           id: chosen,
           distA,
           distB,
-          costMiles: jrnRoundHalf(distA + distB),
+          costMiles: jrnRoundQtr(distA + distB),
         };
       }
       // ---- Toggle Path / River travel mode (mutually exclusive; TP is default) ----
@@ -15786,7 +15917,8 @@
         _tpFlashHex = null;
         const base = tpBaseForSpeed(t.tpState.speed);
         t.tpState.tpTotal = base;
-        t.tpState.tpRemaining = base;
+        t.tpState.tpRemaining = tpDayBase(t.tpState.speed, t.tpState);
+        t.tpState.weatherImpededDeduct = base - t.tpState.tpRemaining;
         _jrnIgnoreRest = false;
         t.tpState.ignoreRest = false;
         t.tpState.encounter = false; // Rest clears any showing encounter
@@ -15832,7 +15964,8 @@
         _tpFlashHex = null;
         const base = tpBaseForSpeed(t.tpState.speed);
         t.tpState.tpTotal = base;
-        t.tpState.tpRemaining = base;
+        t.tpState.tpRemaining = tpDayBase(t.tpState.speed, t.tpState);
+        t.tpState.weatherImpededDeduct = base - t.tpState.tpRemaining;
         _jrnIgnoreRest = false;
         t.tpState.ignoreRest = false;
         t.tpState.encounter = false; // Rest clears any showing encounter
@@ -15895,8 +16028,8 @@
         _jrnForceMarch = true;
         t.tpState.forcedMarch = true;
         // +50% of CURRENT remaining, rounded to nearest 0.5 mile, stored back as TP.
-        const bonusMiles = jrnRoundHalf(
-          t.tpState.tpRemaining * JRN_MILES_PER_TP * 0.5,
+        const bonusMiles = jrnRoundQtr(
+          t.tpState.tpTotal * JRN_MILES_PER_TP * 0.5,
         );
         const bonusTp = bonusMiles / JRN_MILES_PER_TP;
         t.tpState.tpRemaining += bonusTp;
@@ -15915,6 +16048,32 @@
             ),
         );
         _tpFlashHex = null;
+        trackSaveAll(tracks);
+        trackUpdateUI();
+        doLookAround();
+      }
+      // ---- Weather (Travel Impeded / Poor Visibility) ----
+      // Persistent per-journey weather flags on tpState (weatherImpeded / weatherPoorVis),
+      // toggled directly from the greyed I/V bubbles by the Day indicator. Effects TBD.
+      function weatherBubbleToggle(which) {
+        const tracks = trackLoadAll();
+        const t = tracks.find(function (x) { return x.id === _trackActiveId; });
+        if (which === "impeded") {
+          if (!t.tpState.weatherImpeded) {
+            // Turn ON: cap current TP to the day total minus 2, remembering exactly how much we withheld.
+            t.tpState.weatherImpeded = true;
+            const _cap = tpDayBase(t.tpState.speed, t.tpState);
+            const _cut = Math.max(0, t.tpState.tpRemaining - _cap);
+            t.tpState.tpRemaining -= _cut;
+            t.tpState.weatherImpededDeduct = _cut;
+          } else {
+            // Turn OFF: refund whatever the cap withheld (lossless).
+            t.tpState.weatherImpeded = false;
+            t.tpState.tpRemaining += t.tpState.weatherImpededDeduct || 0;
+            t.tpState.weatherImpededDeduct = 0;
+          }
+        }
+        if (which === "vis") t.tpState.weatherPoorVis = !t.tpState.weatherPoorVis;
         trackSaveAll(tracks);
         trackUpdateUI();
         doLookAround();
@@ -16019,7 +16178,8 @@
           t.tpState.day += 1;
           _jrnForceMarch = false; t.tpState.forcedMarch = false; _tpFlashHex = null;
           const _base = tpBaseForSpeed(t.tpState.speed);
-          t.tpState.tpTotal = _base; t.tpState.tpRemaining = _base;
+          t.tpState.tpTotal = _base; t.tpState.tpRemaining = tpDayBase(t.tpState.speed, t.tpState);
+          t.tpState.weatherImpededDeduct = _base - t.tpState.tpRemaining;
           _jrnIgnoreRest = true; t.tpState.ignoreRest = true;
           t.tpState.encounter = false; _jrnEncounter = false; t.tpState.encounterAct = null;
           jrnActNext(t);
@@ -16054,7 +16214,8 @@
         _tpFlashHex = null;
         const base = tpBaseForSpeed(t.tpState.speed);
         t.tpState.tpTotal = base;
-        t.tpState.tpRemaining = base;
+        t.tpState.tpRemaining = tpDayBase(t.tpState.speed, t.tpState);
+        t.tpState.weatherImpededDeduct = base - t.tpState.tpRemaining;
         _jrnIgnoreRest = false;
         t.tpState.ignoreRest = false;
         t.tpState.encounter = false; // Rest clears any showing encounter
@@ -16116,12 +16277,12 @@
       // a journey frees its palette color for reuse.
       function jrnNextColor(tracks) {
         const used = new Set(
-          (tracks || []).map((t) => (t.color || "").toLowerCase()),
+          (tracks || []).map((t) => t.colorFamily).filter(Boolean),
         );
-        for (const col of TRACK_COLORS) {
-          if (!used.has(col.toLowerCase())) return col;
+        for (const fam of TRACK_FAMILIES) {
+          if (!used.has(fam)) return fam;
         }
-        return TRACK_COLORS[(tracks || []).length % TRACK_COLORS.length];
+        return TRACK_FAMILIES[(tracks || []).length % TRACK_FAMILIES.length];
       }
       // ---- Journey Log (human-readable, copy-pasteable event record) ----
       // Each action stamps a monotonic action id (t.tpState.actionSeq); undo removes
@@ -16258,12 +16419,14 @@
         _jrnMode = "tp";
         _jrnLastRoadId = null;
         const tpBase = tpBaseForSpeed(_jrnSpeed);
+        const _newFam = jrnNextColor(tracks);
 
         const newTrack = {
           id: "track-" + Date.now(),
           name: defaultName,
           date: dateResult.date,
-          color: jrnNextColor(tracks),
+          colorFamily: _newFam,
+          color: trackFamilyColor(_newFam) || TRACK_COLOR,
           calendarType: dateResult.calType,
           waypoints: [{ hex: currentHex, entryEdge: null, exitEdge: null }],
           travelLog: [],
@@ -16314,7 +16477,7 @@
           );
           if (result !== null && t) {
             t.name = (result.name && result.name.trim()) || defaultName;
-            if (result.color) t.color = result.color;
+            if (result.color) trackApplyColor(t, result.color);
             trackSaveAll(tracks);
           }
         }
@@ -16471,7 +16634,7 @@
             const remainder =
               Math.abs(jrnSegInnerT(rseg) - jrnEdgeFrac(rseg, edgeAtoB)) *
               (rseg.abLength || 0);
-            const costMiles = jrnRoundHalf(remainder + 3);
+            const costMiles = jrnRoundQtr(remainder + 3);
             const haveMiles = _jrnIgnoreRest
               ? Infinity
               : t.tpState.tpRemaining * JRN_MILES_PER_TP;
@@ -16481,7 +16644,7 @@
                 JRN_MSG.offboardNoMiles(
                   targetHex,
                   jrnFmtMiles(costMiles),
-                  jrnFmtMiles(jrnRoundHalf(haveMiles)),
+                  jrnFmtMiles(jrnRoundQtr(haveMiles)),
                 ),
               );
               return false;
@@ -16512,7 +16675,7 @@
             const destTravel =
               Math.abs(jrnEdgeFrac(rseg, opp) - jrnSegInnerT(rseg)) *
               (rseg.abLength || 0);
-            const costMiles = jrnRoundHalf(3 + destTravel);
+            const costMiles = jrnRoundQtr(3 + destTravel);
             const haveMiles = _jrnIgnoreRest
               ? Infinity
               : t.tpState.tpRemaining * JRN_MILES_PER_TP;
@@ -16522,7 +16685,7 @@
                 JRN_MSG.onboardNoMiles(
                   targetHex,
                   jrnFmtMiles(costMiles),
-                  jrnFmtMiles(jrnRoundHalf(haveMiles)),
+                  jrnFmtMiles(jrnRoundQtr(haveMiles)),
                 ),
               );
               return false;
@@ -16654,17 +16817,38 @@
               // this, adding any stopsT to such a road orphans its dead-end junction.
               let _termStop = null;
               if (_exitFrac === null) {
-                if (
-                  _seg.id === _jrnLastRoadId &&
-                  jrnSegTerm(_seg) &&
-                  _curSegs.some(
-                    (s) =>
-                      s.id !== _seg.id &&
-                      ((s.enter && s.enter.edge === edgeAtoB) ||
-                        (s.exit && s.exit.edge === edgeAtoB)),
-                  )
-                ) {
-                  _termStop = jrnSegDeadT(_seg);
+                const _exitRoad = _curSegs.find(
+                  (s) =>
+                    s.id !== _seg.id &&
+                    ((s.enter && s.enter.edge === edgeAtoB) ||
+                      (s.exit && s.exit.edge === edgeAtoB)),
+                );
+                if (_seg.id === _jrnLastRoadId && jrnSegTerm(_seg) && _exitRoad) {
+                  // The switch point on THIS terminating road is its stop-or-dead-end
+                  // geometrically NEAREST the road that actually exits the clicked edge --
+                  // not blindly the dead-end. A road branching at an interior stop (e.g.
+                  // manor-road-2 off lochsbreth at 0.55) switches there; roads sharing the
+                  // dead-end (e.g. follyegg & lochsbreth at Odd, 1403) still switch at it.
+                  const _SBX = 500, _SBY = 500, _SBR = 100;
+                  const _swCands = _seg.stopsT
+                    .filter((v) => typeof v === "number")
+                    .concat([jrnSegDeadT(_seg)]);
+                  const _erP = jrnSegPolyline(currentHex, _exitRoad.id, _jrnMode === "river", _SBX, _SBY, _SBR);
+                  const _erSp = _erP ? _erP.sp : null;
+                  let _best = jrnSegDeadT(_seg), _bd2 = Infinity;
+                  if (_erSp) {
+                    for (const _c of _swCands) {
+                      const _p = jrnPointAtT(currentHex, _seg.id, _jrnMode === "river", _SBX, _SBY, _SBR, _c);
+                      if (!_p) continue;
+                      let _md = Infinity;
+                      for (let _k = 0; _k < _erSp.length; _k++) {
+                        const _dx = _erSp[_k].x - _p.x, _dy = _erSp[_k].y - _p.y, _dd = _dx * _dx + _dy * _dy;
+                        if (_dd < _md) _md = _dd;
+                      }
+                      if (_md < _bd2) { _bd2 = _md; _best = _c; }
+                    }
+                  }
+                  _termStop = _best;
                   _exitFrac = _termStop;
                 } else {
                   continue;
@@ -16685,7 +16869,7 @@
               _stops.sort((a, b) => (_exitFrac > _curT ? a - b : b - a));
               const _nextStop = _stops[0];
               const _dist = Math.abs(_nextStop - _curT) * (_seg.abLength || 0);
-              const _costMiles = jrnRoundHalf(_dist);
+              const _costMiles = jrnRoundQtr(_dist);
               const _usePathId = _seg.id; // advance on THIS road
               const haveMiles = _jrnIgnoreRest
                 ? Infinity
@@ -16749,7 +16933,7 @@
             // affordability check. Miles are then judged against reaching the STOP, not
             // the full crossing, so a party can enter and pause at a stop they can afford
             // (even if they could not afford the whole hex). Sets _entryStopT + res.costMiles.
-            if (!_spSpecial && res && res.ok) { const _netB = jrnCurrentNetwork(); const _segB = ((_netB && _netB[targetHex]) || []).find((s) => s.id === res.id); if (_segB && Array.isArray(_segB.stopsT) && _segB.stopsT.length) { const _enT = jrnEdgeFrac(_segB, edgeBtoA); if (_enT != null) { const _farT = _enT === 0 ? 1 : 0; const _js = _segB.stopsT.filter((v) => typeof v === "number").filter((v) => _farT > _enT ? v > _enT + 1e-9 && v < _farT - 1e-9 : v < _enT - 1e-9 && v > _farT + 1e-9).sort((a, b) => (_farT > _enT ? a - b : b - a)); if (_js.length) { _entryStopT = _js[0]; res.costMiles = jrnRoundHalf(res.distA + Math.abs(_entryStopT - _enT) * (_segB.abLength || 0)); } } } }
+            if (!_spSpecial && res && res.ok) { const _netB = jrnCurrentNetwork(); const _segB = ((_netB && _netB[targetHex]) || []).find((s) => s.id === res.id); if (_segB && Array.isArray(_segB.stopsT) && _segB.stopsT.length) { const _enT = jrnEdgeFrac(_segB, edgeBtoA); if (_enT != null) { const _farT = _enT === 0 ? 1 : 0; const _js = _segB.stopsT.filter((v) => typeof v === "number").filter((v) => _farT > _enT ? v > _enT + 1e-9 && v < _farT - 1e-9 : v < _enT - 1e-9 && v > _farT + 1e-9).sort((a, b) => (_farT > _enT ? a - b : b - a)); if (_js.length) { _entryStopT = _js[0]; res.costMiles = jrnRoundQtr(res.distA + Math.abs(_entryStopT - _enT) * (_segB.abLength || 0)); } } } }
             const haveMiles = _jrnIgnoreRest
               ? Infinity
               : t.tpState.tpRemaining * JRN_MILES_PER_TP;
@@ -16813,6 +16997,9 @@
               const _sc = _st != null ? (TERRAIN_TP_COST[_st] ?? 2) : 2;
               _lchance = _sc - 1;
             }
+            // Poor Visibility weather: +1-in-6 chance of getting lost in the WILD only
+            // (never on a trail/road/river — those follow a route).
+            if (_lkind === "wild" && t.tpState.weatherPoorVis) _lchance += 1;
             if (Math.floor(Math.random() * 6) + 1 <= _lchance) {
               // GOT LOST -> abort this move entirely.
               if (!_jrnIgnoreRest) t.tpState.tpRemaining += _moveCostTp; // refund the cost
@@ -16887,10 +17074,10 @@
         if (t.tpState) {
           const _lgHex = jrnLogHex(targetHex);
           const _remain = jrnFmtMiles(
-            jrnRoundHalf(t.tpState.tpRemaining * JRN_MILES_PER_TP),
+            jrnRoundQtr(t.tpState.tpRemaining * JRN_MILES_PER_TP),
           );
           const _total = jrnFmtMiles(
-            jrnRoundHalf(t.tpState.tpTotal * JRN_MILES_PER_TP),
+            jrnRoundQtr(t.tpState.tpTotal * JRN_MILES_PER_TP),
           );
           let _lgLine;
           if (_spSpecial && _spOutMode === "river" && _spInMode === "tp") {
@@ -17189,7 +17376,7 @@
           return;
         }
 
-        const fmt = (m) => jrnFmtMiles(jrnRoundHalf(m));
+        const fmt = (m) => jrnFmtMiles(jrnRoundQtr(m));
         listEl.innerHTML = tracks
           .map((t) => {
             const wps = t.waypoints || [];
@@ -18475,7 +18662,7 @@
         <div class="modal__title">Settings</div>
         <div class="settings-section">
           <div class="settings-head">Theme</div>
-          <div class="settings-row settings-row--theme"><div class="segmented segmented--3"><button id="set-theme-regular" class="toggle" onclick="settingsSetTheme('regular')">Regular</button><button id="set-theme-modern" class="toggle" onclick="settingsSetTheme('modern')">Modern</button><button id="set-theme-night" class="toggle" onclick="settingsSetTheme('night')">Night</button></div></div>
+          <div class="settings-row settings-row--theme"><div class="segmented segmented--3"><button id="set-theme-regular" class="toggle" onclick="settingsSetTheme('regular')">Parchment</button><button id="set-theme-modern" class="toggle" onclick="settingsSetTheme('modern')">Modern</button><button id="set-theme-night" class="toggle" onclick="settingsSetTheme('night')">Night</button></div></div>
         </div>
         <div class="settings-section">
           <div class="settings-head">Hex Map</div>
@@ -18489,7 +18676,7 @@
           <div class="settings-row"><span>Infinite Travel Points</span><div class="segmented"><button id="set-alwaysDisableRest-yes" class="toggle toggle--yes" onclick="settingsToggle('alwaysDisableRest', true)">Yes</button><button id="set-alwaysDisableRest-no" class="toggle toggle--no" onclick="settingsToggle('alwaysDisableRest', false)">No</button></div></div>
           <div class="settings-row"><span>Disable Encounters</span><div class="segmented"><button id="set-disableEncounters-yes" class="toggle toggle--yes" onclick="settingsToggle('disableEncounters', true)">Yes</button><button id="set-disableEncounters-no" class="toggle toggle--no" onclick="settingsToggle('disableEncounters', false)">No</button></div></div>
           <div class="settings-row"><span>Disable Getting Lost</span><div class="segmented"><button id="set-disableLost-yes" class="toggle toggle--yes" onclick="settingsToggle('disableLost', true)">Yes</button><button id="set-disableLost-no" class="toggle toggle--no" onclick="settingsToggle('disableLost', false)">No</button></div></div>
-          <div class="settings-row"><span>Lost Rotates Player View</span><div class="segmented"><button id="set-lostFlipsPlayerView-yes" class="toggle toggle--yes" onclick="settingsToggle('lostFlipsPlayerView', true)">Yes</button><button id="set-lostFlipsPlayerView-no" class="toggle toggle--no" onclick="settingsToggle('lostFlipsPlayerView', false)">No</button></div></div>
+          <div class="settings-row" id="row-lostFlipsPlayerView"><span>Lost Rotates Player View</span><div class="segmented"><button id="set-lostFlipsPlayerView-yes" class="toggle toggle--yes" onclick="settingsToggle('lostFlipsPlayerView', true)">Yes</button><button id="set-lostFlipsPlayerView-no" class="toggle toggle--no" onclick="settingsToggle('lostFlipsPlayerView', false)">No</button></div></div>
         </div>
         <div class="modal__actions"><button class="btn btn--primary" type="button" onclick="closeSettings()">Done</button></div>
       </div>
@@ -18547,7 +18734,7 @@
             type="button"
             onclick="insuffIgnoreRest()"
           >
-            Ignore Resting
+            Ignore TP
           </button>
           <button
             class="btn btn--primary"
