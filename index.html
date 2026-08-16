@@ -4,6 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Explore Dolmenwood</title>
+    <script>
+      // Apply saved theme class BEFORE first paint to avoid a Parchment flash on load.
+      (function () {
+        try {
+          var s = JSON.parse(localStorage.getItem("dolmenwood-settings") || "{}");
+          var th = s.theme || (s.nightMode ? "night" : "regular");
+          var r = document.documentElement.classList;
+          r.toggle("night-mode", th === "night");
+          r.toggle("modern-mode", th === "modern");
+        } catch (e) {}
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -12,17 +24,16 @@
     />
     <style>
       :root {
-        --ink: #1a1612;
-        --ink-soft: #3a342c;
-        --ink-faded: #6b5e4e;
-        --parchment: #f1e9d8;
-        --parchment-deep: #e8dcc3;
-        --parchment-light: #f9f3e3;
-        --moss: #556b3d;
-        --moss-deep: #3e4f2c;
-        --ochre: #a87838;
-        --rust: #8a3a24;
-        --sky: #5b6e7a;
+        --fg: #1a1612;
+        --fg-soft: #3a342c;
+        --fg-faded: #6b5e4e;
+        --bg: #f1e9d8;
+        --bg-sunken: #e8dcc3;
+        --bg-raised: #f9f3e3;
+        --accent: #556b3d;
+        --accent-strong: #3e4f2c;
+        --accent-muted: #a87838;
+        --accent-info: #5b6e7a;
         --shadow: rgba(26, 22, 18, 0.18);
 
         /* ===== DESIGN TOKENS (Style Guide v1) — additive; migrate onto these ===== */
@@ -32,6 +43,7 @@
         --focus-ring: #5b6e7a;
         --danger: #8a3a24;
         --danger-hover: #7e130d;
+        --hex-hilite: #2a2420;
         --lost: #7c828a;
         --lost-text: #40454d;
         --encounter: #c01a12;
@@ -42,16 +54,14 @@
         --backdrop: rgba(0, 0, 0, 0.6);
         /* Toggle ON appearance — ONE place to recolour every toggle sharing this language. */
         /* ONE knob for every emphasis FILL (primary buttons, toggle-on, active tab). */
-        --fill: var(--moss);
-        --fill-text: var(--parchment-light);
-        --fill-border: var(--moss);
-        --toggle-on-bg: var(--fill);
-        --toggle-on-text: var(--fill-text);
-        --toggle-on-border: var(--fill-border);
+        --fill: var(--accent);
+        --fill-text: var(--bg-raised);
+        --fill-border: var(--accent);
+        --toggle-no: #7b6a50;
         /* Quiet 'on' state for set-and-forget toggles (Player/2D/World): subtle ochre wash. */
         --toggle-quiet-bg: #eadec8;
-        --toggle-quiet-fg: var(--ochre);
-        --toggle-quiet-border: var(--ochre);
+        --toggle-quiet-fg: var(--accent-muted);
+        --toggle-quiet-border: var(--accent-muted);
         --tab-active: var(
           --fill
         ); /* active-tab underline (was ochre; meter-only per Rule B) */
@@ -66,12 +76,7 @@
         --fs-base: 16px;
         --fs-lg: 20px;
         --fs-xl: 23px;
-        --fs-display: clamp(28px, 5vw, 44px);
         /* Weight (collapsed to 2), line-height (3), tracking */
-        --fw-normal: 400;
-        --fw-bold: 700;
-        --lh-tight: 1.2;
-        --lh: 1.45;
         --lh-loose: 1.6;
         --ls-caps: 0.05em;
 
@@ -90,16 +95,12 @@
         --r-sm: 4px;
         --r-md: 8px;
         --r-pill: 999px;
-        --r-dot: 50%;
         /* Border widths */
         --bw: 1px;
         --bw-strong: 2px;
         /* Elevation (11 -> 3) */
-        --shadow-sm: 0 1px 3px var(--shadow);
-        --shadow-md: 0 4px 12px rgba(26, 22, 18, 0.22);
         --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.4);
         /* Motion (16 -> 3) */
-        --t-fast: 120ms ease;
         --t: 150ms ease;
         --t-slow: 200ms ease;
         /* ===== MAP & TOOLTIP COLORS (edit these + the night-mode block below) ===== */
@@ -117,7 +118,7 @@
         --tooltip-bg2: #e8dcc3;
         --tooltip-border: rgba(107, 94, 78, 0.75);
         --tooltip-inner-border: rgba(107, 94, 78, 0.2);
-        --prominent-bg: #e0bd49;
+        --prominent-bg: #b3973a;
         --prominent-bg-soft: #e0c983;
         --prominent-border: #7b5b00;
         --prominent-text: #fff;
@@ -134,23 +135,23 @@
          only; spacing/fonts/radii unchanged. Journey colors are per-journey values, untouched. */
       :root.night-mode {
         /* VS Dark: neutral dark grays + muted blue accents (Visual Studio dark theme feel). */
-        --ink: #b5b5b5;
-        --ink-soft: #b5b5b5;
-        --ink-faded: #b5b5b5;
-        --parchment: #1e1e1e;
-        --parchment-deep: #252526;
-        --parchment-light: #2d2d30;
-        --moss: #0e639c;
-        --moss-deep: #1177bb;
-        --ochre: #569cd6;
-        --rust: #d16969;
-        --sky: #569cd6;
+        --fg: #b5b5b5;
+        --fg-soft: #b5b5b5;
+        --fg-faded: #b5b5b5;
+        --bg: #1e1e1e;
+        --bg-sunken: #252526;
+        --bg-raised: #2d2d30;
+        --accent: #5a9bd4;
+        --accent-strong: #5a9bd4;
+        --accent-muted: #569cd6;
+        --accent-info: #569cd6;
         --shadow: rgba(0, 0, 0, 0.4);
         --border: #6e6e70;
         --border-strong: #6e6e70;
-        --focus-ring: #007acc;
+        --focus-ring: #1582ca;
         --danger: #f14c4c;
-        --danger-hover: #ff6b6b;
+        --danger-hover: #f14c4c;
+        --hex-hilite: #ffffff;
         --lost: #cccccc;
         --lost-text: #cccccc;
         --encounter: #f14c4c;
@@ -159,18 +160,14 @@
         --meter-warn: #cca700;
         --meter-low: #f14c4c;
         --backdrop: rgba(0, 0, 0, 0.6);
-        --fill: #0e639c;
+        --fill: #1582ca;
         --fill-text: #ffffff;
-        --fill-border: #1177bb;
-        --toggle-on-bg: #0e639c;
-        --toggle-on-text: #ffffff;
-        --toggle-on-border: #1177bb;
+        --fill-border: #1582ca;
+        --toggle-no: #616769;
         --toggle-quiet-bg: #1b2a35;
         --toggle-quiet-fg: #569cd6;
-        --toggle-quiet-border: #0e639c;
-        --tab-active: #007acc;
-        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-        --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
+        --toggle-quiet-border: #1582ca;
+        --tab-active: #1582ca;
         --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
         /* ----- map & tooltip colors (night) ----- */
         --road: #d4aa30;
@@ -203,23 +200,23 @@
       /* ===== MODERN THEME (Settings > UI) — white/gray Apple aesthetic, blue accent,
          muted terrain, modern red for type tags + directions. Journey colors untouched. */
       :root.modern-mode {
-        --ink: #1d1d1f;
-        --ink-soft: #515154;
-        --ink-faded: #86868b;
-        --parchment: #ffffff;
-        --parchment-deep: #f5f5f7;
-        --parchment-light: #fbfbfd;
-        --moss: #0071e3;
-        --moss-deep: #0058b0;
-        --ochre: #86868b;
-        --rust: #d70015;
-        --sky: #0071e3;
+        --fg: #1d1d1f;
+        --fg-soft: #515154;
+        --fg-faded: #86868b;
+        --bg: #ffffff;
+        --bg-sunken: #f5f5f7;
+        --bg-raised: #fbfbfd;
+        --accent: #0071e3;
+        --accent-strong: #0058b0;
+        --accent-muted: #86868b;
+        --accent-info: #0071e3;
         --shadow: rgba(0, 0, 0, 0.10);
         --border: #d2d2d7;
         --border-strong: #86868b;
         --focus-ring: #0071e3;
         --danger: #d70015;
         --danger-hover: #b3000f;
+        --hex-hilite: #2a2420;
         --lost: #a1a1a6;
         --lost-text: #6e6e73;
         --encounter: #d70015;
@@ -231,15 +228,11 @@
         --fill: #0071e3;
         --fill-text: #ffffff;
         --fill-border: #0071e3;
-        --toggle-on-bg: #0071e3;
-        --toggle-on-text: #ffffff;
-        --toggle-on-border: #0071e3;
+        --toggle-no: #7f8387;
         --toggle-quiet-bg: #e6f1fc;
         --toggle-quiet-fg: #0071e3;
         --toggle-quiet-border: #0071e3;
         --tab-active: #0071e3;
-        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-        --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.10);
         --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.16);
         /* map & tooltip (modern) */
         --road: #d4aa30;
@@ -254,7 +247,7 @@
         --hex-center-fill: #ffffff;
         --hex-center-edge: #d8d8dc;
         --hex-center-edge-2: #e6e6ea;
-        --hex-center-outline: #0071e3;
+        --hex-center-outline: #1d1d1f;
         --hex-center-text: #1d1d1f;
         --tooltip-bg1: #ffffff;
         --tooltip-bg2: #f5f5f7;
@@ -279,8 +272,8 @@
         font-family: var(--font-body);
         font-size: var(--fs-base);
         line-height: 1.55;
-        color: var(--ink);
-        background: var(--parchment);
+        color: var(--fg);
+        background: var(--bg);
         background-image:
           radial-gradient(
             ellipse at 10% 5%,
@@ -327,14 +320,14 @@
         font-size: clamp(28px, 5vw, 44px);
         font-weight: 400;
         letter-spacing: 0.04em;
-        color: var(--ink);
+        color: var(--fg);
         margin-bottom: 6px;
       }
       header .sub {
         font-family: var(--font-body);
         font-style: italic;
         font-size: var(--fs-base);
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         margin: 4px 0 0;
       }
       nav.tabs {
@@ -348,7 +341,7 @@
         font-family: var(--font-display);
         font-size: var(--fs-xs);
         letter-spacing: 0.06em;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         background: transparent;
         border: none;
         border-bottom: 2px solid transparent;
@@ -359,11 +352,11 @@
           border-color 0.2s;
       }
       nav.tabs button:hover {
-        color: var(--ink);
+        color: var(--fg);
       }
       nav.tabs button.active {
-        color: var(--ink);
-        border-bottom-color: var(--rust);
+        color: var(--fg);
+        border-bottom-color: var(--danger);
       }
       .panel {
         display: none;
@@ -383,7 +376,7 @@
         }
       }
       .card {
-        background: var(--parchment-light);
+        background: var(--bg-raised);
         border: 1px solid var(--border);
         border-radius: 2px;
         padding: 24px 28px;
@@ -418,11 +411,11 @@
         flex: 1 1 200px;
         min-width: 150px;
       }
-      .settings-gear { flex: 0 0 auto; align-self: end; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 6px; background: var(--parchment-light); color: var(--ink); line-height: 1; cursor: pointer; }
+      .settings-gear { flex: 0 0 auto; align-self: end; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-raised); color: var(--fg); line-height: 1; cursor: pointer; }
       .settings-gear:hover { background: rgba(44, 24, 16, 0.08); }
       .settings-section { margin-bottom: 18px; }
-      .settings-head { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faded); border-bottom: 1px solid var(--border); padding-bottom: 4px; margin-bottom: 6px; }
-      .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: var(--fs-sm); color: var(--ink); cursor: pointer; }
+      .settings-head { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-faded); border-bottom: 1px solid var(--border); padding-bottom: 4px; margin-bottom: 6px; }
+      .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: var(--fs-sm); color: var(--fg); cursor: pointer; }
       .settings-row input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; flex: 0 0 auto; }
       .search-results {
         position: absolute;
@@ -431,7 +424,7 @@
         right: 0;
         max-height: 320px;
         overflow-y: auto;
-        background: var(--parchment-light);
+        background: var(--bg-raised);
         border: 1px solid var(--border);
         border-radius: 4px;
         box-shadow: 0 6px 18px var(--shadow);
@@ -446,14 +439,14 @@
         cursor: pointer;
         border-bottom: 1px solid rgba(107, 94, 78, 0.2);
         font-size: var(--fs-base);
-        color: var(--ink);
+        color: var(--fg);
       }
       .search-result:last-child {
         border-bottom: none;
       }
       .search-result:hover,
       .search-result.active {
-        background: var(--parchment-deep);
+        background: var(--bg-sunken);
       }
       .search-result .sr-primary {
         font-weight: 600;
@@ -462,7 +455,7 @@
         display: block;
         font-size: var(--fs-xs);
         font-style: italic;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         margin-top: 2px;
       }
       .search-result .sr-kind {
@@ -470,14 +463,14 @@
         font-family: var(--font-display);
         font-size: var(--fs-xs);
         letter-spacing: 0.08em;
-        color: var(--rust);
+        color: var(--danger);
         margin-right: 8px;
         vertical-align: middle;
       }
       .search-empty {
         padding: 10px 12px;
         font-style: italic;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         font-size: var(--fs-xs);
       }
       .field {
@@ -491,14 +484,14 @@
         font-family: var(--font-display);
         font-size: var(--fs-xs);
         letter-spacing: 0.08em;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
       }
       input,
       select {
         font-family: var(--font-body);
         font-size: var(--fs-base);
-        color: var(--ink);
-        background: var(--parchment);
+        color: var(--fg);
+        background: var(--bg);
         border: var(--bw) solid var(--border);
         border-radius: var(--r-sm);
         padding: 8px 10px;
@@ -525,12 +518,12 @@
         border-bottom: 1px solid var(--border);
         padding-bottom: 8px;
         margin-bottom: 14px;
-        color: var(--ink);
+        color: var(--fg);
       }
       .scene-sub {
         font-family: var(--font-body);
         font-size: var(--fs-base);
-        color: var(--ink);
+        color: var(--fg);
         margin-bottom: 16px;
       }
       .direction {
@@ -556,11 +549,11 @@
         font-family: var(--font-display);
         font-size: var(--fs-xs);
         letter-spacing: 0.08em;
-        color: var(--rust);
+        color: var(--danger);
         padding-top: 2px;
       }
       .dir-text {
-        color: var(--ink);
+        color: var(--fg);
       }
       .feature-list {
         list-style: circle;
@@ -572,11 +565,11 @@
         line-height: 1.45;
       }
       .no-features {
-        color: var(--ink-faded);
+        color: var(--fg-faded);
       }
       .dir-meta {
         font-size: var(--fs-xs);
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         font-style: italic;
         margin-top: 2px;
       }
@@ -584,25 +577,25 @@
         font-family: var(--font-display);
         font-size: var(--fs-base);
         letter-spacing: 0.08em;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         margin: 20px 0 10px;
         padding-top: 14px;
         border-top: 1px solid rgba(107, 94, 78, 0.3);
       }
       .distant-item {
         padding: 6px 0 6px 14px;
-        border-left: 2px solid var(--ochre);
+        border-left: 2px solid var(--accent-muted);
         margin: 8px 0;
         font-size: var(--fs-base);
       }
       .distant-meta {
         font-size: var(--fs-xs);
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         font-style: italic;
       }
       .empty-note {
         font-style: italic;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         padding: 12px 0;
       }
       .stat {
@@ -624,7 +617,7 @@
         max-width: 100%;
         width: 100%;
         padding: 8px;
-        background: var(--parchment);
+        background: var(--bg);
         border: 1px solid rgba(107, 94, 78, 0.3);
         border-radius: 2px;
         box-shadow: inset 0 1px 2px rgba(26, 22, 18, 0.04);
@@ -650,7 +643,7 @@
           var(--tooltip-bg1) 0%,
           var(--tooltip-bg2) 100%
         );
-        color: var(--ink);
+        color: var(--fg);
         border: 1px solid var(--tooltip-border);
         border-radius: 2px;
         box-shadow: 0 8px 20px rgba(26, 22, 18, 0.22);
@@ -676,12 +669,12 @@
         font-family: var(--font-display);
         font-size: var(--fs-xs);
         letter-spacing: 0.08em;
-        color: var(--ink);
+        color: var(--fg);
         margin-bottom: 2px;
       }
       .hex-tooltip-sub {
         font-size: var(--fs-base);
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         font-style: italic;
         margin-bottom: 8px;
       }
@@ -699,7 +692,7 @@
         font-family: var(--font-display);
         font-size: var(--fs-xs);
         letter-spacing: 0.08em;
-        color: var(--ink);
+        color: var(--fg);
         margin: 10px 0 2px;
       }
       .tooltip-entry-list {
@@ -720,7 +713,7 @@
           var(--tooltip-bg1) 0%,
           var(--tooltip-bg2) 100%
         );
-        color: var(--ink);
+        color: var(--fg);
         border: 1px solid var(--tooltip-border);
         border-radius: 2px;
         box-shadow: 0 4px 12px rgba(26, 22, 18, 0.22);
@@ -760,13 +753,13 @@
         font-family: var(--font-body);
         font-size: var(--fs-xs);
         font-style: italic;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         margin-left: 6px;
       }
       .hex-shape {
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
-        fill: var(--parchment-deep);
+        fill: var(--bg-sunken);
         stroke: rgba(107, 94, 78, 0.5);
         stroke-width: 1.2;
         cursor: pointer;
@@ -786,13 +779,13 @@
       }
       @media (hover: hover) and (pointer: fine) {
         .hex-shape:hover {
-          stroke: #2a2420;
+          stroke: var(--hex-hilite);
           stroke-width: 2;
           stroke-linejoin: round;
           filter: none;
         }
         .hex-shape.blocked:hover {
-          stroke: #2a2420;
+          stroke: var(--hex-hilite);
           stroke-width: 2;
           stroke-linejoin: round;
         }
@@ -802,13 +795,13 @@
         outline: none;
       }
       .hex-shape.selected {
-        stroke: #2a2420;
+        stroke: var(--hex-hilite);
         stroke-width: 2;
         stroke-linejoin: round;
         filter: none;
       }
       .hex-cliff.selected {
-        stroke: #2a2420;
+        stroke: var(--hex-hilite);
         stroke-width: 2;
         stroke-linejoin: round;
       }
@@ -819,12 +812,12 @@
         stroke: #c7c7c7;
       }
       .hex-shape.blocked.selected {
-        stroke: #2a2420;
+        stroke: var(--hex-hilite);
         stroke-width: 2;
         stroke-linejoin: round;
       }
       .hex-cliff.blocked.selected {
-        stroke: #2a2420;
+        stroke: var(--hex-hilite);
         stroke-width: 2;
         stroke-linejoin: round;
       }
@@ -847,7 +840,7 @@
       .hex-selector-overlay path,
       .hex-selector-overlay polygon {
         fill: none;
-        stroke: #2a2420;
+        stroke: var(--hex-hilite);
         stroke-width: 2;
         stroke-linejoin: round;
         pointer-events: none;
@@ -855,7 +848,7 @@
       .hex-text {
         font-family: var(--font-body);
         font-size: 16px;
-        fill: var(--ink);
+        fill: var(--fg);
         text-anchor: middle;
         pointer-events: none;
         font-weight: 600;
@@ -864,24 +857,24 @@
         fill: var(--hex-center-text);
       }
       .hex-text.empty-text {
-        fill: var(--ink-faded);
+        fill: var(--fg-faded);
         font-weight: 400;
       }
       .hex-dir {
         font-family: var(--font-display);
         letter-spacing: 0.08em;
-        fill: var(--ink-faded);
+        fill: var(--fg-faded);
         text-anchor: middle;
         pointer-events: none;
       }
       .hex-text.center-text + .hex-dir,
       .hex-shape.center ~ .hex-dir-center {
-        fill: var(--parchment-deep);
+        fill: var(--bg-sunken);
       }
       .hex-name {
         font-family: var(--font-body);
         font-size: 12px;
-        fill: var(--ink-faded);
+        fill: var(--fg-faded);
         text-anchor: middle;
         pointer-events: none;
         font-style: italic;
@@ -891,26 +884,26 @@
       }
       .module {
         padding: 10px 12px;
-        background: var(--parchment-deep);
-        border-left: 3px solid var(--moss);
+        background: var(--bg-sunken);
+        border-left: 3px solid var(--accent);
         margin-bottom: 6px;
         border-radius: 1px;
       }
       .module-name {
         font-weight: 600;
         font-size: var(--fs-base);
-        color: var(--ink);
+        color: var(--fg);
       }
       .module-type {
         font-family: var(--font-display);
         font-size: var(--fs-xs);
-        color: var(--rust);
+        color: var(--danger);
         letter-spacing: 0.08em;
         margin-left: 8px;
       }
       .module-desc {
         font-size: var(--fs-base);
-        color: var(--ink-soft);
+        color: var(--fg-soft);
         font-style: italic;
         margin-top: 2px;
       }
@@ -918,13 +911,13 @@
         font-family: var(--font-display);
         font-size: var(--fs-xs);
         letter-spacing: 0.1em;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         margin: 18px 0 6px;
         text-transform: uppercase;
       }
       .rt-total.empty {
         background: transparent;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         font-style: italic;
         font-family: var(--font-body);
         letter-spacing: normal;
@@ -935,12 +928,12 @@
         margin-top: 40px;
         font-size: var(--fs-xs);
         font-style: italic;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         line-height: 1.6;
         padding: 0 20px;
       }
       .disclaimer a {
-        color: var(--moss-deep);
+        color: var(--accent-strong);
       }
       @media (max-width: 600px) {
         body {
@@ -995,7 +988,7 @@
         font-family: var(--font-display);
         font-size: var(--fs-xs);
         letter-spacing: 0.08em;
-        color: var(--sky);
+        color: var(--accent-info);
         white-space: nowrap;
       }
       .user-entry-list-actions {
@@ -1024,7 +1017,7 @@
       .ue-flag-label {
         font-family: var(--font-body);
         font-size: var(--fs-base);
-        color: var(--ink);
+        color: var(--fg);
         white-space: nowrap;
       }
       .entry-height-inline {
@@ -1042,8 +1035,8 @@
       textarea.entry-desc {
         font-family: var(--font-body);
         font-size: var(--fs-base);
-        color: var(--ink);
-        background: var(--parchment);
+        color: var(--fg);
+        background: var(--bg);
         border: var(--bw) solid var(--border);
         border-radius: var(--r-sm);
         padding: 8px 10px;
@@ -1080,7 +1073,7 @@
         font-family: var(--font-display);
         font-size: var(--fs-xs);
         letter-spacing: 0.08em;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         background: transparent;
         border: 1px solid rgba(107, 94, 78, 0.4);
         border-radius: 2px;
@@ -1091,7 +1084,7 @@
           border-color 0.15s;
       }
       button.ue-io:hover {
-        color: var(--ink);
+        color: var(--fg);
         border-color: var(--border);
       }
       #ue-file-input {
@@ -1100,13 +1093,13 @@
       .ue-status {
         font-size: var(--fs-xs);
         font-style: italic;
-        color: var(--moss-deep);
+        color: var(--accent-strong);
       }
       /* ---- Party Track System ---- */
       .track-card {
         display: block;
         border: 1px solid var(--border);
-        border-left: 4px solid var(--rust);
+        border-left: 4px solid var(--danger);
         border-radius: 5px;
         padding: 8px 10px;
         margin-bottom: 6px;
@@ -1138,14 +1131,14 @@
         font-weight: 700;
         font-size: var(--fs-sm);
         cursor: pointer;
-        color: var(--ink);
+        color: var(--fg);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
       .track-card-sub {
         font-size: var(--fs-xs);
-        color: var(--ink-soft);
+        color: var(--fg-soft);
         margin-top: 3px;
         display: flex;
         align-items: center;
@@ -1163,13 +1156,13 @@
         padding: 2px 7px;
         border-radius: 10px;
         background: rgba(44, 24, 16, 0.06);
-        color: var(--ink-soft);
+        color: var(--fg-soft);
         border: 1px solid rgba(44, 24, 16, 0.1);
         font-weight: 600;
       }
       .jrn-stat--total {
         background: rgba(44, 24, 16, 0.12);
-        color: var(--ink);
+        color: var(--fg);
       }
 
       /* ── Hex graphic area ──────────────────────────────────────────── */
@@ -1231,15 +1224,15 @@
         width: 100%;
         text-align: left;
         cursor: pointer;
-        background: var(--parchment-light);
+        background: var(--bg-raised);
         border: 1px solid var(--border);
         border-radius: 6px;
         padding: 9px 12px;
         font-family: inherit;
-        color: var(--ink);
+        color: var(--fg);
       }
       .track-chooser-item:hover {
-        background: var(--parchment-deep);
+        background: var(--bg-sunken);
       }
       .track-chooser-dot {
         width: 12px;
@@ -1257,7 +1250,7 @@
       }
       .track-chooser-range {
         font-size: var(--fs-xs);
-        color: var(--ink-faded);
+        color: var(--fg-faded);
       }
       .hex-tab-bar {
         display: flex;
@@ -1279,17 +1272,17 @@
         font-family: var(--font-display);
         font-size: var(--fs-base);
         letter-spacing: 0.01em;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         cursor: pointer;
         transition:
           color var(--t),
           border-color var(--t);
       }
       .hex-tab:hover {
-        color: var(--ink);
+        color: var(--fg);
       }
       .hex-tab--active {
-        color: var(--ink);
+        color: var(--fg);
         border-bottom-color: var(--tab-active);
         font-weight: 600;
       }
@@ -1314,7 +1307,7 @@
         font-family: var(--font-body);
         font-size: var(--fs-xs);
         line-height: 1.2;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         background: transparent;
         border: none;
         border-radius: 5px;
@@ -1328,8 +1321,8 @@
       }
       .vantage-btn:hover,
       .vantage-btn:active {
-        background: var(--parchment-deep);
-        color: var(--ink);
+        background: var(--bg-sunken);
+        color: var(--fg);
       }
       .vantage-btn svg {
         flex-shrink: 0;
@@ -1343,7 +1336,7 @@
       .vantage-label {
         font-family: var(--font-body);
         font-size: var(--fs-xs);
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         white-space: nowrap;
       }
       .vantage-input {
@@ -1354,8 +1347,8 @@
         font-family: var(--font-body);
         border: 1px solid var(--border);
         border-radius: 4px;
-        background: var(--parchment-light);
-        color: var(--ink);
+        background: var(--bg-raised);
+        color: var(--fg);
       }
 
       /* ── Primary action bar ────────────────────────────────────────── */
@@ -1442,7 +1435,7 @@
         border-radius: 3px;
         padding: 3px 10px;
         cursor: pointer;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         line-height: 1;
         transition:
           color 0.15s,
@@ -1450,7 +1443,7 @@
           background 0.15s;
       }
       .track-act:hover {
-        color: var(--ink);
+        color: var(--fg);
         border-color: var(--border-strong);
       }
       .track-act svg {
@@ -1466,12 +1459,12 @@
       .track-act--danger {
         margin-left: auto;
         border-color: transparent;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         padding: 3px 7px;
       }
       .track-act--danger:hover {
-        color: var(--rust);
-        border-color: var(--rust);
+        color: var(--danger);
+        border-color: var(--danger);
         background: rgba(155, 35, 35, 0.08);
       }
       #log-modal-text {
@@ -1481,8 +1474,8 @@
         font-family: var(--font-mono);
         font-size: var(--fs-xs);
         line-height: 1.5;
-        color: var(--ink);
-        background: var(--parchment-light);
+        color: var(--fg);
+        background: var(--bg-raised);
         border: 1px solid var(--border-strong);
         border-radius: 5px;
         padding: 10px;
@@ -1497,8 +1490,8 @@
         flex-direction: column;
         gap: 10px;
         width: 100%;
-        background: var(--parchment-light);
-        border: var(--bw-strong) solid var(--moss);
+        background: var(--bg-raised);
+        border: var(--bw-strong) solid var(--accent);
         border-radius: 6px;
         padding: 10px;
         box-shadow: 0 1px 4px var(--shadow);
@@ -1507,15 +1500,15 @@
       .capture-corner {
         position: absolute;
         top: 10px;
-        right: 10px;
+        right: 28px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
         padding: 0;
-        color: var(--ink-faded);
-        background: var(--parchment-light);
+        color: var(--fg-faded);
+        background: var(--bg-raised);
         border: var(--bw) solid var(--border);
         border-radius: var(--r-sm);
         cursor: pointer;
@@ -1531,8 +1524,8 @@
       .capture-corner:hover,
       .capture-corner:active {
         opacity: 1;
-        color: var(--ochre);
-        border-color: var(--ochre);
+        color: var(--accent-muted);
+        border-color: var(--accent-muted);
       }
       .capture-corner:focus-visible {
         outline: var(--bw-strong) solid var(--focus-ring);
@@ -1540,7 +1533,7 @@
       }
       /* Reserve room so long hex titles wrap instead of running under the corner camera. */
       .scene-title {
-        padding-right: 44px;
+        padding-right: 52px;
       }
       .hud-panel {
         width: 100%;
@@ -1549,7 +1542,7 @@
         flex-direction: column;
         gap: 10px;
         padding: 12px;
-        background: var(--parchment-deep);
+        background: var(--bg-sunken);
         border: 1px solid var(--border);
         border-radius: 9px;
         box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
@@ -1595,8 +1588,8 @@
         font-family: var(--font-body);
         border: var(--bw) solid var(--border);
         border-radius: 5px;
-        background: var(--parchment);
-        color: var(--ink);
+        background: var(--bg);
+        color: var(--fg);
       }
       .hud-panel .vantage-row .vantage-label {
         font-size: var(--fs-xs);
@@ -1638,7 +1631,7 @@
         min-height: 0;
       }
       .jc-tp .tp-val.tp-low {
-        color: var(--rust);
+        color: var(--danger);
       }
       .jc-rate {
         display: inline-flex;
@@ -1655,11 +1648,11 @@
         font-family: var(--font-display);
         font-size: var(--fs-lg);
         font-weight: 400;
-        color: var(--ink-soft);
+        color: var(--fg-soft);
       }
       .jc-day-date {
         font-size: var(--fs-sm);
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         font-style: italic;
       }
       .jc-barline {
@@ -1689,11 +1682,11 @@
       }
       .jc-tp-sep,
       .jc-resource #jrn-tp-total {
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         font-size: var(--fs-base);
       }
       .jc-tp-unit {
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         font-size: var(--fs-xs);
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -1736,8 +1729,8 @@
         justify-content: center;
         border-radius: var(--r-pill);
         border: var(--bw) solid var(--border);
-        background: var(--parchment-deep);
-        color: var(--ink-faded);
+        background: var(--bg-sunken);
+        color: var(--fg-faded);
         cursor: pointer;
         padding: 0;
       }
@@ -1775,7 +1768,7 @@
             var(--tooltip-bg1) 0%,
             var(--tooltip-bg2) 100%
           );
-          color: var(--ink);
+          color: var(--fg);
           border: 1px solid var(--tooltip-border);
           border-radius: 2px;
           box-shadow: 0 8px 20px rgba(26, 22, 18, 0.22);
@@ -1798,14 +1791,14 @@
       .jc-bar-val {
         font-family: var(--font-display);
         font-size: var(--fs-base);
-        color: var(--ink);
+        color: var(--fg);
         white-space: nowrap;
         flex: 0 0 auto;
         min-width: 64px;
         text-align: left;
       }
       .jc-bar-val .tp-val.tp-low {
-        color: var(--rust);
+        color: var(--danger);
       }
       .jc-bar-area {
         position: relative;
@@ -1875,13 +1868,13 @@
         z-index: 3;
       }
       .jc-bar-green {
-        background: #4f7a3a;
+        background: var(--meter-good);
       }
       .jc-bar-orange {
-        background: #b8791f;
+        background: var(--meter-warn);
       }
       .jc-bar-red {
-        background: #9c3320;
+        background: var(--meter-low);
       }
       .jc-bar-pct {
         position: absolute;
@@ -1890,7 +1883,7 @@
         transform: translateY(-50%);
         margin-left: 6px;
         font-size: var(--fs-xs);
-        color: var(--ink-soft);
+        color: var(--fg-soft);
         white-space: nowrap;
         transition: left 0.2s ease;
       }
@@ -1899,7 +1892,7 @@
         font-size: var(--fs-xs);
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
       }
       .jc-actions {
         border-top: 1px solid rgba(107, 94, 78, 0.25);
@@ -1929,17 +1922,17 @@
         font-family: var(--font-display);
         font-size: var(--fs-xs);
         letter-spacing: 0.08em;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         text-transform: uppercase;
       }
       /* ===== TOGGLE SYSTEM (Style Guide v1) — one stateful control =====
-         OFF = ghost outline; ON = filled --ink (Rule B: green/ochre/red are meter-only). */
+         OFF = ghost outline; ON = filled --fg (Rule B: green/ochre/red are meter-only). */
       .segmented {
         display: inline-flex;
         padding: 2px;
         border: var(--bw) solid var(--border);
         border-radius: var(--r-pill);
-        background: var(--parchment-deep);
+        background: var(--bg-sunken);
         box-shadow: inset 0 1px 2px var(--shadow);
       }
       /* Standalone toggle (used by GM tools, Forced March, etc. once migrated). */
@@ -1956,8 +1949,8 @@
         padding: var(--pad-btn);
         border: var(--bw) solid var(--border);
         border-radius: var(--r-pill);
-        background: var(--parchment-deep);
-        color: var(--ink-faded);
+        background: var(--bg-sunken);
+        color: var(--fg-faded);
         cursor: pointer;
         transition:
           color var(--t),
@@ -1967,7 +1960,7 @@
         touch-action: manipulation;
       }
       .toggle:hover {
-        color: var(--ink);
+        color: var(--fg);
         border-color: var(--border-strong);
       }
       .toggle:focus-visible {
@@ -1975,9 +1968,9 @@
         outline-offset: 2px;
       }
       .toggle--on {
-        background: var(--toggle-on-bg);
-        color: var(--toggle-on-text);
-        border-color: var(--toggle-on-border);
+        background: var(--fill);
+        color: var(--fill-text);
+        border-color: var(--fill-border);
       }
       .toggle[disabled],
       .toggle.is-disabled {
@@ -1996,7 +1989,7 @@
         font-size: var(--fs-sm);
         letter-spacing: var(--ls-caps);
         line-height: 1;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         background: transparent;
         border: 0;
         border-radius: var(--r-pill);
@@ -2007,23 +2000,23 @@
           background var(--t);
       }
       .segmented .toggle:hover {
-        color: var(--ink);
+        color: var(--fg);
       }
       .segmented .toggle--on {
-        color: var(--toggle-on-text);
-        background: var(--toggle-on-bg);
+        color: var(--fill-text);
+        background: var(--fill);
         box-shadow: 0 1px 2px var(--shadow);
       }
       /* Yes/No pills: affirmative = moss, negative = rust (semantic, per hue rules). */
       .segmented .toggle--yes.toggle--on {
-        background: var(--moss);
-        border-color: var(--moss);
-        color: var(--parchment-light);
+        background: var(--fill);
+        border-color: var(--fill);
+        color: var(--fill-text);
       }
       .segmented .toggle--no.toggle--on {
-        background: var(--rust);
-        border-color: var(--rust);
-        color: var(--parchment-light);
+        background: var(--toggle-no);
+        border-color: var(--toggle-no);
+        color: var(--fill-text);
       }
       .segmented .toggle[disabled] {
         opacity: 0.45;
@@ -2040,13 +2033,15 @@
         inset: 0;
         z-index: 9999;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
         background: var(--backdrop);
         padding: var(--sp-4);
+        padding-top: min(350px, 32vh);
+        overflow-y: auto;
       }
       .modal__panel {
-        background: var(--parchment);
+        background: var(--bg);
         border: var(--bw-strong) solid var(--border-strong);
         border-radius: var(--r-md);
         box-shadow: var(--shadow-lg);
@@ -2067,14 +2062,14 @@
       .modal__title {
         font-family: var(--font-display);
         font-size: var(--fs-lg);
-        color: var(--ink);
+        color: var(--fg);
         margin: 0 0 var(--sp-3);
       }
       .modal__body {
         font-family: var(--font-body);
         font-size: var(--fs-sm);
         line-height: var(--lh-loose);
-        color: var(--ink);
+        color: var(--fg);
         white-space: pre-line;
       }
       /* Action footer: confirm/primary ALWAYS rightmost. */
@@ -2102,7 +2097,7 @@
         width: 7px;
         height: 7px;
         border-radius: 50%;
-        background: var(--ink-soft);
+        background: var(--fg-soft);
         opacity: 0.5;
         transform: translate(-50%, -50%);
       }
@@ -2112,12 +2107,12 @@
         min-width: 46px;
         padding: 6px 8px;
         border-color: var(--border);
-        color: var(--ink-faded);
-        background: var(--parchment);
+        color: var(--fg-faded);
+        background: var(--bg);
       }
       .lost-compass .dir:hover:not(.dir--locked):not(.is-sel) {
         border-color: var(--border-strong);
-        color: var(--ink);
+        color: var(--fg);
       }
       .lost-compass .dir.is-sel {
         background: var(--fill);
@@ -2167,8 +2162,8 @@
         font-size: var(--fs-xs);
         line-height: 1.35;
         padding: 5px 8px;
-        background: var(--parchment-light);
-        border: 1px solid rgba(107, 94, 78, 0.4);
+        background: var(--bg-raised);
+        border: 1px solid var(--border);
         border-radius: 3px;
         box-shadow: 0 1px 3px var(--shadow);
         flex: 1 1 140px;
@@ -2180,7 +2175,7 @@
         max-width: 612px;
         min-width: 0;
         flex: 1 1 100%;
-        border-left: 3px solid var(--moss);
+        border-left: 3px solid var(--accent);
       }
       .pv-card-empty {
         visibility: hidden;
@@ -2195,7 +2190,7 @@
         font-family: var(--font-display);
         font-size: var(--fs-xs);
         letter-spacing: 0.06em;
-        color: var(--ink);
+        color: var(--fg);
         margin-bottom: 4px;
         font-weight: normal;
       }
@@ -2206,22 +2201,22 @@
       }
       .pv-card-features li {
         margin: 2px 0;
-        color: var(--ink-soft);
+        color: var(--fg-soft);
       }
       .pv-card-blocked {
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         font-style: italic;
         font-size: var(--fs-xs);
       }
       .pv-card-empty-text {
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         font-style: italic;
         font-size: var(--fs-xs);
       }
       /* ===== Journey Travel controls ===== */
       .jrn-lbl {
         font-size: var(--fs-sm);
-        color: var(--ink);
+        color: var(--fg);
         display: inline-flex;
         align-items: center;
         gap: 6px;
@@ -2233,8 +2228,8 @@
         padding: 3px 6px;
         border: 1px solid var(--border);
         border-radius: 4px;
-        background: var(--parchment);
-        color: var(--ink);
+        background: var(--bg);
+        color: var(--fg);
         cursor: pointer;
       }
       /* ===== BUTTON SYSTEM (Style Guide v1) — canonical .btn + 4 variants =====
@@ -2254,7 +2249,7 @@
         border: var(--bw) solid transparent;
         border-radius: var(--r-sm);
         background: transparent;
-        color: var(--ink);
+        color: var(--fg);
         cursor: pointer;
         transition:
           color var(--t),
@@ -2290,16 +2285,16 @@
       }
       /* Start Journey: prominent but lighter than a solid moss block. */
       .btn--journey {
-        background: var(--parchment-deep);
-        color: var(--moss-deep);
-        border-color: var(--moss);
+        background: var(--bg-sunken);
+        color: var(--accent-strong);
+        border-color: var(--accent);
         border-width: var(--bw-strong);
         font-size: var(--fs-base);
       }
       .btn--journey:hover {
-        background: var(--moss);
+        background: var(--accent);
         color: var(--fill-text);
-        border-color: var(--moss);
+        border-color: var(--accent);
       }
       .view-mode-row {
         display: flex;
@@ -2314,10 +2309,10 @@
       /* Ghost = secondary (outline). */
       .btn--ghost {
         border-color: var(--border);
-        color: var(--ink-faded);
+        color: var(--fg-faded);
       }
       .btn--ghost:hover {
-        color: var(--ink);
+        color: var(--fg);
         border-color: var(--border-strong);
       }
       /* Danger = destructive/irreversible only. */
@@ -2329,7 +2324,7 @@
       .btn--locked {
         cursor: default;
         border-style: dashed;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
         border-color: var(--border);
         opacity: 0.7;
       }
@@ -2350,7 +2345,7 @@
       }
       .btn--lost:hover {
         background: var(--lost);
-        color: var(--parchment-light);
+        color: var(--bg-raised);
         border-color: var(--lost);
       }
       .btn--encounter {
@@ -2359,7 +2354,7 @@
       }
       .btn--encounter:hover {
         background: var(--encounter);
-        color: var(--parchment-light);
+        color: var(--bg-raised);
         border-color: var(--encounter);
       }
       /* ===== END BUTTON SYSTEM ===== */
@@ -2370,7 +2365,7 @@
         border: 1px solid var(--border);
         border-radius: 4px;
         background: transparent;
-        color: var(--ink);
+        color: var(--fg);
         cursor: pointer;
         transition: all 0.15s ease;
       }
@@ -2379,8 +2374,8 @@
         background: rgba(107, 94, 78, 0.08);
       }
       .jrn-btn--on {
-        color: var(--ochre);
-        border-color: var(--ochre);
+        color: var(--accent-muted);
+        border-color: var(--accent-muted);
         background: rgba(168, 120, 56, 0.08);
       }
       .encounter-banner .btn,
@@ -2415,11 +2410,11 @@
         font-weight: bold;
       }
       .tp-low {
-        color: var(--rust);
+        color: var(--danger);
       }
       .jrn-day {
         font-size: var(--fs-sm);
-        color: var(--ink-faded);
+        color: var(--fg-faded);
       }
       .journey-tp-banner .tp-val {
         font-size: var(--fs-xl);
@@ -2429,15 +2424,15 @@
         font-family: var(--font-display);
         font-size: var(--fs-base);
         letter-spacing: 0.03em;
-        color: var(--ink-faded);
+        color: var(--fg-faded);
       }
       @keyframes tpFlashFill {
         0%,
         100% {
-          fill: var(--rust);
+          fill: var(--danger);
         }
         50% {
-          fill: var(--flash-base, var(--parchment));
+          fill: var(--flash-base, var(--bg));
         }
       }
       .tp-flash-hex {
@@ -2561,7 +2556,7 @@
               style="
                 margin: 0 0 16px 0;
                 font-style: normal;
-                color: var(--ink-soft);
+                color: var(--fg-soft);
                 font-size: var(--fs-base);
               "
             >
@@ -2609,7 +2604,7 @@
               style="
                 margin: 0 0 16px 0;
                 font-style: normal;
-                color: var(--ink-soft);
+                color: var(--fg-soft);
                 font-size: var(--fs-base);
               "
             >
@@ -2798,13 +2793,12 @@
               style="
                 margin: 0 0 16px 0;
                 font-style: normal;
-                color: var(--ink-soft);
+                color: var(--fg-soft);
                 font-size: var(--fs-base);
               "
             >
-              This tool is built for Dolmenwood Referees running sessions
-              involving overland hex travel. Select a hex to see what is visible
-              around the party.
+              This tool is built for Dolmenwood Referees to track and run sessions
+              involving overland hex travel.
             </p>
 
             <div class="section-title">Visibility Model</div>
@@ -2830,83 +2824,50 @@
             <div class="section-title">Vantage Height</div>
             <p style="margin: 0 0 8px 0">
               Adjust the Vantage (ft) field to raise your eye level above the
-              hex elevation. Reset returns vantage to the default height.
-            </p>
-            <p style="margin: 0 0 16px 0">
-              Prominent entries, which are highlighted in red, are tall enough
+              hex elevation.  Prominent entries, which are highlighted in gold, are tall enough
               to be seen above the canopy even when a hex would otherwise be
               obscured.
             </p>
 
-            <div class="section-title">Controls</div>
-            <ul class="feature-list" style="margin: 0 0 16px 0">
-              <li>
-                <strong>Player</strong> &mdash; strips hex information and is
-                intended for sharing with players.
-              </li>
-              <li>
-                <strong>World</strong> &mdash; shows or hides the full
-                Dolmenwood world map.
-              </li>
-              <li>
-                <strong>2D</strong> &mdash; flattens elevation so all hexes are
-                treated as equal height.
-              </li>
-            </ul>
-
             <div class="section-title">Journeys</div>
             <p style="margin: 0 0 12px 0">
-              Track the party&rsquo;s overland travel day-by-day. Click
-              <strong>Start Journey</strong>, pick a start date (Dolmenwood or
-              real-world calendar), and click adjacent hexes to lay the trail.
-              The console tracks your resources and the calendar as you go.
+              Track the party&rsquo;s overland travel each day. Click
+              <strong>Start Journey</strong>, pick a start date, and click adjacent hexes to track your party's progress. The party may choose to travel wild, follow a road or trail, or move along a river. During an active journey, select Travel Impeded (I) or Poor Visibility (V) to toggle it until your next rest.
             </p>
-            <ul class="feature-list" style="margin: 0 0 12px 0">
-              <li>
-                <strong>Travel Points / Miles</strong> &mdash; each day gives a
-                Travel Point budget based on marching <strong>Speed</strong>;
-                the bar shows remaining vs. total. 1 TP = 3 miles.
-              </li>
-              <li>
-                <strong>Wild / Path / River</strong> &mdash; travel
-                cross-country, follow a road or trail, or move along a river
-                (costs are drawn from the actual route geometry).
-              </li>
-              <li>
-                <strong>Rest</strong> &mdash; ends the day and restores the
-                budget; after 6 days without a full rest day the party risks
-                exhaustion.
-              </li>
-              <li>
-                <strong>Forced March</strong> &mdash; spend beyond the daily
-                budget for extra distance.
-              </li>
-              <li>
-                <strong>Lost &amp; Encounters</strong> &mdash; flagged
-                automatically as you travel; both are dismissible.
-              </li>
-              <li>
-                <strong>Undo</strong> &mdash; steps back the last action (move,
-                rest, forced march, lost/encounter) losslessly.
-              </li>
-            </ul>
+            
             <p style="margin: 0 0 8px 0">
               From <strong>Saved Journeys</strong> you can
-              <strong>Continue</strong>, <strong>Edit Origin</strong> (prepend),
-              recolor, view the <strong>log</strong>, and
-              <strong>Export / Import</strong>.
-            </p>
-            <p style="margin: 0 0 16px 0">
-              Journeys are drawn on both maps as a colored line with waypoints
-              marking the trail.
+              <strong>Continue</strong>, <strong>Edit Origin</strong>,
+               and view/copy the <strong>Journey Log</strong>.
             </p>
 
-            <div class="section-title">Capture</div>
-            <p style="margin: 0 0 16px 0">
-              The <strong>Capture</strong> button exports the hex graphic as a
-              high-resolution PNG &mdash; useful for sharing a sightline
-              snapshot with players or dropping into session notes.
+                        <div class="section-title">Settings &amp; Themes</div>
+            <p style="margin: 0 0 12px 0">
+              The gear icon beside the search bar opens Settings.
             </p>
+            <ul class="feature-list" style="margin: 0 0 16px 0">
+              <li>
+                <strong>Theme</strong> &mdash; switch between Parchment,
+                Modern, and Night palettes.
+              </li>
+              <li>
+                <strong>Travel Point View</strong> &mdash; tints each hex by
+                its Travel-Point cost.
+              </li>
+              <li>
+                <strong>List Paths &amp; Rivers</strong> &mdash; adds nearby
+                roads, trails, and rivers to a hex&rsquo;s visible features descriptions.
+              </li>
+              <li>
+                <strong>Vantage Hides Roads</strong> &mdash; hides roads and rivers in blocked hexes from the Player View.
+              </li>
+              <li>
+                <strong>Fog in Player View</strong> &mdash; shows only adjacent hexes in Player View.
+              </li>
+              <li>
+                <strong>Lost Rotates Player View</strong> &mdash; rotate the Player View when Lost to a given heading.
+              </li>
+            </ul>
 
             <div class="section-title">Feedback</div>
             <p style="margin: 0 0 0 0">
@@ -2927,10 +2888,10 @@
         style="
           margin-top: 12px;
           font-size: var(--fs-xs);
-          color: var(--ink-faded);
+          color: var(--fg-faded);
         "
       >
-        v2.3.0
+        v2.3.1
       </p>
       <p class="disclaimer" style="margin-top: 12px">
         <button
@@ -2939,7 +2900,7 @@
             font-family: var(--font-display);
             font-size: var(--fs-xs);
             letter-spacing: 0.06em;
-            color: var(--ink-faded);
+            color: var(--fg-faded);
             background: transparent;
             border: none;
             cursor: pointer;
@@ -9348,7 +9309,7 @@
           ["horse-eye-road", "road", "SE1", "NW3", null, "0.3,-.5", 5.63],
           ["mulchers-path", "trail", null, "NE3", "0.5,-0.18", null, 1.35],
         ],
-        "1207": [["cave-path", "trail", "S1", null, "0.2,0.5", null, 1.26]],
+        "1207": [["cave-path", "trail", "S1", null, "0.2,0.3", null, 1.26]],
         "1208": [["cave-path", "trail", "N3", "SE1", null, "0.2,0", 4.64]],
         "1209": [
           ["bogwitt-path", "trail", "S3", null, "-0.3,-0.5", ".3,0", 5.44],
@@ -9666,6 +9627,7 @@
         el.dataset.active = el.dataset.active !== "1" ? "1" : "0";
         const fogEl = document.getElementById("tog-fog");
         if (fogEl) fogEl.dataset.active = (el.dataset.active === "1" && settingsGet("fogInPlayerView")) ? "1" : "0";
+        maybePromptLostNorth();
         doLookAround();
         saveState();
       }
@@ -9877,7 +9839,7 @@
           if (btn) {
             btn.textContent = "Track";
             btn.style.background = "transparent";
-            btn.style.color = "var(--ink-faded)";
+            btn.style.color = "var(--fg-faded)";
           }
           if (typeof trackRenderList === "function") trackRenderList();
         }
@@ -9915,6 +9877,8 @@
         ["nightMode", "travelPointView", "listRoads", "vantageHidesRoads", "fogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) {
           if (typeof settingsSyncSeg === "function") settingsSyncSeg(k, settingsGet(k));
         });
+        // Re-apply the (now default) theme to the document root so the FULL UI resets, not just the map.
+        if (typeof applyTheme === "function") applyTheme();
         // A disabled-resting override may have been cleared; recompute the ignore-rest flag.
         _jrnIgnoreRest = false;
         renderWorldMap();
@@ -10064,7 +10028,7 @@
       function settingsSetTheme(val) { settingsLoad().theme = val; settingsSave(); applyTheme(); if (typeof doLookAround === "function") doLookAround(); if (typeof trackUpdateUI === "function") trackUpdateUI(); if (typeof trackRenderList === "function") trackRenderList(); if (typeof isInWorldMapView === "function" && isInWorldMapView() && typeof renderWorldMap === "function") renderWorldMap(); var _cm = document.getElementById("color-modal"); if (_cm && _cm.style.display === "flex" && typeof colorModalRenderPresets === "function") colorModalRenderPresets(); }
       function settingsSyncSeg(key, val) { const y = document.getElementById("set-" + key + "-yes"); const n = document.getElementById("set-" + key + "-no"); if (y) y.classList.toggle("toggle--on", !!val); if (n) n.classList.toggle("toggle--on", !val); }
       function settingsSyncLostFlipVis() { var r = document.getElementById("row-lostFlipsPlayerView"); if (r) r.style.display = settingsLoad().disableLost ? "none" : ""; }
-      function settingsToggle(key, val) { settingsLoad()[key]=!!val; settingsSave(); settingsSyncSeg(key, !!val); if (key==="nightMode") applyNightMode(); if (key==="alwaysDisableRest") { if (val) { _jrnIgnoreRest=true; } else { const tks=trackLoadAll(); const at=tks.find(function(x){return x.id===_trackActiveId;}); _jrnIgnoreRest=!!(at&&at.tpState&&at.tpState.ignoreRest); } } if (key==="disableEncounters" && val && typeof journeyClearEncounter==="function") journeyClearEncounter(); if (key==="disableLost" && val && typeof journeyClearLost==="function") { const _tks=trackLoadAll(); const _at=_tks.find(function(x){return x.id===_trackActiveId;}); if (_at&&_at.tpState&&_at.tpState.lost) journeyClearLost(); } if (key==="disableLost" && typeof settingsSyncLostFlipVis==="function") settingsSyncLostFlipVis(); if (key==="fogInPlayerView" && isPlayerView()) { const _fe=document.getElementById("tog-fog"); if(_fe) _fe.dataset.active = val ? "1" : "0"; } if (key==="lostFlipsPlayerView" && val) { const _rtk=trackLoadAll(); const _rat=_rtk.find(function(x){return x.id===_trackActiveId;}); if (_rat&&_rat.tpState&&_rat.tpState.lost && typeof promptLostNorthDir==="function") { _rat.tpState.lostNorthDir=null; trackSaveAll(_rtk); promptLostNorthDir(); } } if (typeof trackUpdateUI==="function") trackUpdateUI(); if (typeof doLookAround==="function") doLookAround(); if (typeof isInWorldMapView==="function"&&isInWorldMapView()&&typeof renderWorldMap==="function") renderWorldMap(); }
+      function settingsToggle(key, val) { settingsLoad()[key]=!!val; settingsSave(); settingsSyncSeg(key, !!val); if (key==="nightMode") applyNightMode(); if (key==="alwaysDisableRest") { if (val) { _jrnIgnoreRest=true; } else { const tks=trackLoadAll(); const at=tks.find(function(x){return x.id===_trackActiveId;}); _jrnIgnoreRest=!!(at&&at.tpState&&at.tpState.ignoreRest); } } if (key==="disableEncounters" && val && typeof journeyClearEncounter==="function") journeyClearEncounter(); if (key==="disableLost" && val && typeof journeyClearLost==="function") { const _tks=trackLoadAll(); const _at=_tks.find(function(x){return x.id===_trackActiveId;}); if (_at&&_at.tpState&&_at.tpState.lost) journeyClearLost(); } if (key==="disableLost" && typeof settingsSyncLostFlipVis==="function") settingsSyncLostFlipVis(); if (key==="fogInPlayerView" && isPlayerView()) { const _fe=document.getElementById("tog-fog"); if(_fe) _fe.dataset.active = val ? "1" : "0"; } if (key==="lostFlipsPlayerView" && val) { const _rtk=trackLoadAll(); const _rat=_rtk.find(function(x){return x.id===_trackActiveId;}); if (_rat&&_rat.tpState&&_rat.tpState.lost && typeof promptLostNorthDir==="function") { _rat.tpState.lostNorthDir=null; trackSaveAll(_rtk); maybePromptLostNorth(); } } if (typeof trackUpdateUI==="function") trackUpdateUI(); if (typeof doLookAround==="function") doLookAround(); if (typeof isInWorldMapView==="function"&&isInWorldMapView()&&typeof renderWorldMap==="function") renderWorldMap(); }
       // Terrain type -> Travel Point cost to enter that hex.
       const TERRAIN_TP_COST = {
         Aquatic: 2,
@@ -10809,6 +10773,10 @@
       }
       const LOST_FLIP_DIRS_CW = ["N", "NE", "SE", "S", "SW", "NW"];
       function lostFlipRotateDir(dir, k) { const i = LOST_FLIP_DIRS_CW.indexOf(dir); if (i < 0) return dir; return LOST_FLIP_DIRS_CW[(((i + k) % 6) + 6) % 6]; }
+      // 12-point compass, clockwise (30 deg/step). Maps a hex TRUE bearing to its APPARENT
+      // bearing when the player view is rotated while lost: apparent = true + k*60deg CW = +2k steps.
+      const _COMPASS12_CW = ["N","NNE","NE","E","SE","SSE","S","SSW","SW","W","NW","NNW"];
+      function _apparentDir(trueDir, k) { const i = _COMPASS12_CW.indexOf(trueDir); if (i < 0) return trueDir; return _COMPASS12_CW[(((i + 2 * k) % 12) + 12) % 12]; }
       // Chosen real direction -> k so that direction lands on N (top): k = (6 - dirIndex) mod 6,
       // using LOST_FLIP_DIRS_CW = [N,NE,SE,S,SW,NW]. (N is not selectable; dismiss = random seed.)
       const LOST_NORTH_K = { NE: 5, SE: 4, S: 3, SW: 2, NW: 1 };
@@ -10855,6 +10823,17 @@
       }
       function lostNorthConfirm() { lostNorthClose(_lostNorthPending); }
       function lostNorthDismiss() { lostNorthClose("none"); } // no rotation this lost episode
+      // Prompt for the players north-choice only in Player View; defer until the referee toggles in.
+      function maybePromptLostNorth() {
+        if (!settingsGet("lostFlipsPlayerView")) return;
+        if (!isPlayerView()) return;
+        if (_lostNorthResolve != null) return;
+        var at = null;
+        try { at = trackLoadAll().find(function (x) { return x.id === _trackActiveId; }); } catch (e) {}
+        if (!(at && at.tpState && at.tpState.lost)) return;
+        if (at.tpState.lostNorthDir != null) return;
+        promptLostNorthDir();
+      }
       async function promptLostNorthDir() {
         const dir = await showLostNorthModal();
         const tracks = trackLoadAll();
@@ -10877,7 +10856,7 @@
         const _dispDir = (D) => (_flipActive ? lostFlipRotateDir(D, -_flipK) : D);
         let html = `<div class="card">`;
         html +=
-          '<button id="capture-btn" class="capture-corner" onclick="captureView()" title="Capture image" aria-label="Capture image" data-html2canvas-ignore="true"><svg width="18" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="6" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="11" cy="12.5" r="3.5" stroke="currentColor" stroke-width="1.6"/><path d="M8 6 L9.5 3.5 H12.5 L14 6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="17" cy="9" r="1" fill="currentColor"/></svg></button>';
+          '<button id="capture-btn" class="capture-corner" onclick="captureView()" title="Capture image" aria-label="Capture image" data-html2canvas-ignore="true"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="6" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="11" cy="12.5" r="3.5" stroke="currentColor" stroke-width="1.6"/><path d="M8 6 L9.5 3.5 H12.5 L14 6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="17" cy="9" r="1" fill="currentColor"/></svg></button>';
         const pv = isPlayerView();
         const pvHide = pv ? "visibility:hidden;" : "";
         html += `<div style="${pvHide}">`;
@@ -10974,7 +10953,7 @@
                 else cardContent = `<ul class="pv-card-features">${_pp}</ul>`;
               }
             }
-            html += `<div class="pv-card"><div class="pv-card-title">${_flipActive ? "" : dir}</div>${cardContent}</div>`;
+            html += `<div class="pv-card"><div class="pv-card-title">${dir}</div>${cardContent}</div>`;
           });
           html += "</div>";
           // Hex graphic
@@ -11020,7 +10999,7 @@
                 else cardContent = `<ul class="pv-card-features">${_pp}</ul>`;
               }
             }
-            html += `<div class="pv-card"><div class="pv-card-title">${_flipActive ? "" : dir}</div>${cardContent}</div>`;
+            html += `<div class="pv-card"><div class="pv-card-title">${dir}</div>${cardContent}</div>`;
           });
           html += "</div>";
 
@@ -11039,7 +11018,7 @@
             }
 
             html += '<div class="pv-row-top">';
-            if (!_flipActive && typeof settingsGet === "function" && settingsGet("listRoads")) {
+            if (typeof settingsGet === "function" && settingsGet("listRoads")) {
               const _pp = hexPathsProse(hex).concat(hexRiversProse(hex)).map((p) => `<li>${escapeHtml(p)}</li>`).join("");
               if (_pp) {
                 if (centerContent.indexOf("pv-card-features") >= 0) centerContent = centerContent.replace(/<\/ul>\s*$/, _pp + "</ul>");
@@ -11225,7 +11204,9 @@
               ((_uT.tpState.lastLostAction === "gotLost" &&
                 !_uT.waypoints.some((w) => (w.actionId || 0) > (_uT.tpState.gotLostAct || 0))) ||
                 _uT.tpState.lostClearedPending ||
-                (_uT.tpState.fmUndoable && _uT.tpState.forcedMarch))
+                (_uT.tpState.fmUndoable && _uT.tpState.forcedMarch) ||
+                (_uT.tpState.wxImpUndoable && _uT.tpState.weatherImpeded) ||
+                (_uT.tpState.wxVisUndoable && _uT.tpState.weatherPoorVis))
             ) || _restUndoable;
           const _undoHex =
             !_uT || _uT.waypoints.length < 2
@@ -12047,6 +12028,7 @@
             hexCode: hex2,
             blocked,
             dir: farDir,
+            dispDir: _apparentDir(farDir, _flipK),
             ring: 2,
             classes: "hex-shape" + (blocked ? " blocked" : ""),
             rawBg: rawBg,
@@ -12097,6 +12079,7 @@
               hexCode: neighborHex,
               blocked: isBlocked,
               dir,
+              dispDir: dir,
               ring: 1,
               classes: "hex-shape" + (isBlocked ? " blocked" : ""),
               rawBg: rawBg,
@@ -12116,6 +12099,7 @@
               hexCode: null,
               blocked: false,
               dir,
+              dispDir: dir,
               ring: 1,
               classes: "hex-shape empty",
             });
@@ -12142,7 +12126,7 @@
             baseDrawX: cx,
             baseDrawY: cy,
             solidBg: "#2a2420",
-            fg: "var(--parchment-light)",
+            fg: "var(--bg-raised)",
             tooltip,
             hexCode: centerHexObj.hex,
             blocked: false,
@@ -13033,7 +13017,7 @@
             } else {
               // Direction labels always visible (even in Player View)
               if (!(pv && _blank))
-                svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 18}" style="fill:${h.fg};font-size:7px;opacity:0.75">${_flipActive ? "" : h.dir}</text>`;
+                svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 18}" style="fill:${h.fg};font-size:7px;opacity:0.75">${h.dispDir != null ? h.dispDir : h.dir}</text>`;
               if (!pv) {
                 const tAbbrev = terrainAbbrevOf(h.hexCode);
                 const prominent = hexHasProminentEntry(h.hexCode);
@@ -13061,7 +13045,7 @@
           const h = item.data;
           if (h.isEmpty) {
             svg += `<path class="${h.classes}" d="${hexPath(h.drawX, h.drawY, r)}"/>`;
-            svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 5}" style="font-size:7px">${_flipActive ? "" : h.dir}</text>`;
+            svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 5}" style="font-size:7px">${h.dispDir != null ? h.dispDir : h.dir}</text>`;
             if (!isPlayerView())
               svg += `<text class="hex-text empty-text" x="${h.drawX}" y="${h.drawY + 8}" style="font-size:11px">\u2014</text>`;
             continue;
@@ -13344,7 +13328,7 @@
             const prominent = m.prominent && m.height ? ` ▲ ${m.height}'` : "";
             return `<li class="user-entry-list-item">
       <span class="user-entry-list-badge">${escapeHtml(m.type || "POI")}</span>
-      <span>${escapeHtml(m.name || "(unnamed)")}${prominent ? `<span style="color:var(--sky);font-size:var(--fs-xs);"> ${prominent}</span>` : ""}</span>
+      <span>${escapeHtml(m.name || "(unnamed)")}${prominent ? `<span style="color:var(--accent-info);font-size:var(--fs-xs);"> ${prominent}</span>` : ""}</span>
       <span class="user-entry-list-actions">
         <button class="btn btn--ghost btn--sm" onclick="ueLoadEntryForEdit('${hexCode}',${idx})">✎ Edit</button>
         <button class="btn btn--danger btn--sm" onclick="ueDeleteEntry('${hexCode}',${idx})">✕</button>
@@ -13412,7 +13396,7 @@
         const el = document.getElementById("ue-form-status");
         if (!el) return;
         el.textContent = msg;
-        el.style.color = isError ? "var(--rust)" : "var(--moss-deep)";
+        el.style.color = isError ? "var(--danger)" : "var(--accent-strong)";
         if (!isError)
           setTimeout(() => {
             el.textContent = "";
@@ -13575,7 +13559,7 @@
         const el = document.getElementById("ue-io-status");
         if (!el) return;
         el.textContent = msg;
-        el.style.color = isError ? "var(--rust)" : "var(--moss-deep)";
+        el.style.color = isError ? "var(--danger)" : "var(--accent-strong)";
         if (!isError)
           setTimeout(() => {
             el.textContent = "";
@@ -13735,7 +13719,7 @@
             return;
           }
 
-          const capBg = (getComputedStyle(document.documentElement).getPropertyValue("--parchment-light") || "#ffffff").trim() || "#ffffff";
+          const capBg = (getComputedStyle(document.documentElement).getPropertyValue("--bg-raised") || "#ffffff").trim() || "#ffffff";
           const scale = Math.min(Math.max(window.devicePixelRatio || 2, 2), 4);
 
           const raw = await html2canvas(honeycomb, {
@@ -15273,6 +15257,8 @@
         clearedLost: (hex) => `Found their way in hex ${hex}.`,
         rest: (tp) => `Rested for the day.`,
         forcedMarch: (tp, hex) => `Forced march in hex ${hex}.`,
+        weatherImpeded: (tp) => `Weather impeded travel (-${tp} TP).`,
+        weatherPoorVis: () => `Weather caused poor visibility.`,
         ignoreRest: () =>
           `Pressed on, ignoring the need to rest — travel points no longer limit movement until the next Rest.`,
       };
@@ -15915,6 +15901,11 @@
         _jrnForceMarch = false;
         t.tpState.forcedMarch = false;
         _tpFlashHex = null;
+        // Rest clears weather (Travel Impeded / Poor Visibility) so the new day starts fresh.
+        t.tpState.weatherImpeded = false; t.tpState.weatherPoorVis = false;
+        t.tpState.weatherImpededDeduct = 0;
+        t.tpState.wxImpAct = null; t.tpState.wxImpUndoable = false;
+        t.tpState.wxVisAct = null; t.tpState.wxVisUndoable = false;
         const base = tpBaseForSpeed(t.tpState.speed);
         t.tpState.tpTotal = base;
         t.tpState.tpRemaining = tpDayBase(t.tpState.speed, t.tpState);
@@ -15962,6 +15953,11 @@
         _jrnForceMarch = false;
         t.tpState.forcedMarch = false;
         _tpFlashHex = null;
+        // Rest clears weather (Travel Impeded / Poor Visibility) so the new day starts fresh.
+        t.tpState.weatherImpeded = false; t.tpState.weatherPoorVis = false;
+        t.tpState.weatherImpededDeduct = 0;
+        t.tpState.wxImpAct = null; t.tpState.wxImpUndoable = false;
+        t.tpState.wxVisAct = null; t.tpState.wxVisUndoable = false;
         const base = tpBaseForSpeed(t.tpState.speed);
         t.tpState.tpTotal = base;
         t.tpState.tpRemaining = tpDayBase(t.tpState.speed, t.tpState);
@@ -16059,21 +16055,26 @@
         const tracks = trackLoadAll();
         const t = tracks.find(function (x) { return x.id === _trackActiveId; });
         if (which === "impeded") {
-          if (!t.tpState.weatherImpeded) {
-            // Turn ON: cap current TP to the day total minus 2, remembering exactly how much we withheld.
-            t.tpState.weatherImpeded = true;
-            const _cap = tpDayBase(t.tpState.speed, t.tpState);
-            const _cut = Math.max(0, t.tpState.tpRemaining - _cap);
-            t.tpState.tpRemaining -= _cut;
-            t.tpState.weatherImpededDeduct = _cut;
-          } else {
-            // Turn OFF: refund whatever the cap withheld (lossless).
-            t.tpState.weatherImpeded = false;
-            t.tpState.tpRemaining += t.tpState.weatherImpededDeduct || 0;
-            t.tpState.weatherImpededDeduct = 0;
-          }
+          if (t.tpState.weatherImpeded) return; // locked ON until rest (use Undo to reverse)
+          // Turn ON: cap current TP to the day total minus 2, remembering exactly how much we withheld.
+          t.tpState.weatherImpeded = true;
+          const _cap = tpDayBase(t.tpState.speed, t.tpState);
+          const _cut = Math.max(0, t.tpState.tpRemaining - _cap);
+          t.tpState.tpRemaining -= _cut;
+          t.tpState.weatherImpededDeduct = _cut;
+          jrnActNext(t);
+          t.tpState.wxImpAct = t.tpState._curAct;
+          t.tpState.wxImpUndoable = true;
+          const _fb = tpBaseForSpeed(t.tpState.speed);
+          jrnLogPush(t, jrnLogPrefix(t) + JRN_LOG.weatherImpeded(_fb - Math.max(0, _fb - 2)));
+        } else if (which === "vis") {
+          if (t.tpState.weatherPoorVis) return; // locked ON until rest (use Undo to reverse)
+          t.tpState.weatherPoorVis = true;
+          jrnActNext(t);
+          t.tpState.wxVisAct = t.tpState._curAct;
+          t.tpState.wxVisUndoable = true;
+          jrnLogPush(t, jrnLogPrefix(t) + JRN_LOG.weatherPoorVis());
         }
-        if (which === "vis") t.tpState.weatherPoorVis = !t.tpState.weatherPoorVis;
         trackSaveAll(tracks);
         trackUpdateUI();
         doLookAround();
@@ -16171,12 +16172,22 @@
           lostClearedPending: !!t.tpState.lostClearedPending,
           lastLostAction: t.tpState.lastLostAction,
           travelLogLen: t.travelLog ? t.travelLog.length : 0,
+          weatherImpeded: !!t.tpState.weatherImpeded,
+          weatherPoorVis: !!t.tpState.weatherPoorVis,
+          weatherImpededDeduct: t.tpState.weatherImpededDeduct || 0,
+          wxImpAct: t.tpState.wxImpAct != null ? t.tpState.wxImpAct : null,
+          wxVisAct: t.tpState.wxVisAct != null ? t.tpState.wxVisAct : null,
         };
         if (settingsGet("alwaysDisableRest")) {
           // Resting disabled: Rest ONLY advances the day; no resource gating, no forced rest-day.
           t.tpState.currentDate = journeyDateAdvance(t, 1);
           t.tpState.day += 1;
           _jrnForceMarch = false; t.tpState.forcedMarch = false; _tpFlashHex = null;
+          // Rest clears weather (Travel Impeded / Poor Visibility) so the new day starts fresh.
+          t.tpState.weatherImpeded = false; t.tpState.weatherPoorVis = false;
+          t.tpState.weatherImpededDeduct = 0;
+          t.tpState.wxImpAct = null; t.tpState.wxImpUndoable = false;
+          t.tpState.wxVisAct = null; t.tpState.wxVisUndoable = false;
           const _base = tpBaseForSpeed(t.tpState.speed);
           t.tpState.tpTotal = _base; t.tpState.tpRemaining = tpDayBase(t.tpState.speed, t.tpState);
           t.tpState.weatherImpededDeduct = _base - t.tpState.tpRemaining;
@@ -16212,6 +16223,11 @@
         _jrnForceMarch = false;
         t.tpState.forcedMarch = false;
         _tpFlashHex = null;
+        // Rest clears weather (Travel Impeded / Poor Visibility) so the new day starts fresh.
+        t.tpState.weatherImpeded = false; t.tpState.weatherPoorVis = false;
+        t.tpState.weatherImpededDeduct = 0;
+        t.tpState.wxImpAct = null; t.tpState.wxImpUndoable = false;
+        t.tpState.wxVisAct = null; t.tpState.wxVisUndoable = false;
         const base = tpBaseForSpeed(t.tpState.speed);
         t.tpState.tpTotal = base;
         t.tpState.tpRemaining = tpDayBase(t.tpState.speed, t.tpState);
@@ -17025,7 +17041,7 @@
               trackUpdateUI();
               doLookAround();
               // Referee-input rotation: prompt for the players' "north" (async; re-renders on pick).
-              if (settingsGet("lostFlipsPlayerView")) promptLostNorthDir();
+              maybePromptLostNorth();
               return false; // stay put; no waypoint, no TP/miles spent
             }
           }
@@ -17075,10 +17091,10 @@
           const _lgHex = jrnLogHex(targetHex);
           const _remain = jrnFmtMiles(
             jrnRoundQtr(t.tpState.tpRemaining * JRN_MILES_PER_TP),
-          );
+          ).replace(" ", "");
           const _total = jrnFmtMiles(
             jrnRoundQtr(t.tpState.tpTotal * JRN_MILES_PER_TP),
-          );
+          ).replace(" ", "");
           let _lgLine;
           if (_spSpecial && _spOutMode === "river" && _spInMode === "tp") {
             // River offboard: leaving the river onto open water (entered via straight hop).
@@ -17136,6 +17152,8 @@
             t.tpState.lastLostAction = null;
           }
           t.tpState.fmUndoable = false;
+          t.tpState.wxImpUndoable = false;
+          t.tpState.wxVisUndoable = false;
         }
         jrnRollEncounter(t, targetHex);
         trackSaveAll(tracks);
@@ -17206,25 +17224,44 @@
           return;
         }
 
-        // Undo a Forced March (adds no waypoint) -> reverse the bonus and unlock.
-        // Only when it's the most recent action (cleared once a move is committed).
-        if (t.tpState && t.tpState.fmUndoable && t.tpState.forcedMarch) {
-          const _fmBonus = t.tpState.fmBonusTp || 0;
-          t.tpState.tpRemaining = Math.max(0, t.tpState.tpRemaining - _fmBonus);
-          t.tpState.tpTotal = Math.max(0, t.tpState.tpTotal - _fmBonus);
-          t.tpState.forcedMarch = false;
-          t.tpState.fmUndoable = false;
-          _jrnForceMarch = false;
-          if (t.tpState.fmAct != null && t.journeyLog)
-            t.journeyLog = t.journeyLog.filter(
-              (e) => e.act !== t.tpState.fmAct,
-            );
-          t.tpState.fmAct = null;
-          t.tpState.fmBonusTp = null;
-          trackSaveAll(tracks);
-          trackUpdateUI();
-          doLookAround();
-          return;
+        // Undo the most recent no-waypoint pre-move action (Forced March / weather toggles).
+        // Each locks until rest, but Undo reverses whichever is the latest such action (LIFO).
+        {
+          const _wxCands = [];
+          if (t.tpState && t.tpState.fmUndoable && t.tpState.forcedMarch) _wxCands.push({ k: "fm", act: t.tpState.fmAct || 0 });
+          if (t.tpState && t.tpState.wxImpUndoable && t.tpState.weatherImpeded) _wxCands.push({ k: "imp", act: t.tpState.wxImpAct || 0 });
+          if (t.tpState && t.tpState.wxVisUndoable && t.tpState.weatherPoorVis) _wxCands.push({ k: "vis", act: t.tpState.wxVisAct || 0 });
+          if (_wxCands.length) {
+            _wxCands.sort((a, b) => b.act - a.act);
+            const _wk = _wxCands[0].k;
+            if (_wk === "fm") {
+              const _fmBonus = t.tpState.fmBonusTp || 0;
+              t.tpState.tpRemaining = Math.max(0, t.tpState.tpRemaining - _fmBonus);
+              t.tpState.tpTotal = Math.max(0, t.tpState.tpTotal - _fmBonus);
+              t.tpState.forcedMarch = false;
+              t.tpState.fmUndoable = false;
+              _jrnForceMarch = false;
+              if (t.tpState.fmAct != null && t.journeyLog) t.journeyLog = t.journeyLog.filter((e) => e.act !== t.tpState.fmAct);
+              t.tpState.fmAct = null;
+              t.tpState.fmBonusTp = null;
+            } else if (_wk === "imp") {
+              t.tpState.tpRemaining += t.tpState.weatherImpededDeduct || 0;
+              t.tpState.weatherImpededDeduct = 0;
+              t.tpState.weatherImpeded = false;
+              t.tpState.wxImpUndoable = false;
+              if (t.tpState.wxImpAct != null && t.journeyLog) t.journeyLog = t.journeyLog.filter((e) => e.act !== t.tpState.wxImpAct);
+              t.tpState.wxImpAct = null;
+            } else if (_wk === "vis") {
+              t.tpState.weatherPoorVis = false;
+              t.tpState.wxVisUndoable = false;
+              if (t.tpState.wxVisAct != null && t.journeyLog) t.journeyLog = t.journeyLog.filter((e) => e.act !== t.tpState.wxVisAct);
+              t.tpState.wxVisAct = null;
+            }
+            trackSaveAll(tracks);
+            trackUpdateUI();
+            doLookAround();
+            return;
+          }
         }
 
         // Undo a Rest (adds no waypoint) -> restore pre-rest day/date/TP. LIFO via stack:
@@ -17250,6 +17287,11 @@
             t.tpState.ignoreRest = s.ignoreRest;
             t.tpState.lostClearedPending = s.lostClearedPending;
             t.tpState.lastLostAction = s.lastLostAction;
+            t.tpState.weatherImpeded = !!s.weatherImpeded;
+            t.tpState.weatherPoorVis = !!s.weatherPoorVis;
+            t.tpState.weatherImpededDeduct = s.weatherImpededDeduct || 0;
+            t.tpState.wxImpAct = s.wxImpAct != null ? s.wxImpAct : null;
+            t.tpState.wxVisAct = s.wxVisAct != null ? s.wxVisAct : null;
             if (t.travelLog && t.travelLog.length > s.travelLogLen)
               t.travelLog.length = s.travelLogLen;
             _jrnForceMarch = s.forcedMarch;
@@ -17327,6 +17369,14 @@
             (w) => (w.actionId || 0) > t.tpState.fmAct,
           );
           if (!_postFM) t.tpState.fmUndoable = true;
+        }
+        if (t.tpState && t.tpState.weatherImpeded && t.tpState.wxImpAct != null) {
+          const _postImp = t.waypoints.some((w) => (w.actionId || 0) > t.tpState.wxImpAct);
+          if (!_postImp) t.tpState.wxImpUndoable = true;
+        }
+        if (t.tpState && t.tpState.weatherPoorVis && t.tpState.wxVisAct != null) {
+          const _postVis = t.waypoints.some((w) => (w.actionId || 0) > t.tpState.wxVisAct);
+          if (!_postVis) t.tpState.wxVisUndoable = true;
         }
 
         trackSaveAll(tracks);
@@ -17544,7 +17594,7 @@
         const st = document.getElementById("track-io-status");
         if (st) {
           st.textContent = "Exported.";
-          st.style.color = "var(--moss-deep)";
+          st.style.color = "var(--accent-strong)";
           setTimeout(() => {
             st.textContent = "";
           }, 3000);
@@ -17576,7 +17626,7 @@
             const st = document.getElementById("track-io-status");
             if (st) {
               st.textContent = `Imported ${added} track(s).`;
-              st.style.color = "var(--moss-deep)";
+              st.style.color = "var(--accent-strong)";
               setTimeout(() => {
                 st.textContent = "";
               }, 3000);
@@ -18293,7 +18343,7 @@
             gap: 8px;
             margin-top: 14px;
             font-size: var(--fs-sm);
-            color: var(--ink-soft);
+            color: var(--fg-soft);
           "
         >
           <span>Color:</span>
@@ -18339,7 +18389,7 @@
         <label
           style="
             font-size: var(--fs-xs);
-            color: var(--ink-soft);
+            color: var(--fg-soft);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -18392,7 +18442,7 @@
             justify-content: center;
             gap: 4px;
             font-size: var(--fs-lg);
-            color: var(--ink);
+            color: var(--fg);
           "
         >
           <input
@@ -18455,7 +18505,7 @@
         <div
           id="date-modal-err"
           style="
-            color: var(--rust);
+            color: var(--danger);
             font-size: var(--fs-xs);
             min-height: 18px;
             margin-top: 8px;
@@ -18591,7 +18641,7 @@
         <div
           style="
             font-size: var(--fs-sm);
-            color: var(--ink-faded);
+            color: var(--fg-faded);
             text-transform: uppercase;
             letter-spacing: 0.06em;
             margin-bottom: 8px;
@@ -18629,7 +18679,7 @@
             id="log-modal-copied"
             style="
               margin-right: auto;
-              color: var(--moss-deep);
+              color: var(--accent-strong);
               font-size: var(--fs-sm);
             "
           ></span>
@@ -18694,7 +18744,7 @@
           <button type="button" class="btn dir" style="left: 12%; top: 71%" onclick="lostNorthPick('SW')">SW</button>
           <button type="button" class="btn dir" style="left: 12%; top: 29%" onclick="lostNorthPick('NW')">NW</button>
         </div>
-        <div class="modal__body" style="text-align: center; font-size: var(--fs-xs); color: var(--ink-soft); margin-top: var(--sp-3)">Dismiss to let the map rotate at random.</div>
+        <div class="modal__body" style="text-align: center; font-size: var(--fs-xs); color: var(--fg-soft); margin-top: var(--sp-3)">Dismiss to let the map rotate at random.</div>
         <div class="modal__actions">
           <button class="btn btn--ghost" type="button" onclick="lostNorthDismiss()">Dismiss</button>
           <button id="lost-north-confirm" class="btn btn--primary" type="button" disabled onclick="lostNorthConfirm()">Confirm</button>
