@@ -2131,6 +2131,43 @@
         }
       }
 
+      /* ── Dual-Screen Popup Mode ─────────────────────────────────────── */
+      body.pv-popup-mode {
+        margin: 0;
+        padding: 0;
+        overflow: auto;
+        background: var(--bg-page, var(--parchment, #f5f0e8));
+      }
+      body.pv-popup-mode .container > header,
+      body.pv-popup-mode #controls,
+      body.pv-popup-mode #hex-tabs-section,
+      body.pv-popup-mode #pan-output,
+      body.pv-popup-mode #first-load-section,
+      body.pv-popup-mode #world-map-section,
+      body.pv-popup-mode #world-map-fullscreen,
+      body.pv-popup-mode .disclaimer,
+      body.pv-popup-mode p.disclaimer {
+        display: none !important;
+      }
+      body.pv-popup-mode .container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+      body.pv-popup-mode #detail-view-section {
+        display: block !important;
+      }
+      body.pv-popup-mode .card {
+        border-radius: 0;
+        border: none;
+        margin: 0;
+        box-shadow: none;
+        padding: var(--sp-3, 12px) var(--sp-3, 12px) var(--sp-4, 16px);
+      }
+      body.pv-popup-mode .capture-corner {
+        display: none !important;
+      }
+
       /* ── Player View Callout Cards ──────────────────────────────────── */
       .pv-callout-container {
         display: flex;
@@ -2855,6 +2892,12 @@
                 its Travel-Point cost.
               </li>
               <li>
+                <strong>Dual Screen Player View</strong> &mdash; opens a
+                clean pop-up window showing only the Player View, designed to
+                be moved to a second screen. Clicking hexes in either window
+                updates both.
+              </li>
+              <li>
                 <strong>List Paths &amp; Rivers</strong> &mdash; adds nearby
                 roads, trails, and rivers to a hex&rsquo;s visible features descriptions.
               </li>
@@ -2891,7 +2934,7 @@
           color: var(--fg-faded);
         "
       >
-        v2.3.1
+        v2.3.2
       </p>
       <p class="disclaimer" style="margin-top: 12px">
         <button
@@ -2948,6 +2991,127 @@
       let _jrnIgnoreRest = false; // resource limits ignored until next Rest
       let _jrnLost = false; // party is lost (referee clears via the Lost button)
       let _jrnEncounter = false; // active encounter; persists until Rest or manual clear
+
+      // ── Dual-Screen Player View ──────────────────────────────────────────────
+      // Detect if this window is the popup (opened with ?pvpopup=1 in the URL).
+      const IS_PV_POPUP = new URLSearchParams(window.location.search).has("pvpopup");
+      // BroadcastChannel for main ↔ popup communication (same origin only).
+      const _pvChannel = (typeof BroadcastChannel !== "undefined")
+        ? new BroadcastChannel("dolmenwood-pv-sync") : null;
+      // Reference to the popup window (main window only).
+      let _pvPopupWin = null;
+      // Polling interval for detecting popup closure.
+      let _pvClosePoller = null;
+
+      // Open the dual-screen popup window.
+      function openPvPopup() {
+        if (_pvPopupWin && !_pvPopupWin.closed) { _pvPopupWin.focus(); return; }
+        const url = window.location.href.split("?")[0].split("#")[0] + "?pvpopup=1";
+        _pvPopupWin = window.open(url, "dolmenwood-pv-popup",
+          "width=700,height=900,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,status=no");
+        if (!_pvPopupWin) {
+          alert("Popup blocked — please allow popups for this page, then try again.");
+          settingsToggle("dualScreenPlayerView", false);
+          return;
+        }
+        // Poll for closure so we can turn the setting off automatically.
+        _pvClosePoller = setInterval(function () {
+          if (_pvPopupWin && _pvPopupWin.closed) { _pvPopupWindowClosed(); }
+        }, 600);
+        // Give the popup a moment to load, then push current state.
+        setTimeout(function () { pvBroadcastState(); }, 1200);
+      }
+
+      // Called when popup window is detected as closed.
+      function _pvPopupWindowClosed() {
+        clearInterval(_pvClosePoller);
+        _pvClosePoller = null;
+        _pvPopupWin = null;
+        // Turn off the setting without re-triggering the open.
+        try {
+          var s = (typeof settingsLoad === "function") ? settingsLoad() : {};
+          s.dualScreenPlayerView = false;
+          if (typeof settingsSave === "function") settingsSave();
+          if (typeof settingsSyncSeg === "function") settingsSyncSeg("dualScreenPlayerView", false);
+        } catch (e) {}
+      }
+
+      // Close the popup from the main window side.
+      function closePvPopup() {
+        clearInterval(_pvClosePoller);
+        _pvClosePoller = null;
+        if (_pvPopupWin && !_pvPopupWin.closed) { _pvPopupWin.close(); }
+        _pvPopupWin = null;
+      }
+
+      // Broadcast current state from main → popup.
+      function pvBroadcastState() {
+        if (!_pvChannel) return;
+        if (IS_PV_POPUP) return; // popup never broadcasts state
+        const hexEl = document.getElementById("pan-hex");
+        const vantageEl = document.getElementById("pan-vantage");
+        const fogEl = document.getElementById("tog-fog");
+        const flatEl = document.getElementById("tog-2d");
+        _pvChannel.postMessage({
+          type: "dv-state",
+          hex: hexEl ? hexEl.value : "",
+          vantage: vantageEl ? (parseInt(vantageEl.value, 10) || 6) : 6,
+          fog: fogEl ? fogEl.dataset.active === "1" : false,
+          flat: flatEl ? flatEl.dataset.active === "1" : false,
+        });
+      }
+
+      // In the popup: apply incoming state and re-render.
+      function pvApplyState(msg) {
+        if (!IS_PV_POPUP) return;
+        const hexEl = document.getElementById("pan-hex");
+        const vantageEl = document.getElementById("pan-vantage");
+        const fogEl = document.getElementById("tog-fog");
+        const flatEl = document.getElementById("tog-2d");
+        const pvEl = document.getElementById("tog-playerview");
+        if (hexEl) hexEl.value = msg.hex || "";
+        if (vantageEl) vantageEl.value = msg.vantage != null ? msg.vantage : 6;
+        if (fogEl) fogEl.dataset.active = msg.fog ? "1" : "0";
+        if (flatEl) flatEl.dataset.active = msg.flat ? "1" : "0";
+        if (pvEl) pvEl.dataset.active = "1"; // always Player View in popup
+        if (typeof doDetail === "function") doDetail();
+      }
+
+      // Set up channel listeners — popup listens for state; main listens for hex clicks.
+      if (_pvChannel) {
+        _pvChannel.onmessage = function (e) {
+          const msg = e.data || {};
+          if (IS_PV_POPUP) {
+            if (msg.type === "dv-state") pvApplyState(msg);
+          } else {
+            // Main window receives a hex click from the popup.
+            if (msg.type === "dv-hex-click" && msg.hex) {
+              if (typeof jumpToDetail === "function") jumpToDetail(msg.hex);
+            }
+          }
+        };
+      }
+
+      // Popup init: runs after DOM is ready (called from DOMContentLoaded below).
+      function pvPopupInit() {
+        if (!IS_PV_POPUP) return;
+        // Add body class for CSS-based UI hiding.
+        document.body.classList.add("pv-popup-mode");
+        // Force Player View on permanently.
+        const pvEl = document.getElementById("tog-playerview");
+        if (pvEl) pvEl.dataset.active = "1";
+        // Show detail section, hide first-load.
+        const fl = document.getElementById("first-load-section");
+        const dv = document.getElementById("detail-view-section");
+        if (fl) fl.style.display = "none";
+        if (dv) dv.style.display = "";
+        // Apply theme from localStorage (shared with main window).
+        if (typeof applyTheme === "function") applyTheme();
+        // Set window title.
+        document.title = "Player View — Dolmenwood";
+        // Tell main we're ready.
+        if (_pvChannel) _pvChannel.postMessage({ type: "dv-popup-ready" });
+      }
 
       // Embedded data
 
@@ -9874,7 +10038,7 @@
         // Restore all Settings toggles to their defaults (literal key: const defined later).
         try { localStorage.removeItem("dolmenwood-settings"); } catch (e) {}
         _settings = null;
-        ["nightMode", "travelPointView", "listRoads", "vantageHidesRoads", "fogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) {
+        ["nightMode", "travelPointView", "dualScreenPlayerView", "listRoads", "vantageHidesRoads", "fogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) {
           if (typeof settingsSyncSeg === "function") settingsSyncSeg(k, settingsGet(k));
         });
         // Re-apply the (now default) theme to the document root so the FULL UI resets, not just the map.
@@ -10012,13 +10176,13 @@
       };
       function isNightMode() { return getTheme() === "night"; } // end const TERRAIN_COLOR
       const SETTINGS_KEY = "dolmenwood-settings";
-      const SETTINGS_DEFAULTS = { travelPointView:false, listRoads:true, alwaysDisableRest:false, disableEncounters:false, disableLost:false, lostFlipsPlayerView:false, fogInPlayerView:true, vantageHidesRoads:true, nightMode:false, theme:"regular" };
+      const SETTINGS_DEFAULTS = { travelPointView:false, dualScreenPlayerView:false, listRoads:true, alwaysDisableRest:false, disableEncounters:false, disableLost:false, lostFlipsPlayerView:false, fogInPlayerView:true, vantageHidesRoads:true, nightMode:false, theme:"regular" };
       let _settings = null;
       function settingsLoad() { if (_settings) return _settings; _settings = Object.assign({}, SETTINGS_DEFAULTS); try { const raw = localStorage.getItem(SETTINGS_KEY); if (raw) Object.assign(_settings, JSON.parse(raw)); } catch (e) {} return _settings; }
       function settingsGet(key) { return settingsLoad()[key]; }
       function settingsSave() { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settingsLoad())); } catch (e) {} }
       function isTravelPointView() { return settingsGet("travelPointView"); }
-            function openSettings() { const s = settingsLoad(); ["nightMode", "travelPointView", "listRoads", "vantageHidesRoads", "fogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) { settingsSyncSeg(k, !!s[k]); }); settingsSyncTheme(); settingsSyncLostFlipVis(); document.getElementById("settings-modal").style.display = "flex"; }
+            function openSettings() { const s = settingsLoad(); ["nightMode", "travelPointView", "dualScreenPlayerView", "listRoads", "vantageHidesRoads", "fogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) { settingsSyncSeg(k, !!s[k]); }); settingsSyncTheme(); settingsSyncLostFlipVis(); document.getElementById("settings-modal").style.display = "flex"; }
       function closeSettings() { document.getElementById("settings-modal").style.display="none"; }
       function getTheme() { var s = settingsLoad(); if (s.theme) return s.theme; return s.nightMode ? "night" : "regular"; }
       function isModernMode() { return getTheme() === "modern"; }
@@ -10028,7 +10192,7 @@
       function settingsSetTheme(val) { settingsLoad().theme = val; settingsSave(); applyTheme(); if (typeof doLookAround === "function") doLookAround(); if (typeof trackUpdateUI === "function") trackUpdateUI(); if (typeof trackRenderList === "function") trackRenderList(); if (typeof isInWorldMapView === "function" && isInWorldMapView() && typeof renderWorldMap === "function") renderWorldMap(); var _cm = document.getElementById("color-modal"); if (_cm && _cm.style.display === "flex" && typeof colorModalRenderPresets === "function") colorModalRenderPresets(); }
       function settingsSyncSeg(key, val) { const y = document.getElementById("set-" + key + "-yes"); const n = document.getElementById("set-" + key + "-no"); if (y) y.classList.toggle("toggle--on", !!val); if (n) n.classList.toggle("toggle--on", !val); }
       function settingsSyncLostFlipVis() { var r = document.getElementById("row-lostFlipsPlayerView"); if (r) r.style.display = settingsLoad().disableLost ? "none" : ""; }
-      function settingsToggle(key, val) { settingsLoad()[key]=!!val; settingsSave(); settingsSyncSeg(key, !!val); if (key==="nightMode") applyNightMode(); if (key==="alwaysDisableRest") { if (val) { _jrnIgnoreRest=true; } else { const tks=trackLoadAll(); const at=tks.find(function(x){return x.id===_trackActiveId;}); _jrnIgnoreRest=!!(at&&at.tpState&&at.tpState.ignoreRest); } } if (key==="disableEncounters" && val && typeof journeyClearEncounter==="function") journeyClearEncounter(); if (key==="disableLost" && val && typeof journeyClearLost==="function") { const _tks=trackLoadAll(); const _at=_tks.find(function(x){return x.id===_trackActiveId;}); if (_at&&_at.tpState&&_at.tpState.lost) journeyClearLost(); } if (key==="disableLost" && typeof settingsSyncLostFlipVis==="function") settingsSyncLostFlipVis(); if (key==="fogInPlayerView" && isPlayerView()) { const _fe=document.getElementById("tog-fog"); if(_fe) _fe.dataset.active = val ? "1" : "0"; } if (key==="lostFlipsPlayerView" && val) { const _rtk=trackLoadAll(); const _rat=_rtk.find(function(x){return x.id===_trackActiveId;}); if (_rat&&_rat.tpState&&_rat.tpState.lost && typeof promptLostNorthDir==="function") { _rat.tpState.lostNorthDir=null; trackSaveAll(_rtk); maybePromptLostNorth(); } } if (typeof trackUpdateUI==="function") trackUpdateUI(); if (typeof doLookAround==="function") doLookAround(); if (typeof isInWorldMapView==="function"&&isInWorldMapView()&&typeof renderWorldMap==="function") renderWorldMap(); }
+      function settingsToggle(key, val) { settingsLoad()[key]=!!val; settingsSave(); settingsSyncSeg(key, !!val); if (key==="dualScreenPlayerView") { if (val) { openPvPopup(); } else { closePvPopup(); } } if (key==="nightMode") applyNightMode(); if (key==="alwaysDisableRest") { if (val) { _jrnIgnoreRest=true; } else { const tks=trackLoadAll(); const at=tks.find(function(x){return x.id===_trackActiveId;}); _jrnIgnoreRest=!!(at&&at.tpState&&at.tpState.ignoreRest); } } if (key==="disableEncounters" && val && typeof journeyClearEncounter==="function") journeyClearEncounter(); if (key==="disableLost" && val && typeof journeyClearLost==="function") { const _tks=trackLoadAll(); const _at=_tks.find(function(x){return x.id===_trackActiveId;}); if (_at&&_at.tpState&&_at.tpState.lost) journeyClearLost(); } if (key==="disableLost" && typeof settingsSyncLostFlipVis==="function") settingsSyncLostFlipVis(); if (key==="fogInPlayerView" && isPlayerView()) { const _fe=document.getElementById("tog-fog"); if(_fe) _fe.dataset.active = val ? "1" : "0"; } if (key==="lostFlipsPlayerView" && val) { const _rtk=trackLoadAll(); const _rat=_rtk.find(function(x){return x.id===_trackActiveId;}); if (_rat&&_rat.tpState&&_rat.tpState.lost && typeof promptLostNorthDir==="function") { _rat.tpState.lostNorthDir=null; trackSaveAll(_rtk); maybePromptLostNorth(); } } if (typeof trackUpdateUI==="function") trackUpdateUI(); if (typeof doLookAround==="function") doLookAround(); if (typeof isInWorldMapView==="function"&&isInWorldMapView()&&typeof renderWorldMap==="function") renderWorldMap(); }
       // Terrain type -> Travel Point cost to enter that hex.
       const TERRAIN_TP_COST = {
         Aquatic: 2,
@@ -12924,7 +13088,8 @@
               : "";
             const width = seg.type === "road" ? 2.5 : 2;
             const dash = seg.type === "trail" ? ' stroke-dasharray="4 3"' : "";
-            svg += `<path d="${pathD}" fill="none" style="stroke:${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${dash}${jattr} pointer-events="none"/>`;
+            const strokeAttr = jInfo ? `stroke="${color}"` : `style="stroke:${color}"`;
+            svg += `<path d="${pathD}" fill="none" ${strokeAttr} stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${dash}${jattr} pointer-events="none"/>`;
             const roadName = ROAD_NAMES[seg.id] || seg.id;
             const roadType = seg.type === "trail" ? "Trail" : "Road";
             svg += `<path d="${pathD}" fill="none" stroke="transparent" stroke-width="12" stroke-linecap="round" data-road-name="${escapeHtml(roadName)}" data-road-type="${roadType}" data-road-hex="${seg.hexCode}" data-road-id="${escapeHtml(seg.id)}" class="road-hit-area" style="cursor:pointer;pointer-events:stroke;"/>`;
@@ -12976,7 +13141,8 @@
               ? ` class="journey-line" data-journey-name="${escapeHtml(jInfo.name)}"`
               : "";
             const width = seg.width || 3.5;
-            svg += `<path d="${pathD}" fill="none" style="stroke:${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${jattr} pointer-events="none"/>`;
+            const strokeAttr = jInfo ? `stroke="${color}"` : `style="stroke:${color}"`;
+            svg += `<path d="${pathD}" fill="none" ${strokeAttr} stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${jattr} pointer-events="none"/>`;
             const riverName = RIVER_NAMES[seg.id] || seg.id;
             svg += `<path d="${pathD}" fill="none" stroke="transparent" stroke-width="12" stroke-linecap="round" data-road-name="${escapeHtml(riverName)}" data-road-type="River" data-road-hex="${seg.hexCode}" data-road-id="${escapeHtml(seg.id)}" class="road-hit-area" style="cursor:pointer;pointer-events:stroke;"/>`;
             continue;
@@ -13122,8 +13288,12 @@
       function doLookAround() {
         if (settingsGet("alwaysDisableRest")) _jrnIgnoreRest = true;
         doDetail(); // doDetail populates world map internally if visible
-        doPanorama();
-        saveState();
+        if (!IS_PV_POPUP) {
+          doPanorama();
+          saveState();
+          // Broadcast to dual-screen popup if it's open.
+          if (_pvPopupWin && !_pvPopupWin.closed) pvBroadcastState();
+        }
       }
 
       function resetVantage() {
@@ -13153,6 +13323,11 @@
       }
 
       function jumpToDetail(hex) {
+        // In popup mode: broadcast click to main window, then update locally.
+        if (IS_PV_POPUP && _pvChannel) {
+          _pvChannel.postMessage({ type: "dv-hex-click", hex });
+        }
+
         // --- Party Track intercept (detail map only, not world map clicks) ---
         if (_trackActive) {
           const allow = trackHandleHexClick(hex);
@@ -14221,6 +14396,9 @@
 
       document.addEventListener("DOMContentLoaded", initHexSearch);
       document.addEventListener("DOMContentLoaded", applyNightMode);
+      document.addEventListener("DOMContentLoaded", function () {
+        if (IS_PV_POPUP) pvPopupInit();
+      });
 
       // ============================================================================
       // TOOLTIPS, SELECTOR OVERLAY & ROUTE HIGHLIGHTING
@@ -14655,19 +14833,22 @@
           if (e.key === "Enter") doLookAround();
         });
       // Restore saved state — no default hex on fresh load
-      const _hadSavedState = loadState();
-      const _savedHex = resolveHex(document.getElementById("pan-hex").value);
-      if (_hadSavedState && _savedHex) {
-        // Returning user with a saved hex — go straight to detail view
-        document.getElementById("first-load-section").style.display = "none";
-        document.getElementById("detail-view-section").style.display = "";
-        doLookAround();
-      } else {
-        // Fresh load — show blank world map, wait for a hex click
-        document.getElementById("first-load-section").style.display = "";
-        document.getElementById("detail-view-section").style.display = "none";
-        renderWorldMap(); // renders with hex=null: all hexes equal, none highlighted
+      if (!IS_PV_POPUP) {
+        const _hadSavedState = loadState();
+        const _savedHex = resolveHex(document.getElementById("pan-hex").value);
+        if (_hadSavedState && _savedHex) {
+          // Returning user with a saved hex — go straight to detail view
+          document.getElementById("first-load-section").style.display = "none";
+          document.getElementById("detail-view-section").style.display = "";
+          doLookAround();
+        } else {
+          // Fresh load — show blank world map, wait for a hex click
+          document.getElementById("first-load-section").style.display = "";
+          document.getElementById("detail-view-section").style.display = "none";
+          renderWorldMap(); // renders with hex=null: all hexes equal, none highlighted
+        }
       }
+      // Popup mode: pvPopupInit() handles startup via DOMContentLoaded.
 
       // ============================================================================
       // PARTY TRACK SYSTEM
@@ -18720,6 +18901,7 @@
           <div class="settings-row"><span>Vantage Hides Roads</span><div class="segmented"><button id="set-vantageHidesRoads-yes" class="toggle toggle--yes" onclick="settingsToggle('vantageHidesRoads', true)">Yes</button><button id="set-vantageHidesRoads-no" class="toggle toggle--no" onclick="settingsToggle('vantageHidesRoads', false)">No</button></div></div>
           <div class="settings-row"><span>Fog in Player View</span><div class="segmented"><button id="set-fogInPlayerView-yes" class="toggle toggle--yes" onclick="settingsToggle('fogInPlayerView', true)">Yes</button><button id="set-fogInPlayerView-no" class="toggle toggle--no" onclick="settingsToggle('fogInPlayerView', false)">No</button></div></div>
           <div class="settings-row"><span>Travel Point View</span><div class="segmented"><button id="set-travelPointView-yes" class="toggle toggle--yes" onclick="settingsToggle('travelPointView', true)">Yes</button><button id="set-travelPointView-no" class="toggle toggle--no" onclick="settingsToggle('travelPointView', false)">No</button></div></div>
+          <div class="settings-row"><span>Dual Screen Player View</span><div class="segmented"><button id="set-dualScreenPlayerView-yes" class="toggle toggle--yes" onclick="settingsToggle('dualScreenPlayerView', true)">Yes</button><button id="set-dualScreenPlayerView-no" class="toggle toggle--no" onclick="settingsToggle('dualScreenPlayerView', false)">No</button></div></div>
         </div>
         <div class="settings-section">
           <div class="settings-head">Journeys</div>
