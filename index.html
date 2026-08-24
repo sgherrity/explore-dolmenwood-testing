@@ -122,6 +122,11 @@
         --prominent-bg-soft: #e0c983;
         --prominent-border: #7b5b00;
         --prominent-text: #fff;
+        --tag-hl-bg: #7c3aed;
+        --tag-hl-bg-soft: #ece1fb;
+        --tag-hl-border: #5b21b6;
+        --tag-hl-text: #ffffff;
+        --tag-hl-title: #7c3aed;
         --hidden-bg: #e4d5e2;
         --hidden-border: #52279c;
         --hex-center-edge: #000000;
@@ -188,6 +193,11 @@
         --prominent-bg-soft: #433b28;
         --prominent-border: #c7a14a;
         --prominent-text: #1e1e1e;
+        --tag-hl-bg: #a074ff;
+        --tag-hl-bg-soft: #332a4d;
+        --tag-hl-border: #b79bff;
+        --tag-hl-text: #1e1e1e;
+        --tag-hl-title: #b79bff;
         --hidden-bg: #2e2942;
         --hidden-border: #7a6ea8;
         --hex-center-edge: #a86e00;
@@ -257,6 +267,11 @@
         --prominent-bg-soft: #fff0db;
         --prominent-border: #ff9500;
         --prominent-text: #ffffff;
+        --tag-hl-bg: #8b2fe0;
+        --tag-hl-bg-soft: #f2eafd;
+        --tag-hl-border: #7c3aed;
+        --tag-hl-text: #ffffff;
+        --tag-hl-title: #7c3aed;
         --hidden-bg: #f3eefc;
         --hidden-border: #7c3aed;
       }
@@ -413,6 +428,11 @@
       }
       .settings-gear { flex: 0 0 auto; align-self: end; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-raised); color: var(--fg); line-height: 1; cursor: pointer; }
       .settings-gear:hover { background: rgba(44, 24, 16, 0.08); }
+      .tags-btn { flex: 0 0 auto; align-self: end; display: flex; align-items: center; justify-content: center; gap: 5px; height: 40px; padding: 0 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-raised); color: var(--fg); font-size: var(--fs-sm); line-height: 1; cursor: pointer; white-space: nowrap; }
+      .tags-btn:hover { background: rgba(44, 24, 16, 0.08); }
+      .hl-title-word { color: var(--tag-hl-title); font-weight: 600; }
+      .entry-tag-chip { display: inline-block; padding: 1px 7px; margin-left: 5px; border-radius: 8px; font-size: var(--fs-xs); font-weight: 600; line-height: 1.5; vertical-align: middle; background: var(--tag-hl-bg-soft); border: 1px solid var(--tag-hl-border); color: var(--tag-hl-border); }
+      .entry-tag-chip--prominent { background: var(--prominent-bg-soft); border-color: var(--prominent-border); color: var(--prominent-border); }
       .settings-section { margin-bottom: 18px; }
       .settings-head { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-faded); border-bottom: 1px solid var(--border); padding-bottom: 4px; margin-bottom: 6px; }
       .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: var(--fs-sm); color: var(--fg); cursor: pointer; }
@@ -467,6 +487,7 @@
         margin-right: 8px;
         vertical-align: middle;
       }
+      .search-result .sr-kind--tag { color: var(--tag-hl-border); text-transform: uppercase; font-weight: 700; letter-spacing: 0.1em; }
       .search-empty {
         padding: 10px 12px;
         font-style: italic;
@@ -2680,6 +2701,7 @@
                 hidden
               ></div>
             </div>
+            <button type="button" id="tags-btn" class="tags-btn" title="Highlight tags" aria-label="Highlight tags" onclick="openHighlight()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="7" r="1.3" fill="currentColor"/></svg><span>Tags</span></button>
             <button type="button" id="settings-btn" class="settings-gear" title="Settings" aria-label="Settings" onclick="openSettings()"><svg width="22" height="22" viewBox="-2 -2 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <input id="pan-hex" type="hidden" value="" />
             <input id="pan-vantage" type="hidden" value="6" />
@@ -2863,7 +2885,6 @@
                     <option value="Fairy Door">Fairy Door</option>
                     <option value="Fairy Road">Fairy Road</option>
                     <option value="Scenario">Scenario</option>
-                    <option value="Pylon">Pylon</option>
                   </select>
                 </div>
               </div>
@@ -3083,7 +3104,7 @@
           color: var(--fg-faded);
         "
       >
-        v2.3.2
+        v2.3.3
       </p>
       <p class="disclaimer" style="margin-top: 12px">
         <button
@@ -3321,6 +3342,7 @@
               desc: "Elf lord and his guests are trapped in the house as punishment for loving Ygraine",
             },
           ],
+          hlTags: ["Fairies","Magicians"],
         },
 
         "0102": {
@@ -3370,6 +3392,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Fairies","Human Nobility"],
         },
 
         "0104": {
@@ -3397,6 +3420,7 @@
               desc: "Ghosts haunt a light house with a big octopus at the top. Soul-stealing crystal",
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         "0105": {
@@ -3428,6 +3452,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         "0106": {
@@ -3455,6 +3480,7 @@
               desc: "At the top of a crag is a Monolith that scares people",
             },
           ],
+          hlTags: ["Standing Stones"],
         },
 
         "0107": {
@@ -3513,6 +3539,7 @@
               desc: "Inn housing the head of the rebels seeking to overthrow Lord Murkin",
             },
           ],
+          hlTags: ["Human Nobility","Longhorn Nobility","Settlements","Taverners"],
         },
 
         "0109": {
@@ -3543,6 +3570,7 @@
               desc: "Conscripted soldiers of Lord Murkin prepare for war",
             },
           ],
+          hlTags: ["Longhorn Nobility","Monsters"],
         },
 
         "0110": {
@@ -3567,6 +3595,7 @@
               desc: "Monolith that is all the remains of the necromantic labratory of Lord Gnarlgruff",
             },
           ],
+          hlTags: ["Longhorn Nobility","Standing Stones"],
         },
 
         "0111": {
@@ -3628,6 +3657,7 @@
               desc: "Monolith dedicated to controversial Drune renegade",
             },
           ],
+          hlTags: ["Atanuwe","Drune","Standing Stones","Monsters"],
         },
 
         "0202": {
@@ -3658,6 +3688,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         "0203": {
@@ -3689,6 +3720,7 @@
               desc: "A garden of moss cultivated by a pair of bickering married trolls",
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         "0204": {
@@ -3719,6 +3751,7 @@
               desc: "Summerstone. Gain breathe water. Protected by frost fiends.",
             },
           ],
+          hlTags: ["Drune","Standing Stones","Monsters"],
         },
 
         "0205": {
@@ -3743,6 +3776,7 @@
               desc: "Attacked cottage containing a living wooden doll who has tied up his creator",
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         "0206": {
@@ -3768,6 +3802,7 @@
               desc: "Abandoned priory covered in beetles containing a magic banner of St. Lillibeth",
             },
           ],
+          hlTags: ["Atanuwe"],
         },
 
         "0207": {
@@ -3798,6 +3833,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Drune","Standing Stones","Monsters"],
         },
 
         "0208": {
@@ -3831,6 +3867,7 @@
               desc: "Ancient magical stones measure the power of the Witching Ring",
             },
           ],
+          hlTags: ["Longhorn Nobility"],
         },
 
         "0209": {
@@ -3867,6 +3904,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         "0210": {
@@ -3893,6 +3931,7 @@
               desc: "Decaying castle home of Lord Nodlock surrounded by a moat of bog corpses",
             },
           ],
+          hlTags: ["Human Nobility"],
         },
 
         "0211": {
@@ -3924,6 +3963,7 @@
               desc: "Tent occupied by dream avatar of the Dreaming Snail. Entirely an illusion",
             },
           ],
+          hlTags: ["Taverners"],
         },
 
         "0301": {
@@ -3949,6 +3989,7 @@
               desc: "Abandoned village of wooden stilt houses in a bog haunted by hungry ghosts",
             },
           ],
+          hlTags: ["Undead"],
         },
 
         "0302": {
@@ -3979,6 +4020,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         "0303": {
@@ -4004,6 +4046,7 @@
               desc: "Rainswept home of witch cursed to be a newt and her madtom fanatics",
             },
           ],
+          hlTags: ["Human Nobility","Monsters"],
         },
 
         "0304": {
@@ -4039,6 +4082,7 @@
               desc: "A burning man of green flames, veiling a summerstone guarded by an Audrune",
             },
           ],
+          hlTags: ["Drune","Fairies","Standing Stones"],
         },
 
         "0305": {
@@ -4069,6 +4113,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Fairies","Taverners","Undead"],
         },
 
         "0306": {
@@ -4099,6 +4144,7 @@
               desc: "Monolith that randomly changes character alignment",
             },
           ],
+          hlTags: ["Standing Stones"],
         },
 
         "0307": {
@@ -4129,6 +4175,7 @@
               desc: "A group of humanoid fungus talk at night with clues and hints",
             },
           ],
+          hlTags: ["Atanuwe","Church Figures"],
         },
 
         "0308": {
@@ -4154,6 +4201,7 @@
               desc: "Reveals the cave of an ancient Drune wizard protected by Tinekin, a flame entity",
             },
           ],
+          hlTags: ["Drune"],
         },
 
         "0309": {
@@ -4192,6 +4240,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Drune","Longhorn Nobility"],
         },
 
         "0310": {
@@ -4222,6 +4271,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Fairies","Monsters"],
         },
 
         "0311": {
@@ -4252,6 +4302,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Longhorn Nobility"],
         },
 
         "0312": {
@@ -4277,6 +4328,7 @@
               desc: "Friendly inn run by a shorthorn woman who has relations with a wolf",
             },
           ],
+          hlTags: ["Longhorn Nobility","Taverners"],
         },
 
         "0401": {
@@ -4301,6 +4353,7 @@
               desc: "A tree with hanging bodies — soulstealing undead that will stalk the party",
             },
           ],
+          hlTags: ["Undead"],
         },
 
         "0402": {
@@ -4333,6 +4386,7 @@
               desc: "A woodland glade that makes people sleepy",
             },
           ],
+          hlTags: ["Fairies","Monsters"],
         },
 
         "0403": {
@@ -4364,6 +4418,7 @@
               desc: "Giant flowers cause those passing by to fall asleep for hours",
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         "0404": {
@@ -4418,6 +4473,7 @@
               desc: "A large cheese woman is making blood-cheese in the woods from corpses",
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         "0406": {
@@ -4449,6 +4505,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Drune","Monsters"],
         },
 
         "0407": {
@@ -4474,6 +4531,7 @@
               desc: "Small lake with trapped ghostly souls, harvested by the Drune",
             },
           ],
+          hlTags: ["Undead"],
         },
 
         "0408": {
@@ -4503,6 +4561,7 @@
               desc: "A crypt under the sinking chapel containing the Helm of St Sedge",
             },
           ],
+          hlTags: ["Church Figures"],
         },
 
         "0409": {
@@ -4529,6 +4588,7 @@
               desc: "A small goatfolk town ruled by Captain Cabruc Lockehorn, loyal to Ramius",
             },
           ],
+          hlTags: ["Longhorn Nobility","Settlements","Monsters"],
         },
 
         "0410": {
@@ -4556,6 +4616,7 @@
               desc: "Keep of Lord Ramius. Icy caverns, ancestral crypts, and monument below",
             },
           ],
+          hlTags: ["Fairies","Human Nobility","Longhorn Nobility"],
         },
 
         "0411": {
@@ -4607,6 +4668,7 @@
               desc: "Old fairy stronghold. Longhorn commander mourns a failed attempt on the Bicorne",
             },
           ],
+          hlTags: ["Fairies","Human Nobility","Longhorn Nobility","Monsters"],
         },
 
         "0501": {
@@ -4632,6 +4694,7 @@
               desc: "Home to a witch, the Eye of Hasturiel",
             },
           ],
+          hlTags: ["Standing Stones","Undead","Witches","Wood Gods","Monsters"],
         },
 
         "0502": {
@@ -4661,6 +4724,7 @@
               desc: "Nodal for Hoad. Impregnates players. Protected by Children of Zarlac",
             },
           ],
+          hlTags: ["Drune","Standing Stones"],
         },
 
         "0503": {
@@ -4692,6 +4756,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Drune"],
         },
 
         "0504": {
@@ -4721,6 +4786,7 @@
               desc: "200' high waterfall guarded by a village of Drune",
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         "0505": {
@@ -4753,6 +4819,7 @@
               desc: "Witches gather at the top of a tower that contains a Locus of Ertta",
             },
           ],
+          hlTags: ["Fairies","Wood Gods","Monsters"],
         },
 
         "0506": {
@@ -4783,6 +4850,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Drune","Fairies","Standing Stones"],
         },
 
         "0507": {
@@ -4807,6 +4875,7 @@
               desc: "Center of Drune power",
             },
           ],
+          hlTags: ["Drune"],
         },
 
         "0508": {
@@ -4837,6 +4906,7 @@
               desc: "Collection of mushrooms tended by a sentient skeleton",
             },
           ],
+          hlTags: ["Undead"],
         },
 
         "0509": {
@@ -4866,6 +4936,7 @@
               desc: "Summerstone. Primary stone in the Ring of Chell. Guarded by insects and Cadraigaunt",
             },
           ],
+          hlTags: ["Atanuwe","Drune","Standing Stones","Wood Gods"],
         },
 
         "0510": {
@@ -4890,6 +4961,7 @@
               desc: "The pit of the Bicorne, an ancient faeirie beast with compelling toxic dreams",
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         "0511": {
@@ -4915,6 +4987,7 @@
               desc: "Hostile cursed sentient inn that feeds off of terror, strife, and murder",
             },
           ],
+          hlTags: ["Taverners"],
         },
 
         "0512": {
@@ -4958,6 +5031,7 @@
               desc: "In the town of High-Hankle",
             },
           ],
+          hlTags: ["Human Nobility"],
         },
 
         "0601": {
@@ -5014,6 +5088,7 @@
               desc: "A giant is guarding the Emerald Door in a massive doomed hall",
             },
           ],
+          hlTags: ["Fairies","Monsters"],
         },
 
         "0603": {
@@ -5038,6 +5113,7 @@
               desc: "Phantoms mutter secrets and may be convinced to trade",
             },
           ],
+          hlTags: ["Drune","Fairies","Undead","Monsters"],
         },
 
         "0604": {
@@ -5076,6 +5152,7 @@
               desc: "In Fort Vulgar",
             },
           ],
+          hlTags: ["Fairies","Monsters"],
         },
 
         "0605": {
@@ -5100,6 +5177,7 @@
               desc: "Palace of the Merfauns",
             },
           ],
+          hlTags: ["Fairies","Wood Gods","Monsters"],
         },
 
         "0606": {
@@ -5130,6 +5208,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Atanuwe","Fairies","Wood Gods","Monsters"],
         },
 
         "0607": {
@@ -5166,6 +5245,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Human Nobility","Standing Stones","Undead"],
         },
 
         "0608": {
@@ -5190,6 +5270,7 @@
               desc: "The lair of the serpentine High Priestess of Southern Dolmenwood",
             },
           ],
+          hlTags: ["Witches","Wood Gods"],
         },
 
         "0609": {
@@ -5224,6 +5305,7 @@
               desc: "Fairy Princess is trapped in a dungeon waiting on her true love",
             },
           ],
+          hlTags: ["Standing Stones"],
         },
 
         "0610": {
@@ -5278,6 +5360,7 @@
               desc: "Hideout of a magpie themed bandit gang",
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         "0612": {
@@ -5310,6 +5393,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Standing Stones"],
         },
 
         "0701": {
@@ -5336,6 +5420,7 @@
               desc: "Haunted Northern watchtower. Secret home of the Malachite Mirror",
             },
           ],
+          hlTags: ["Undead"],
         },
 
         "0702": {
@@ -5372,6 +5457,7 @@
               desc: "In the hamlet of Drigbolton",
             },
           ],
+          hlTags: ["Atanuwe","Human Nobility","Sages","Settlements"],
         },
 
         "0703": {
@@ -5410,6 +5496,7 @@
               desc: "In ruined town of Midgewarrow",
             },
           ],
+          hlTags: ["Atanuwe","Human Nobility"],
         },
 
         "0704": {
@@ -5441,6 +5528,7 @@
               desc: "Manor home of one of the reclusive high witches and aunt of Harrowmoor",
             },
           ],
+          hlTags: ["Human Nobility","Wood Gods"],
         },
 
         "0705": {
@@ -5465,6 +5553,7 @@
               desc: "A cursed scrabey has a lair hidden under a tree surrounded by insects",
             },
           ],
+          hlTags: ["Fairies","Human Nobility","Undead"],
         },
 
         "0706": {
@@ -5494,6 +5583,7 @@
               desc: "Isle that does not exist except for one hour at midnight",
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         "0707": {
@@ -5523,6 +5613,7 @@
               desc: "Fishermen trying to catch longmere squid",
             },
           ],
+          hlTags: ["Wood Gods","Monsters"],
         },
 
         "0708": {
@@ -5549,6 +5640,7 @@
               desc: "Shorthorn village headed for conflict with the Drune",
             },
           ],
+          hlTags: ["Drune","Longhorn Nobility","Magicians","Settlements"],
         },
 
         "0709": {
@@ -5579,6 +5671,7 @@
               desc: "Set in town of Shadhome.",
             },
           ],
+          hlTags: ["Longhorn Nobility","Church Figures","Settlements"],
         },
 
         "0710": {
@@ -5614,6 +5707,7 @@
               desc: "In the town of Lankshorn",
             },
           ],
+          hlTags: ["Drune","Longhorn Nobility","Wood Gods"],
         },
 
         "0711": {
@@ -5651,6 +5745,7 @@
               desc: "Shrine to King Pusskin",
             },
           ],
+          hlTags: ["Fairies","Taverners"],
         },
 
         "0712": {
@@ -5678,6 +5773,7 @@
               desc: "Old windmill lair of a wyrm and a site of faerie ritual magic",
             },
           ],
+          hlTags: ["Fairies","Monsters"],
         },
 
         "0801": {
@@ -5708,6 +5804,7 @@
               desc: "Giant sculptures that mutate people",
             },
           ],
+          hlTags: ["Atanuwe"],
         },
 
         "0802": {
@@ -5738,6 +5835,7 @@
               desc: "Lair of a phlegm wyrm",
             },
           ],
+          hlTags: ["Atanuwe","Fairies","Monsters"],
         },
 
         "0803": {
@@ -5768,6 +5866,7 @@
               desc: "Bridge and river users being charged by minions of Snarkscorn",
             },
           ],
+          hlTags: ["Atanuwe","Wood Gods"],
         },
 
         "0804": {
@@ -5803,6 +5902,7 @@
               desc: "Paralyzing trees grasp at travellers",
             },
           ],
+          hlTags: ["Atanuwe","Drune","Standing Stones"],
         },
 
         "0805": {
@@ -5841,6 +5941,7 @@
               desc: "Corruption from the River Shrub gathers under the bridge as an icky foam",
             },
           ],
+          hlTags: ["Fairies","Taverners","Undead","Wood Gods"],
         },
 
         "0806": {
@@ -5871,6 +5972,7 @@
               desc: "A wall of white fire seperates the lake from the land",
             },
           ],
+          hlTags: ["Witches","Wood Gods","Monsters"],
         },
 
         "0807": {
@@ -5895,6 +5997,7 @@
               desc: "An atacorn is breeding with human fishermen to create a brood",
             },
           ],
+          hlTags: ["Atanuwe","Monsters"],
         },
 
         "0808": {
@@ -5920,6 +6023,7 @@
               desc: "Wizard who has been torn into three parts: skin, viscera and skeleton",
             },
           ],
+          hlTags: ["Magicians","Settlements"],
         },
 
         "0809": {
@@ -5955,6 +6059,7 @@
               desc: "Fairy ruin overtaken by Crookhorns and home to a frost elf prisoner",
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         "0810": {
@@ -5986,6 +6091,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Drune","Fairies"],
         },
 
         "0811": {
@@ -6016,6 +6122,7 @@
               desc: "Small caves with nothing in them",
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         "0812": {
@@ -6043,6 +6150,7 @@
               desc: "Dancing shadows that can steal a persons shadow",
             },
           ],
+          hlTags: ["Standing Stones","Monsters"],
         },
 
         "0901": {
@@ -6098,6 +6206,7 @@
               desc: "A group of corrupted treants is fighting a group of lawful ones",
             },
           ],
+          hlTags: ["Atanuwe"],
         },
 
         "0903": {
@@ -6128,6 +6237,7 @@
               desc: "White obelisk guarded by Audrune Jhaelloch. Kills or grants visions of the future",
             },
           ],
+          hlTags: ["Atanuwe","Drune","Standing Stones"],
         },
 
         "0904": {
@@ -6160,6 +6270,7 @@
               desc: "Corrupted nodal stone in the heart of the nag lords kingdom",
             },
           ],
+          hlTags: ["Atanuwe","Drune","Standing Stones","Wood Gods"],
         },
 
         "0905": {
@@ -6190,6 +6301,7 @@
               desc: "Cliffs above Valley of Wise Beasts",
             },
           ],
+          hlTags: ["Atanuwe"],
         },
 
         "0906": {
@@ -6223,6 +6335,7 @@
               desc: "In the crypts of the ruined abbey",
             },
           ],
+          hlTags: ["Atanuwe","Human Nobility","Church Figures","Undead"],
         },
 
         "0907": {
@@ -6248,6 +6361,7 @@
               desc: "Corrupted stone. People obsess over it, eventually becoming thralls",
             },
           ],
+          hlTags: ["Atanuwe","Standing Stones","Undead"],
         },
 
         "0908": {
@@ -6279,6 +6393,7 @@
               desc: "Spectral hands try to draw people to bathe with them",
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         "0909": {
@@ -6309,6 +6424,7 @@
               desc: "Home of a giant telepathic earthworm",
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         "0910": {
@@ -6340,6 +6456,7 @@
               desc: "Poisonous nodal stone guarded by Aethogrym. Grants zoom in of a hex",
             },
           ],
+          hlTags: ["Drune","Fairies","Longhorn Nobility","Standing Stones","Taverners"],
         },
 
         "0911": {
@@ -6370,6 +6487,7 @@
               desc: "Residence of Shub's Nanna and her henchfolk",
             },
           ],
+          hlTags: ["Atanuwe","Fairies","Monsters"],
         },
 
         "0912": {
@@ -6396,6 +6514,7 @@
               desc: "Town recently taken over by pigs.",
             },
           ],
+          hlTags: ["Human Nobility","Settlements","Monsters"],
         },
 
         1001: {
@@ -6426,6 +6545,7 @@
               desc: "Giants living in mounds hurl rocks at boats",
             },
           ],
+          hlTags: ["Atanuwe","Monsters"],
         },
 
         1002: {
@@ -6453,6 +6573,7 @@
               desc: "Thorny scrubs protect the Carrion Storks",
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         1003: {
@@ -6521,6 +6642,7 @@
               desc: "Beneath Baron Fragglehorn’s tower",
             },
           ],
+          hlTags: ["Atanuwe"],
         },
 
         1005: {
@@ -6557,6 +6679,7 @@
               desc: "Stirge Owls and Nightboars reside in this area",
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         1006: {
@@ -6582,6 +6705,7 @@
               desc: "Locus of the Gwyrigon Limwdd",
             },
           ],
+          hlTags: ["Wood Gods"],
         },
 
         1007: {
@@ -6609,6 +6733,7 @@
               desc: "Home of a fairy spy for the Cold Prince pretending to be human",
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         1008: {
@@ -6635,6 +6760,7 @@
             },
             { name: "Tekwell's Hut", type: "POI", desc: "Home of a fisherman" },
           ],
+          hlTags: ["Fairies","Longhorn Nobility"],
         },
 
         1009: {
@@ -6660,6 +6786,7 @@
               desc: "Prism that leeches the color from everything nearby",
             },
           ],
+          hlTags: ["Standing Stones"],
         },
 
         1010: {
@@ -6691,6 +6818,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Taverners","Witches"],
         },
 
         1011: {
@@ -6722,6 +6850,7 @@
               desc: "Cursed haunt of a group of antler wraiths",
             },
           ],
+          hlTags: ["Longhorn Nobility","Standing Stones"],
         },
 
         1012: {
@@ -6772,6 +6901,7 @@
               desc: "Tomb of a wight that owned dogs",
             },
           ],
+          hlTags: ["Undead","Wood Gods"],
         },
 
         1102: {
@@ -6802,6 +6932,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Witches","Wood Gods"],
         },
 
         1103: {
@@ -6832,6 +6963,7 @@
               desc: "Black tower built by Aubrathon and home of the Onyx Mirror",
             },
           ],
+          hlTags: ["Drune","Wood Gods"],
         },
 
         1104: {
@@ -6862,6 +6994,7 @@
               desc: "Egg that will spawn a cygnet, claiming to be a prophet of the One True God",
             },
           ],
+          hlTags: ["Atanuwe","Church Figures"],
         },
 
         1105: {
@@ -6895,6 +7028,7 @@
               desc: "Ancestral home of the Harrowmoor family",
             },
           ],
+          hlTags: ["Human Nobility"],
         },
 
         1106: {
@@ -6933,6 +7067,7 @@
               desc: "In the town of Prigwort",
             },
           ],
+          hlTags: ["Fairies","Church Figures","Undead"],
         },
 
         1107: {
@@ -6957,6 +7092,7 @@
               desc: "Lair of the yellow bile wyrm Chasobrithe",
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         1108: {
@@ -6993,6 +7129,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Fairies","Magicians","Standing Stones","Witches","Wood Gods"],
         },
 
         1109: {
@@ -7032,6 +7169,7 @@
               desc: "In the Woodcutters’s Encampment",
             },
           ],
+          hlTags: ["Church Figures"],
         },
 
         1110: {
@@ -7069,6 +7207,7 @@
               desc: "Town",
             },
           ],
+          hlTags: ["Magicians"],
         },
 
         1111: {
@@ -7125,6 +7264,7 @@
               desc: "A troll resides there, taking a toll of dead bodies from passerby",
             },
           ],
+          hlTags: ["Fairies","Human Nobility"],
         },
 
         1201: {
@@ -7156,6 +7296,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Sages","Undead"],
         },
 
         1202: {
@@ -7181,6 +7322,7 @@
               desc: "Tomb of a undead sacrifice to the shaman Kul",
             },
           ],
+          hlTags: ["Undead","Wood Gods"],
         },
 
         1203: {
@@ -7212,6 +7354,7 @@
               desc: "Escaped cobbin convicts evading Baron Fragglehorn",
             },
           ],
+          hlTags: ["Atanuwe"],
         },
 
         1204: {
@@ -7248,6 +7391,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Human Nobility","Taverners","Wood Gods"],
         },
 
         1205: {
@@ -7272,6 +7416,7 @@
               desc: "Spectre haunted pool protects the Gorthstone as well as the Audrune Haygral",
             },
           ],
+          hlTags: ["Drune","Fairies","Standing Stones","Undead"],
         },
 
         1206: {
@@ -7296,6 +7441,7 @@
               desc: "A baker and her daughters sell food made by gingerbread golems",
             },
           ],
+          hlTags: ["Fairies","Magicians","Undead","Witches"],
         },
 
         1207: {
@@ -7327,6 +7473,7 @@
             },
             { name: "Fog Lake", type: "POI", desc: "Flood prone lake" },
           ],
+          hlTags: ["Settlements"],
         },
 
         1208: {
@@ -7390,6 +7537,7 @@
               desc: "Home of Pollard, the head of the Woodcutters and his drug haunted manse",
             },
           ],
+          hlTags: ["Settlements","Undead","Monsters"],
         },
 
         1210: {
@@ -7423,6 +7571,7 @@
               desc: "Tunnels of infested servants leading to the missing lord of the manse",
             },
           ],
+          hlTags: ["Human Nobility","Undead","Wood Gods"],
         },
 
         1211: {
@@ -7448,6 +7597,7 @@
               desc: "Giant spider performing puppet shows with dead bodies",
             },
           ],
+          hlTags: ["Fairies","Settlements","Monsters"],
         },
 
         1212: {
@@ -7478,6 +7628,7 @@
               desc: "A book where one can ask questions of a fairie queen",
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         1301: {
@@ -7508,6 +7659,7 @@
               desc: "Rickety bridge",
             },
           ],
+          hlTags: ["Undead"],
         },
 
         1302: {
@@ -7532,6 +7684,7 @@
               desc: "Chapel lair of a Blood Wyrm and resting place of the Sword of St Sedge",
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         1303: {
@@ -7583,6 +7736,7 @@
               desc: "Manor home of Lord Guillefer",
             },
           ],
+          hlTags: ["Human Nobility","Witches"],
         },
 
         1305: {
@@ -7613,6 +7767,7 @@
               desc: "Maifestation of the stag lord Yorghan",
             },
           ],
+          hlTags: ["Atanuwe","Wood Gods"],
         },
 
         1306: {
@@ -7645,6 +7800,7 @@
               desc: "Giant pile of woodgrue guano. Ew.",
             },
           ],
+          hlTags: ["Fairies","Human Nobility","Standing Stones"],
         },
 
         1307: {
@@ -7677,6 +7833,7 @@
               desc: "In a wayside refuge",
             },
           ],
+          hlTags: ["Church Figures"],
         },
 
         1308: {
@@ -7706,6 +7863,7 @@
               desc: "A pair of undead rise nightly",
             },
           ],
+          hlTags: ["Undead"],
         },
 
         1309: {
@@ -7737,6 +7895,7 @@
               desc: "Orchard that grows clairvoyant apples",
             },
           ],
+          hlTags: ["Human Nobility","Taverners"],
         },
 
         1310: {
@@ -7762,6 +7921,7 @@
               desc: "Home to a retired werewolf monster hunter",
             },
           ],
+          hlTags: ["Undead","Monsters"],
         },
 
         1311: {
@@ -7793,6 +7953,7 @@
               desc: "Corpses of animals are scattered around the area",
             },
           ],
+          hlTags: ["Fairies","Undead"],
         },
 
         1312: {
@@ -7818,6 +7979,7 @@
               desc: "Fields that overlap with the realm of Princess Andromethia, resulting in sleepiness",
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         1401: {
@@ -7842,6 +8004,7 @@
               desc: "Old farmhouse is home to an undead noble revenant and his friar slave",
             },
           ],
+          hlTags: ["Church Figures","Undead"],
         },
 
         1402: {
@@ -7878,6 +8041,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Fairies","Monsters"],
         },
 
         1403: {
@@ -7909,6 +8073,7 @@
               desc: "Town of Odd",
             },
           ],
+          hlTags: ["Fairies","Witches"],
         },
 
         1404: {
@@ -7941,11 +8106,12 @@
             },
             {
               name: "The Glaring Pylon",
-              type: "Pylon",
+              type: "POI",
               desc: "Locus of Hasturial Thrice Crowned",
               hidden: true,
             },
           ],
+          hlTags: ["Wood Gods","Monsters"],
         },
 
         1405: {
@@ -7985,6 +8151,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         1406: {
@@ -8015,6 +8182,7 @@
               desc: "Trees grow glowing orbs. Last for one day",
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         1407: {
@@ -8072,6 +8240,7 @@
               desc: "Long unused home of Elder Phanatarch",
             },
           ],
+          hlTags: ["Drune","Human Nobility"],
         },
 
         1409: {
@@ -8097,6 +8266,7 @@
               desc: "A giant flesh monstrosity guards a horde in an abandoned crypt.",
             },
           ],
+          hlTags: ["Undead"],
         },
 
         1410: {
@@ -8122,6 +8292,7 @@
               desc: "A group of singing cockatrice have nest here",
             },
           ],
+          hlTags: ["Fairies","Undead","Monsters"],
         },
 
         1501: {
@@ -8184,6 +8355,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Fairies","Wood Gods","Monsters"],
         },
 
         1503: {
@@ -8210,6 +8382,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         1504: {
@@ -8271,6 +8444,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Wood Gods"],
         },
 
         1506: {
@@ -8297,6 +8471,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Wood Gods"],
         },
 
         1507: {
@@ -8327,6 +8502,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Drune","Standing Stones"],
         },
 
         1508: {
@@ -8370,6 +8546,7 @@
               desc: "In Castle Brackenwold",
             },
           ],
+          hlTags: ["Fairies","Human Nobility","Church Figures","Sages","Standing Stones","Undead"],
         },
 
         1509: {
@@ -8396,6 +8573,7 @@
             },
             { name: "Shankswell Cross", type: "POI", desc: "Farmer's Market " },
           ],
+          hlTags: ["Atanuwe","Fairies","Human Nobility","Church Figures"],
         },
 
         1601: {
@@ -8421,6 +8599,7 @@
               desc: "Sleeping 200' tall giant whose body exudes assorted treasures",
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         1602: {
@@ -8452,6 +8631,7 @@
               desc: "Group of buried skeletons that can see around Dolmenwood",
             },
           ],
+          hlTags: ["Fairies","Wood Gods"],
         },
 
         1603: {
@@ -8482,6 +8662,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Drune","Standing Stones","Undead"],
         },
 
         1604: {
@@ -8523,6 +8704,7 @@
               desc: "The duke has decreed that the place be razed to the ground, but the bold may be able to get in and out before the troops arrive.",
             },
           ],
+          hlTags: ["Undead","Monsters"],
         },
 
         1605: {
@@ -8553,6 +8735,7 @@
               desc: "Sheer deep chasm, 4 miles long, laden with fungi",
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         1606: {
@@ -8584,6 +8767,7 @@
               desc: "Sorcerous caves that share what is said in Castle Brackenwold",
             },
           ],
+          hlTags: ["Human Nobility","Longhorn Nobility","Church Figures","Witches"],
         },
 
         1607: {
@@ -8614,6 +8798,7 @@
               desc: "Questing friars who turned bandit in mortal life and seek redemption",
             },
           ],
+          hlTags: ["Church Figures"],
         },
 
         1608: {
@@ -8639,6 +8824,7 @@
               desc: "Two elf courtiers have blessed/poisoned the local cidery",
             },
           ],
+          hlTags: ["Fairies"],
         },
 
         1701: {
@@ -8701,6 +8887,7 @@
               desc: "Locus of Howawi and home of the deorlings",
             },
           ],
+          hlTags: ["Wood Gods"],
         },
 
         1703: {
@@ -8737,6 +8924,7 @@
               desc: "In the village of Meagre’s Reach",
             },
           ],
+          hlTags: ["Magicians","Settlements"],
         },
 
         1704: {
@@ -8768,6 +8956,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Fairies","Undead"],
         },
 
         1705: {
@@ -8803,6 +8992,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Wood Gods","Monsters"],
         },
 
         1706: {
@@ -8833,6 +9023,7 @@
               desc: "Monolith that transforms people into a dragonfly or grants a permanent charm",
             },
           ],
+          hlTags: ["Standing Stones","Witches"],
         },
 
         1707: {
@@ -8869,6 +9060,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Church Figures","Witches","Wood Gods"],
         },
 
         1801: {
@@ -8899,6 +9091,7 @@
               desc: "Toxic mining hill",
             },
           ],
+          hlTags: ["Wood Gods"],
         },
 
         1802: {
@@ -8937,6 +9130,7 @@
               desc: "Hidden in a chamber under the manse",
             },
           ],
+          hlTags: ["Fairies","Magicians","Standing Stones"],
         },
 
         1803: {
@@ -8969,6 +9163,7 @@
               desc: "Tree that speeds up time and eventually eats those who stay",
             },
           ],
+          hlTags: ["Magicians"],
         },
 
         1804: {
@@ -9032,6 +9227,7 @@
               hidden: true,
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         1806: {
@@ -9062,6 +9258,7 @@
               desc: "A giant 300' skeleton is buried in the ground",
             },
           ],
+          hlTags: ["Magicians"],
         },
 
         1901: {
@@ -9099,6 +9296,7 @@
               desc: "Nest of a group of perytons",
             },
           ],
+          hlTags: ["Drune","Fairies"],
         },
 
         1902: {
@@ -9124,6 +9322,7 @@
               desc: "Abandoned clockmakers cottage",
             },
           ],
+          hlTags: ["Monsters"],
         },
 
         1903: {
@@ -9156,6 +9355,7 @@
               desc: "Giant birch tree with bracket fungi towers over the land",
             },
           ],
+          hlTags: ["Drune","Wood Gods"],
         },
 
         1904: {
@@ -9183,6 +9383,7 @@
               desc: "A group of 3 badger cobbin have taken it over",
             },
           ],
+          hlTags: ["Atanuwe","Magicians"],
         },
 
         1905: {
@@ -9213,6 +9414,7 @@
               desc: "Large crystal that draws magic items to it",
             },
           ],
+          hlTags: ["Sages","Standing Stones","Wood Gods"],
         },
 
         1906: {
@@ -10219,6 +10421,9 @@
         ["nightMode", "travelPointView", "dualScreenPlayerView", "listRoads", "vantageHidesRoads", "fogInPlayerView", "alwaysDisableRest", "disableEncounters", "disableLost", "lostFlipsPlayerView"].forEach(function (k) {
           if (typeof settingsSyncSeg === "function") settingsSyncSeg(k, settingsGet(k));
         });
+        // Restore tag highlights to defaults (only Prominent on).
+        try { localStorage.removeItem("dolmenwood-tag-highlights"); } catch (e) {}
+        _hlState = null;
         // Re-apply the (now default) theme to the document root so the FULL UI resets, not just the map.
         if (typeof applyTheme === "function") applyTheme();
         // A disabled-resting override may have been cleared; recompute the ignore-rest flag.
@@ -10262,6 +10467,9 @@
       }
       // Return the best display name for a hex:
       // prefer the book-page title (from HEXES[h].name), fall back to settlement name
+      function mkDot(x,y){return '<circle cx="'+x+'" cy="'+y+'" r="4" fill="var(--tag-hl-bg)" opacity="0.85" pointer-events="none"/>';}
+      function mkTagBadge(x,y){return '<rect x="+(x-15)+" y="+(y+16)+" width=\"30\" height=\"11\" rx=\"3\" ry=\"3\" style=\"fill:var(--tag-hl-bg)\" pointer-events=\"none\"/>';}
+      function hlHexTags(code){var hx=HEXES[code];if(!hx)return [];var a=[];(hx.hlTags||[]).forEach(function(t){if(hlGet(t))a.push(t);});if(hlGet('Settlements')&&a.indexOf('Settlements')<0&&(hx.modules||[]).some(function(m){return m.type==='Civilization';}))a.push('Settlements');return a;}
       function hexNameOf(h) {
         if (!h) return "";
         const hx = HEXES[h];
@@ -10371,6 +10579,21 @@
       function settingsSyncSeg(key, val) { const y = document.getElementById("set-" + key + "-yes"); const n = document.getElementById("set-" + key + "-no"); if (y) y.classList.toggle("toggle--on", !!val); if (n) n.classList.toggle("toggle--on", !val); }
       function settingsSyncLostFlipVis() { var r = document.getElementById("row-lostFlipsPlayerView"); if (r) r.style.display = settingsLoad().disableLost ? "none" : ""; }
       function settingsToggle(key, val) { settingsLoad()[key]=!!val; settingsSave(); settingsSyncSeg(key, !!val); if (key==="dualScreenPlayerView") { if (val) { openPvPopup(); } else { closePvPopup(); } } if (key==="nightMode") applyNightMode(); if (key==="alwaysDisableRest") { if (val) { _jrnIgnoreRest=true; } else { const tks=trackLoadAll(); const at=tks.find(function(x){return x.id===_trackActiveId;}); _jrnIgnoreRest=!!(at&&at.tpState&&at.tpState.ignoreRest); } } if (key==="disableEncounters" && val && typeof journeyClearEncounter==="function") journeyClearEncounter(); if (key==="disableLost" && val && typeof journeyClearLost==="function") { const _tks=trackLoadAll(); const _at=_tks.find(function(x){return x.id===_trackActiveId;}); if (_at&&_at.tpState&&_at.tpState.lost) journeyClearLost(); } if (key==="disableLost" && typeof settingsSyncLostFlipVis==="function") settingsSyncLostFlipVis(); if (key==="fogInPlayerView" && isPlayerView()) { const _fe=document.getElementById("tog-fog"); if(_fe) _fe.dataset.active = val ? "1" : "0"; } if (key==="lostFlipsPlayerView" && val) { const _rtk=trackLoadAll(); const _rat=_rtk.find(function(x){return x.id===_trackActiveId;}); if (_rat&&_rat.tpState&&_rat.tpState.lost && typeof promptLostNorthDir==="function") { _rat.tpState.lostNorthDir=null; trackSaveAll(_rtk); maybePromptLostNorth(); } } if (typeof trackUpdateUI==="function") trackUpdateUI(); if (typeof doLookAround==="function") doLookAround(); if (typeof isInWorldMapView==="function"&&isInWorldMapView()&&typeof renderWorldMap==="function") renderWorldMap(); }
+      // ===== Tag Highlights (Highlight modal) =====
+      const HL_KEY = "dolmenwood-tag-highlights";
+      const HL_TAGS = ["Atanuwe","Church Figures","Drune","Fairies","Human Nobility","Longhorn Nobility","Magicians","Monsters","Sages","Settlements","Standing Stones","Taverners","Undead","Witches","Wood Gods"];
+      const HL_DEFAULTS = (function(){ var o={}; HL_TAGS.forEach(function(t){ o[t] = false; }); return o; })();
+      let _hlState = null;
+      function hlTagId(tag){ return tag.replace(/[^a-zA-Z0-9]+/g, "-"); }
+      function hlLoad(){ if (_hlState) return _hlState; _hlState = Object.assign({}, HL_DEFAULTS); try { const raw = localStorage.getItem(HL_KEY); if (raw) Object.assign(_hlState, JSON.parse(raw)); } catch (e) {} return _hlState; }
+      function hlGet(tag){ return !!hlLoad()[tag]; }
+      function hlSave(){ try { localStorage.setItem(HL_KEY, JSON.stringify(hlLoad())); } catch (e) {} }
+      function hlAnyActiveNonProminent(){ return HL_TAGS.some(function(t){ return t !== "Prominent" && hlGet(t); }); }
+      function hlSyncSeg(tag){ var id = hlTagId(tag); var y = document.getElementById("hl-" + id + "-yes"); var n = document.getElementById("hl-" + id + "-no"); var v = hlGet(tag); if (y) y.classList.toggle("toggle--on", v); if (n) n.classList.toggle("toggle--on", !v); }
+      function hlToggle(tag, val){ hlLoad()[tag] = !!val; hlSave(); hlSyncSeg(tag); if (typeof doLookAround === "function") doLookAround(); }
+      function hlRenderRows(){ var box = document.getElementById("highlight-tag-rows"); if (!box) return; var html = ""; HL_TAGS.forEach(function(tag){ var id = hlTagId(tag); html += '<div class="settings-row"><span>' + tag + '</span><div class="segmented">' + '<button id="hl-' + id + '-yes" class="toggle toggle--yes" onclick="hlToggle(\'' + tag + '\', true)">Yes</button>' + '<button id="hl-' + id + '-no" class="toggle toggle--no" onclick="hlToggle(\'' + tag + '\', false)">No</button>' + '</div></div>'; }); box.innerHTML = html; }
+      function openHighlight(){ hlRenderRows(); HL_TAGS.forEach(hlSyncSeg); document.getElementById("highlight-modal").style.display = "flex"; }
+      function closeHighlight(){ document.getElementById("highlight-modal").style.display = "none"; }
       // Terrain type -> Travel Point cost to enter that hex.
       const TERRAIN_TP_COST = {
         Aquatic: 2,
@@ -11826,6 +12049,7 @@
               ? rawBg
               : fmBlend(rawBg, rawBg === terrainColor("Aquatic") ? 0.5 : 0.3);
           svg += `<path d="${hexPath(p.x, p.y, r * 0.95)}" fill="${fill}" stroke="rgba(107,94,78,0.35)" stroke-width="0.6" style="cursor:pointer;" onclick="jumpToDetail('${code}')" data-fullmap-hex="${code}">${h.blank ? "" : `<title>${code}${h.name ? " — " + h.name : ""}</title>`}</path>`;
+        if(!h.blank){var _t=hlHexTags(code);if(_t.length)svg+=mkDot(p.x,p.y);}
         }
 
         // Pass 1b: roads, trails, and rivers on the world map
@@ -13369,7 +13593,11 @@
                 svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 18}" style="fill:var(--hex-center-text);font-size:7px;">This hex</text>`;
                 const tAbbrev = terrainAbbrevOf(h.hexCode);
                 const centerProminent = hexHasProminentEntry(h.hexCode);
+                const centerTagged = hlHexTags(h.hexCode).length > 0;
                 if (_blank) {
+                } else if (centerTagged) {
+                  svg += `<rect x="${h.drawX - 15}" y="${h.drawY - 16}" width="30" height="15" rx="3" ry="3" style="fill:var(--tag-hl-bg)" pointer-events="none"/>`;
+                  svg += `<text class="hex-text center-text" x="${h.drawX}" y="${h.drawY - 6}" style="fill:var(--tag-hl-text);font-size:11px">${h.hexCode}</text>`;
                 } else if (centerProminent) {
                   svg += `<rect x="${h.drawX - 15}" y="${h.drawY - 16}" width="30" height="15" rx="3" ry="3" style="fill:var(--prominent-bg)" pointer-events="none"/>`;
                   svg += `<text class="hex-text center-text" x="${h.drawX}" y="${h.drawY - 6}" style="fill:#ffffff;font-size:11px">${h.hexCode}</text>`;
@@ -13393,7 +13621,11 @@
               if (!pv) {
                 const tAbbrev = terrainAbbrevOf(h.hexCode);
                 const prominent = hexHasProminentEntry(h.hexCode);
+                const tagged = hlHexTags(h.hexCode).length > 0;
                 if (_blank) {
+                } else if (tagged) {
+                  svg += `<rect x="${h.drawX - 15}" y="${h.drawY - 17}" width="30" height="15" rx="3" ry="3" style="fill:var(--tag-hl-bg)" pointer-events="none"/>`;
+                  svg += `<text class="hex-text" x="${h.drawX}" y="${h.drawY - 6}" style="fill:var(--tag-hl-text);font-size:11px">${h.hexCode}</text>`;
                 } else if (prominent) {
                   svg += `<rect x="${h.drawX - 15}" y="${h.drawY - 17}" width="30" height="15" rx="3" ry="3" style="fill:var(--prominent-bg)" pointer-events="none"/>`;
                   svg += `<text class="hex-text" x="${h.drawX}" y="${h.drawY - 6}" style="fill:#ffffff;font-size:11px">${h.hexCode}</text>`;
@@ -14022,8 +14254,11 @@
                 ? `<span class="sr-meta">Hex ${r.hex}</span>`
                 : `<span class="sr-meta">in ${r.sub} — Hex ${r.hex}</span>`;
             const kindLbl =
-              r.kind === "Hex" ? "" : `<span class="sr-kind">${r.kind}</span>`;
-            return `<div class="${cls}" data-hex="${r.hex}">${kindLbl}<span class="sr-primary">${r.label}</span>${meta}</div>`;
+              r.kind === "Hex" ? ""
+              : r.kind === "tag" ? `<span class="sr-kind sr-kind--tag">${r.sub}</span>`
+              : `<span class="sr-kind">${r.kind}</span>`;
+            const tagAttr=r.tagName?` data-tag="${r.tagName}"`:"";
+            return `<div class="${cls}" data-hex="${r.hex}"${tagAttr}>${kindLbl}<span class="sr-primary">${r.label}</span>${meta}</div>`;
           })
           .join("");
         box.hidden = false;
@@ -14453,6 +14688,18 @@
           existingKeys.add(key);
         }
 
+        // Tag search
+        HL_TAGS.forEach(function(tag){
+          if(tag.toLowerCase().indexOf(q)<0) return;
+          Object.keys(HEXES).forEach(function(code){
+            var hx=HEXES[code]; if(!hx||hx.blank)return;
+            if(!hx.hlTags||hx.hlTags.indexOf(tag)<0)return;
+            if(seenHexes.has(code+"|t|"+tag))return;
+            seenHexes.add(code+"|t|"+tag);
+            results.push({hex:code,label:hexNameOf(code)||("Hex "+code),kind:"tag",sub:tag,score:10,tagName:tag});
+          });
+        });
+
         // Also search user-added entries (live, since they change at runtime)
         try {
           const raw = localStorage.getItem("dolmenwood-user-entries");
@@ -14520,7 +14767,7 @@
                 ? `<span class="sr-meta">Hex ${r.hex}</span>`
                 : `<span class="sr-meta">in ${r.sub} — Hex ${r.hex}</span>`;
             const kindLbl =
-              r.kind === "Hex" ? "" : `<span class="sr-kind">${r.kind}</span>`;
+              r.kind === "Hex" ? "" : r.kind === "tag" ? `<span class="sr-kind">${(r.tagName||r.sub).toUpperCase()}</span>` : `<span class="sr-kind">${r.kind}</span>`;
             return `<div class="${cls}" data-hex="${r.hex}" data-idx="${i}">${kindLbl}<span class="sr-primary">${r.label}</span>${meta}</div>`;
           })
           .join("");
@@ -14570,7 +14817,7 @@
           } else if (e.key === "Enter") {
             if (_searchActive >= 0 && _searchResults[_searchActive]) {
               e.preventDefault();
-              selectSearchResult(_searchResults[_searchActive].hex);
+              selectSearchResult(_searchResults[_searchActive].hex,_searchResults[_searchActive].tagName);
             }
           } else if (e.key === "Escape") {
             hideSearchResults();
@@ -14582,7 +14829,7 @@
           const el = e.target.closest(".search-result");
           if (!el) return;
           e.preventDefault(); // keep focus off blur race
-          selectSearchResult(el.getAttribute("data-hex"));
+          selectSearchResult(el.getAttribute("data-hex"),el.getAttribute("data-tag")||undefined);
         });
 
         input.addEventListener("blur", () => {
@@ -14597,8 +14844,9 @@
         });
       } // end function initHexSearch
 
-      function selectSearchResult(hex) {
+      function selectSearchResult(hex, tag) {
         const input = document.getElementById("hex-search");
+        if(tag){hlToggle(tag,true);}
         const go = () => {
           if (input) input.value = "";
           hideSearchResults();
@@ -19135,6 +19383,14 @@
           <div class="settings-row" id="row-lostFlipsPlayerView"><span>Lost Rotates Player View</span><div class="segmented"><button id="set-lostFlipsPlayerView-yes" class="toggle toggle--yes" onclick="settingsToggle('lostFlipsPlayerView', true)">Yes</button><button id="set-lostFlipsPlayerView-no" class="toggle toggle--no" onclick="settingsToggle('lostFlipsPlayerView', false)">No</button></div></div>
         </div>
         <div class="modal__actions"><button class="btn btn--primary" type="button" onclick="closeSettings()">Done</button></div>
+      </div>
+    </div>
+    <div id="highlight-modal" class="modal" style="display: none; z-index: 10005">
+      <div class="modal__panel modal__panel--sm">
+        <div class="modal__title">Highlight</div>
+        <div class="modal__body" style="margin-bottom: var(--sp-3)">Toggle <span class="hl-title-word">highlights</span> on for hexes containing the elements below:</div>
+        <div class="settings-section" id="highlight-tag-rows"></div>
+        <div class="modal__actions"><button class="btn btn--primary" type="button" onclick="closeHighlight()">Done</button></div>
       </div>
     </div>
     <div id="lost-north-modal" class="modal" style="display: none; z-index: 10004">
