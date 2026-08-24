@@ -2186,7 +2186,7 @@
         margin: 0;
         padding: 0;
         overflow: auto;
-        background: var(--bg-page, var(--parchment, #f5f0e8));
+        background: var(--bg-raised);
       }
       body.pv-popup-mode .container > header,
       body.pv-popup-mode #controls,
@@ -2274,7 +2274,13 @@
       /* Two-column bullet list in popup mode for cards with >3 bullets */
       body.pv-popup-mode .pv-card--multicol .pv-card-features {
         columns: 2;
-        column-gap: 8px;
+        column-gap: 14px;
+        padding-left: 0;
+        list-style-position: inside;
+      }
+      body.pv-popup-mode .pv-card--multicol .pv-card-features li {
+        break-inside: avoid;
+        -webkit-column-break-inside: avoid;
       }
       body.pv-popup-mode .pv-card-title {
         font-size: clamp(12px, 0.9vw, 16px) !important;
@@ -2296,6 +2302,19 @@
         flex: 1 1 0;
         min-width: 80px;
         max-width: none;
+      }
+      /* Ultrawide cap: the pv-card font hits its 16px clamp ceiling at ~1778px
+         viewport (0.9vw = 16px). Beyond that the cards would keep stretching, so
+         freeze card width at the width it has at that breakpoint (~578px) and let
+         the centered row absorb the extra space. */
+      @media (min-width: 1778px) {
+        body.pv-popup-mode .pv-card,
+        body.pv-popup-mode .pv-card-empty {
+          max-width: 578px;
+        }
+        body.pv-popup-mode .pv-card.pv-card-here {
+          max-width: 578px !important;
+        }
       }
 
       /* ── Player View Callout Cards ──────────────────────────────────── */
@@ -3221,6 +3240,7 @@
         // (vantage hides roads, fog in player view, theme, etc.) are picked up
         // fresh from localStorage on this render.
         _settings = null;
+        if (typeof applyTheme === "function") applyTheme();
         if (typeof doDetail === "function") doDetail();
       }
 
@@ -10347,7 +10367,7 @@
       function settingsSyncTheme() { var th = getTheme(); ["regular","modern","night"].forEach(function (mo) { var b = document.getElementById("set-theme-" + mo); if (b) b.classList.toggle("toggle--on", th === mo); }); }
       function applyTheme() { try { var th = getTheme(); var r = document.documentElement.classList; r.toggle("night-mode", th === "night"); r.toggle("modern-mode", th === "modern"); settingsSyncTheme(); } catch (e) {} }
       function applyNightMode() { applyTheme(); }
-      function settingsSetTheme(val) { settingsLoad().theme = val; settingsSave(); applyTheme(); if (typeof doLookAround === "function") doLookAround(); if (typeof trackUpdateUI === "function") trackUpdateUI(); if (typeof trackRenderList === "function") trackRenderList(); if (typeof isInWorldMapView === "function" && isInWorldMapView() && typeof renderWorldMap === "function") renderWorldMap(); var _cm = document.getElementById("color-modal"); if (_cm && _cm.style.display === "flex" && typeof colorModalRenderPresets === "function") colorModalRenderPresets(); }
+      function settingsSetTheme(val) { settingsLoad().theme = val; settingsSave(); applyTheme(); if (typeof pvBroadcastState === "function") pvBroadcastState(); if (typeof doLookAround === "function") doLookAround(); if (typeof trackUpdateUI === "function") trackUpdateUI(); if (typeof trackRenderList === "function") trackRenderList(); if (typeof isInWorldMapView === "function" && isInWorldMapView() && typeof renderWorldMap === "function") renderWorldMap(); var _cm = document.getElementById("color-modal"); if (_cm && _cm.style.display === "flex" && typeof colorModalRenderPresets === "function") colorModalRenderPresets(); }
       function settingsSyncSeg(key, val) { const y = document.getElementById("set-" + key + "-yes"); const n = document.getElementById("set-" + key + "-no"); if (y) y.classList.toggle("toggle--on", !!val); if (n) n.classList.toggle("toggle--on", !val); }
       function settingsSyncLostFlipVis() { var r = document.getElementById("row-lostFlipsPlayerView"); if (r) r.style.display = settingsLoad().disableLost ? "none" : ""; }
       function settingsToggle(key, val) { settingsLoad()[key]=!!val; settingsSave(); settingsSyncSeg(key, !!val); if (key==="dualScreenPlayerView") { if (val) { openPvPopup(); } else { closePvPopup(); } } if (key==="nightMode") applyNightMode(); if (key==="alwaysDisableRest") { if (val) { _jrnIgnoreRest=true; } else { const tks=trackLoadAll(); const at=tks.find(function(x){return x.id===_trackActiveId;}); _jrnIgnoreRest=!!(at&&at.tpState&&at.tpState.ignoreRest); } } if (key==="disableEncounters" && val && typeof journeyClearEncounter==="function") journeyClearEncounter(); if (key==="disableLost" && val && typeof journeyClearLost==="function") { const _tks=trackLoadAll(); const _at=_tks.find(function(x){return x.id===_trackActiveId;}); if (_at&&_at.tpState&&_at.tpState.lost) journeyClearLost(); } if (key==="disableLost" && typeof settingsSyncLostFlipVis==="function") settingsSyncLostFlipVis(); if (key==="fogInPlayerView" && isPlayerView()) { const _fe=document.getElementById("tog-fog"); if(_fe) _fe.dataset.active = val ? "1" : "0"; } if (key==="lostFlipsPlayerView" && val) { const _rtk=trackLoadAll(); const _rat=_rtk.find(function(x){return x.id===_trackActiveId;}); if (_rat&&_rat.tpState&&_rat.tpState.lost && typeof promptLostNorthDir==="function") { _rat.tpState.lostNorthDir=null; trackSaveAll(_rtk); maybePromptLostNorth(); } } if (typeof trackUpdateUI==="function") trackUpdateUI(); if (typeof doLookAround==="function") doLookAround(); if (typeof isInWorldMapView==="function"&&isInWorldMapView()&&typeof renderWorldMap==="function") renderWorldMap(); }
@@ -14074,12 +14094,14 @@
 
         try {
           let honeycomb;
+          const detOut = document.getElementById("det-output");
           if (IS_PV_POPUP) {
-            // In popup mode, capture the entire PV output — that IS the view.
-            honeycomb = document.getElementById("det-output");
+            // In popup mode, target the callout container directly — same as
+            // non-popup PV mode. Capturing det-output includes invisible structural
+            // elements (pvHide, hidden HUD) that add blank space to the image.
+            honeycomb = detOut && detOut.querySelector(".pv-callout-container");
           } else {
-            // In normal mode, target only the hex graphic / callout container.
-            const detOut = document.getElementById("det-output");
+            // In normal mode, target the hex graphic / callout container.
             honeycomb =
               detOut &&
               (detOut.querySelector(".pv-callout-container") ||
@@ -14094,7 +14116,26 @@
           const capBg = (getComputedStyle(document.documentElement).getPropertyValue("--bg-raised") || "#ffffff").trim() || "#ffffff";
           const scale = Math.min(Math.max(window.devicePixelRatio || 2, 2), 4);
 
-          const raw = await html2canvas(honeycomb, {
+          // Crop horizontally to the actual visible content so ultrawide layouts
+          // (capped, centered cards) do not bake large side margins into the PNG.
+          const _cRect = honeycomb.getBoundingClientRect();
+          let _minL = Infinity, _maxR = -Infinity;
+          honeycomb.querySelectorAll(".pv-card, .neighbor-honeycomb").forEach((el) => {
+            if (el.offsetParent === null) return;
+            const r = el.getBoundingClientRect();
+            if (r.width === 0 || r.height === 0) return;
+            if (r.left < _minL) _minL = r.left;
+            if (r.right > _maxR) _maxR = r.right;
+          });
+          const _cropOpts = {};
+          if (isFinite(_minL) && _maxR > _minL) {
+            const _pad = 6;
+            const _x = Math.max(0, Math.floor(_minL - _cRect.left - _pad));
+            const _w = Math.ceil(_maxR - _minL + _pad * 2);
+            if (_w > 0 && _x + _w < honeycomb.scrollWidth) { _cropOpts.x = _x; _cropOpts.width = _w; }
+          }
+
+          const raw = await html2canvas(honeycomb, Object.assign({
             backgroundColor: capBg,
             scale: scale,
             useCORS: true,
@@ -14104,27 +14145,13 @@
                 card.style.background = capBg;
               });
             },
-          });
-
-          // Composite onto a square canvas with 12% padding each side
-          const pad = 0;
-          const side = Math.max(raw.width, raw.height) + pad * 2;
-          const square = document.createElement("canvas");
-          square.width = side;
-          square.height = side;
-          const ctx = square.getContext("2d");
-          ctx.fillStyle = capBg;
-          ctx.fillRect(0, 0, side, side);
-          // Center the raw capture within the square
-          const dx = Math.round((side - raw.width) / 2);
-          const dy = Math.round((side - raw.height) / 2);
-          ctx.drawImage(raw, dx, dy);
+          }, _cropOpts));
 
           const hexInput = document.getElementById("pan-hex");
           const hexId =
             hexInput && hexInput.value ? hexInput.value.trim() : "hex";
           showCaptureResult(
-            square.toDataURL("image/png"),
+            raw.toDataURL("image/png"),
             `dolmenwood_${hexId}_${Date.now()}.png`,
           );
         } finally {
