@@ -2131,6 +2131,56 @@
         }
       }
 
+      /* ── Main window Player View: stack HUD below hex, cards scale with width ── */
+      body.pv-active:not(.pv-popup-mode) .hex-layout--split .hex-layout__media {
+        max-width: var(--hex-graphic-w);
+      }
+      body.pv-active:not(.pv-popup-mode) .pv-callout-container {
+        max-width: 100%;
+        width: 100%;
+        gap: 0;
+      }
+      body.pv-active:not(.pv-popup-mode) .pv-hex-graphic .neighbor-honeycomb,
+      body.pv-active:not(.pv-popup-mode) .neighbor-honeycomb {
+        margin: 0 auto;
+      }
+      body.pv-active:not(.pv-popup-mode) .pv-hex-graphic,
+      body.pv-active:not(.pv-popup-mode) .pv-hex-graphic .neighbor-honeycomb {
+        max-width: 350px;
+        max-height: 500px;
+      }
+      body.pv-active:not(.pv-popup-mode) .pv-row-top,
+      body.pv-active:not(.pv-popup-mode) .pv-row-bottom {
+        width: 100%;
+        flex-wrap: nowrap;
+      }
+      body.pv-active:not(.pv-popup-mode) .pv-card {
+        flex: 1 1 0;
+        min-width: 80px;
+        max-width: none;
+        
+        
+      }
+      body.pv-active:not(.pv-popup-mode) .pv-card-empty {
+        flex: 1 1 0;
+        min-width: 80px;
+        max-width: none;
+      }
+      body.pv-active:not(.pv-popup-mode) .pv-card-title {
+        
+      }
+      body.pv-active:not(.pv-popup-mode) .pv-card-features li {
+        
+      }
+      body.pv-active:not(.pv-popup-mode) .pv-card-blocked,
+      body.pv-active:not(.pv-popup-mode) .pv-card-empty-text,
+      body.pv-active:not(.pv-popup-mode) .pv-card.pv-card-here {
+        
+      }
+      body.pv-active:not(.pv-popup-mode) .pv-card.pv-card-here {
+        max-width: none;
+      }
+
       /* ── Dual-Screen Popup Mode ─────────────────────────────────────── */
       body.pv-popup-mode {
         margin: 0;
@@ -2146,7 +2196,10 @@
       body.pv-popup-mode #world-map-section,
       body.pv-popup-mode #world-map-fullscreen,
       body.pv-popup-mode .disclaimer,
-      body.pv-popup-mode p.disclaimer {
+      body.pv-popup-mode p.disclaimer,
+      body.pv-popup-mode .hex-layout__hud,
+      body.pv-popup-mode .hex-action-bar,
+      body.pv-popup-mode .journey-console {
         display: none !important;
       }
       body.pv-popup-mode .container {
@@ -2157,15 +2210,92 @@
       body.pv-popup-mode #detail-view-section {
         display: block !important;
       }
-      body.pv-popup-mode .card {
+      /* Center the card and remove decorative chrome */
+      body.pv-popup-mode #det-output .card {
         border-radius: 0;
         border: none;
         margin: 0;
         box-shadow: none;
-        padding: var(--sp-3, 12px) var(--sp-3, 12px) var(--sp-4, 16px);
+        padding: var(--sp-3, 12px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        box-sizing: border-box;
       }
-      body.pv-popup-mode .capture-corner {
-        display: none !important;
+      /* Let the PV layout fill the full window width */
+      body.pv-popup-mode .pv-callout-container {
+        max-width: 100% !important;
+        width: 100%;
+        gap: 0;
+      }
+      body.pv-popup-mode .pv-hex-graphic .neighbor-honeycomb,
+      body.pv-popup-mode .neighbor-honeycomb {
+        margin: 0 auto;
+      }
+      body.pv-popup-mode .pv-hex-graphic,
+      body.pv-popup-mode .pv-hex-graphic .neighbor-honeycomb,
+      body.pv-popup-mode .neighbor-honeycomb {
+        max-width: 350px !important;
+        max-height: 500px;
+      }
+      /* Font scales proportionally with card width in popup, from 12px base up to 16px cap */
+      body.pv-popup-mode .pv-card {
+        font-size: clamp(12px, 0.9vw, 16px);
+      }
+      body.pv-popup-mode .pv-card-here {
+        max-width: 100% !important;
+        width: 100%;
+      }
+      body.pv-popup-mode .hex-layout {
+        width: 100%;
+      }
+      body.pv-popup-mode .hex-layout__media,
+      body.pv-popup-mode .hex-layout--split .hex-layout__media {
+        max-width: 100% !important;
+        flex: 1 1 100% !important;
+      }
+      body.pv-popup-mode .pv-row-top,
+      body.pv-popup-mode .pv-row-bottom {
+        width: 100%;
+        flex-wrap: nowrap;
+      }
+      /* ── Popup: cards fill the row equally ─────────────────────────────
+         flex: 1 1 0 gives each card an equal share of the row (1/3 of
+         container width). max-width is intentionally unset so flex-grow
+         can expand cards without being capped.                            */
+      body.pv-popup-mode .pv-card {
+        flex: 1 1 0;
+        min-width: 80px;
+        max-width: none;
+        
+        
+      }
+      /* Two-column bullet list in popup mode for cards with >3 bullets */
+      body.pv-popup-mode .pv-card--multicol .pv-card-features {
+        columns: 2;
+        column-gap: 8px;
+      }
+      body.pv-popup-mode .pv-card-title {
+        font-size: clamp(12px, 0.9vw, 16px) !important;
+      }
+      body.pv-popup-mode .pv-card-features li {
+        
+      }
+      body.pv-popup-mode .pv-card-blocked,
+      body.pv-popup-mode .pv-card-empty-text {
+        font-size: clamp(12px, 0.9vw, 16px);
+      }
+      body.pv-popup-mode .pv-card.pv-card-here {
+        flex: 0 0 auto;
+        width: calc((100% - 12px) / 3);
+        max-width: none;
+        margin: 0 auto;
+      }
+      body.pv-popup-mode .pv-card-empty {
+        flex: 1 1 0;
+        min-width: 80px;
+        max-width: none;
       }
 
       /* ── Player View Callout Cards ──────────────────────────────────── */
@@ -2934,7 +3064,7 @@
           color: var(--fg-faded);
         "
       >
-        v2.3.3
+        v2.3.2
       </p>
       <p class="disclaimer" style="margin-top: 12px">
         <button
@@ -3052,12 +3182,21 @@
         const vantageEl = document.getElementById("pan-vantage");
         const fogEl = document.getElementById("tog-fog");
         const flatEl = document.getElementById("tog-2d");
+        // Popup is always Player View, so apply fogInPlayerView setting directly.
+        // The main window's tog-fog is "0" when PV isn't toggled there, so we can't
+        // use it as-is — compute what fog *should* be for a PV window instead.
+        const rawFog = fogEl ? fogEl.dataset.active === "1" : false;
+        const fogForPopup = rawFog || !!settingsGet("fogInPlayerView");
         _pvChannel.postMessage({
           type: "dv-state",
           hex: hexEl ? hexEl.value : "",
           vantage: vantageEl ? (parseInt(vantageEl.value, 10) || 6) : 6,
-          fog: fogEl ? fogEl.dataset.active === "1" : false,
+          fog: fogForPopup,
           flat: flatEl ? flatEl.dataset.active === "1" : false,
+          // Journey state the popup needs to render correctly
+          lost: _jrnLost,
+          trackActiveId: _trackActiveId,
+          trackActive: _trackActive,
         });
       }
 
@@ -3074,6 +3213,14 @@
         if (fogEl) fogEl.dataset.active = msg.fog ? "1" : "0";
         if (flatEl) flatEl.dataset.active = msg.flat ? "1" : "0";
         if (pvEl) pvEl.dataset.active = "1"; // always Player View in popup
+        // Sync journey state so lostFlipK() and other journey checks work correctly
+        _jrnLost = !!msg.lost;
+        _trackActiveId = msg.trackActiveId || null;
+        _trackActive = !!msg.trackActive;
+        // Invalidate the settings cache so any changes made on the main window
+        // (vantage hides roads, fog in player view, theme, etc.) are picked up
+        // fresh from localStorage on this render.
+        _settings = null;
         if (typeof doDetail === "function") doDetail();
       }
 
@@ -9786,11 +9933,19 @@
         const el = document.getElementById("tog-2d");
         return el && el.dataset.active === "1";
       }
+      // Sync body.pv-active class with the player view toggle state.
+      // Called whenever tog-playerview changes so CSS can respond immediately.
+      function applyPvBodyClass() {
+        if (IS_PV_POPUP) return; // popup always has pv-popup-mode; skip
+        document.body.classList.toggle("pv-active", isPlayerView());
+      }
+
       function togglePlayerView() {
         const el = document.getElementById("tog-playerview");
         el.dataset.active = el.dataset.active !== "1" ? "1" : "0";
         const fogEl = document.getElementById("tog-fog");
         if (fogEl) fogEl.dataset.active = (el.dataset.active === "1" && settingsGet("fogInPlayerView")) ? "1" : "0";
+        applyPvBodyClass();
         maybePromptLostNorth();
         doLookAround();
         saveState();
@@ -9871,6 +10026,7 @@
                   if (state.flat)
                     document.getElementById("tog-2d").dataset.active = "1";
                   if (state.labelMode === "terrain") hexLabelMode = "terrain";
+                  if (typeof applyPvBodyClass === "function") applyPvBodyClass();
                 }
               } catch (e) {
                 /* ignore */
@@ -9917,6 +10073,7 @@
           if (state.playerView) {
             document.getElementById("tog-playerview").dataset.active = "1";
           }
+          if (typeof applyPvBodyClass === "function") applyPvBodyClass();
 
           // Restore 2D toggle
           if (state.flat) {
@@ -10025,6 +10182,7 @@
         document.getElementById("pan-vantage").value = 6;
         document.getElementById("tog-fog").dataset.active = "0";
         document.getElementById("tog-playerview").dataset.active = "0";
+        if (typeof applyPvBodyClass === "function") applyPvBodyClass();
         document.getElementById("tog-2d").dataset.active = "0";
         hexLabelMode = "names";
         // Return to first-load state: hide detail, reset world map flag
@@ -10843,6 +11001,19 @@
       // hex's single named anchor -> "runs from <Anchor> to the ..." (multiple same-type roads
       // sharing the anchor combine into one sentence); anchorless interior end -> reference the
       // other road ("the road") or a lake ("the lake"). Directions ordered N,S,W,E (W before E).
+      // Count total visible PV bullet points for a hex (terrain + roads + rivers when enabled).
+      // Used to decide whether to render a PV card in two-column mode.
+      function pvBulletCount(hexCode, isBlocked, flipActive) {
+        if (isBlocked) return 0;
+        const hx = HEXES[hexCode];
+        let count = 0;
+        if (hx && hx.features) count += splitFeatures(hx.features).length;
+        if (!flipActive && typeof settingsGet === "function" && settingsGet("listRoads")) {
+          count += hexPathsProse(hexCode).length + hexRiversProse(hexCode).length;
+        }
+        return count;
+      }
+
       function hexPathsProse(hex) {
         const segs = (typeof HEX_ROADS !== "undefined" && HEX_ROADS[hex]) || [];
         if (!segs.length) return [];
@@ -10945,14 +11116,17 @@
       // using LOST_FLIP_DIRS_CW = [N,NE,SE,S,SW,NW]. (N is not selectable; dismiss = random seed.)
       const LOST_NORTH_K = { NE: 5, SE: 4, S: 3, SW: 2, NW: 1 };
       // Rotation (1..5 * 60deg) per lost-event. If the referee chose a "north" (lostNorthDir),
-      // use it; if they dismissed the prompt (or haven't chosen), fall back to a deterministic
-      // seed = lost hex + real date.
+      // use it; if they dismissed the prompt (lostNorthDir==="none"), fall back to a deterministic
+      // seed. If the prompt hasn't been answered yet (lostNorthDir===null), return 0 — no rotation
+      // until the referee responds.
       function lostFlipK(centerHex) {
         if (!(typeof settingsGet === "function" && settingsGet("lostFlipsPlayerView") && _jrnLost && isPlayerView())) return 0;
         let t = null;
         try { t = trackLoadAll().find(function (x) { return x.id === _trackActiveId; }); } catch (e) {}
         const dir = t && t.tpState ? t.tpState.lostNorthDir : null;
-        if (LOST_NORTH_K[dir]) return LOST_NORTH_K[dir]; // referee's explicit choice
+        if (LOST_NORTH_K[dir]) return LOST_NORTH_K[dir]; // referee's explicit direction choice
+        if (dir !== "none") return 0; // null = prompt not yet answered — hold off rotation
+        // dir === "none": referee dismissed, use deterministic seed-based rotation
         const date = (t && t.tpState) ? ((t.tpState.lostSeed != null ? t.tpState.lostSeed : t.tpState.currentDate) || "") : "";
         const seed = String(centerHex) + "|" + date;
         let hsh = 2166136261; for (let i = 0; i < seed.length; i++) { hsh ^= seed.charCodeAt(i); hsh = (hsh * 16777619) >>> 0; }
@@ -10987,11 +11161,19 @@
       }
       function lostNorthConfirm() { lostNorthClose(_lostNorthPending); }
       function lostNorthDismiss() { lostNorthClose("none"); } // no rotation this lost episode
-      // Prompt for the players north-choice only in Player View; defer until the referee toggles in.
+      // Prompt for the players north-choice.
+      // - Normal mode: only prompt when player view is active (original behaviour).
+      // - Dual-screen mode: prompt on the REFEREE (main) window regardless of player view toggle,
+      //   because the popup handles its own rendering and the referee needs to pick the direction.
+      // - Popup window: never shows this prompt itself.
       function maybePromptLostNorth() {
         if (!settingsGet("lostFlipsPlayerView")) return;
-        if (!isPlayerView()) return;
+        if (IS_PV_POPUP) return; // popup never shows the modal
         if (_lostNorthResolve != null) return;
+        // In dual-screen mode show on the referee window unconditionally.
+        // In normal mode only show when player view is toggled on.
+        const dualScreen = settingsGet("dualScreenPlayerView");
+        if (!dualScreen && !isPlayerView()) return;
         var at = null;
         try { at = trackLoadAll().find(function (x) { return x.id === _trackActiveId; }); } catch (e) {}
         if (!(at && at.tpState && at.tpState.lost)) return;
@@ -11117,7 +11299,7 @@
                 else cardContent = `<ul class="pv-card-features">${_pp}</ul>`;
               }
             }
-            html += `<div class="pv-card"><div class="pv-card-title">${dir}</div>${cardContent}</div>`;
+            html += `<div class="pv-card${pvBulletCount(adjCode, isBlocked, _flipActive) > 3 ? ' pv-card--multicol' : ''}"><div class="pv-card-title">${dir}</div>${cardContent}</div>`;
           });
           html += "</div>";
           // Hex graphic
@@ -11163,7 +11345,7 @@
                 else cardContent = `<ul class="pv-card-features">${_pp}</ul>`;
               }
             }
-            html += `<div class="pv-card"><div class="pv-card-title">${dir}</div>${cardContent}</div>`;
+            html += `<div class="pv-card${pvBulletCount(adjCode, isBlocked, _flipActive) > 3 ? ' pv-card--multicol' : ''}"><div class="pv-card-title">${dir}</div>${cardContent}</div>`;
           });
           html += "</div>";
 
@@ -11189,7 +11371,7 @@
                 else centerContent = `<ul class="pv-card-features">${_pp}</ul>`;
               }
             }
-            html += `<div class="pv-card pv-card-here"><div class="pv-card-title">HERE</div>${centerContent}</div>`;
+            html += `<div class="pv-card pv-card-here${pvBulletCount(hex, false, false) > 3 ? ' pv-card--multicol' : ''}"><div class="pv-card-title">HERE</div>${centerContent}</div>`;
             html += "</div>";
           }
           html += "</div>";
@@ -12014,13 +12196,17 @@
         // Viewport — add vertical room for elevation range
         // Max possible elevation diff in Dolmenwood is ~600', so ±72px
         const elevPad = 50;
-        // Compact (ring1-only) box whenever fog is on (referee OR player) so the map zooms in to
-        // fill the screen. Exception: when rotated (Lost Rotates Player View) keep the full 2-ring box.
-        const pvCompact = isFogOn() && !_flipActive;
-        const W = pvCompact ? 2 * colDx + 2 * r + 24 : 4 * colDx + 2 * r + 20;
-        const H = pvCompact
-          ? 2 * hexH + 2 * r + 24 + elevPad * 2
-          : 4 * hexH + 2 * r + 20 + elevPad * 2;
+        // Compact (ring1-only) box whenever fog is on so the map zooms in slightly.
+        // PV_COMPACT_ZOOM controls fog-zoom strength: 1.0 = original full zoom, 0.0 = no zoom.
+        // Tune this value to taste — 0.5 gives a gentle half-strength zoom when fog is on.
+        const PV_COMPACT_ZOOM = 0.5;
+        const pvCompact = isFogOn() && (!_flipActive || IS_PV_POPUP);
+        const W_full = 4 * colDx + 2 * r + 20;
+        const H_full = 4 * hexH + 2 * r + 20 + elevPad * 2;
+        const W_compact_orig = 2 * colDx + 2 * r + 24;
+        const H_compact_orig = 2 * hexH + 2 * r + 24 + elevPad * 2;
+        const W = pvCompact ? W_full - PV_COMPACT_ZOOM * (W_full - W_compact_orig) : W_full;
+        const H = pvCompact ? H_full - PV_COMPACT_ZOOM * (H_full - H_compact_orig) : H_full;
         const cx = W / 2;
         const cy = H / 2;
 
@@ -13323,9 +13509,14 @@
       }
 
       function jumpToDetail(hex) {
-        // In popup mode: broadcast click to main window, then update locally.
-        if (IS_PV_POPUP && _pvChannel) {
-          _pvChannel.postMessage({ type: "dv-hex-click", hex });
+        // In popup mode: only broadcast to main window and return.
+        // The main window owns all state (track, waypoints, navigation) and will
+        // broadcast the updated state back, which re-renders the popup.
+        // Never process track intercepts or navigate locally in the popup — doing so
+        // causes trackHandleHexClick to fire twice (once here, once on main).
+        if (IS_PV_POPUP) {
+          if (_pvChannel) _pvChannel.postMessage({ type: "dv-hex-click", hex });
+          return;
         }
 
         // --- Party Track intercept (detail map only, not world map clicks) ---
@@ -13882,12 +14073,18 @@
         }
 
         try {
-          // Target only the honeycomb hex graphic
-          const detOut = document.getElementById("det-output");
-          const honeycomb =
-            detOut &&
-            (detOut.querySelector(".pv-callout-container") ||
-              detOut.querySelector(".neighbor-honeycomb"));
+          let honeycomb;
+          if (IS_PV_POPUP) {
+            // In popup mode, capture the entire PV output — that IS the view.
+            honeycomb = document.getElementById("det-output");
+          } else {
+            // In normal mode, target only the hex graphic / callout container.
+            const detOut = document.getElementById("det-output");
+            honeycomb =
+              detOut &&
+              (detOut.querySelector(".pv-callout-container") ||
+                detOut.querySelector(".neighbor-honeycomb"));
+          }
 
           if (!honeycomb) {
             showInfoModal(UI_MSG.noCaptureHex);
