@@ -2046,6 +2046,10 @@
       }
       /* ===== END TOGGLE SYSTEM ===== */
 
+      /* Tag modal grid: single-select chip buttons, 2 per row. */
+      .tag-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-2); }
+      .tag-toggle { white-space: normal; line-height: 1.25; text-align: center; padding: 8px 6px; border-radius: var(--r-md); }
+
       /* ===== MODAL SHELL (Style Guide v1 §5) — additive; migrate modals onto this =====
          Works with the existing JS that toggles inline style.display none<->flex: when shown,
          inline 'flex' matches .modal's display and the centering/backdrop come from the class. */
@@ -2075,6 +2079,9 @@
         max-width: 300px;
       }
       #settings-modal .modal__panel {
+        max-width: var(--hud-w);
+      }
+      #highlight-modal .modal__panel {
         max-width: var(--hud-w);
       }
       .modal__panel--lg {
@@ -2701,7 +2708,7 @@
                 hidden
               ></div>
             </div>
-            <button type="button" id="tags-btn" class="tags-btn" title="Highlight tags" aria-label="Highlight tags" onclick="openHighlight()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="7" r="1.3" fill="currentColor"/></svg><span>Tags</span></button>
+            <button type="button" id="tags-btn" class="tags-btn" title="Tags" aria-label="Tags" onclick="openHighlight()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="7" r="1.3" fill="currentColor"/></svg></button>
             <button type="button" id="settings-btn" class="settings-gear" title="Settings" aria-label="Settings" onclick="openSettings()"><svg width="22" height="22" viewBox="-2 -2 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <input id="pan-hex" type="hidden" value="" />
             <input id="pan-vantage" type="hidden" value="6" />
@@ -10465,11 +10472,84 @@
         }
         return false;
       }
+      function hexHasSecretEntry(hexCode) {
+        const hx = HEXES[hexCode];
+        if (hx && hx.modules && hx.modules.some((m) => m.hidden)) return true;
+        try {
+          const raw = localStorage.getItem("dolmenwood-user-entries");
+          if (raw) {
+            const all = JSON.parse(raw);
+            const userMods = all[hexCode];
+            if (Array.isArray(userMods) && userMods.some((m) => m.hidden)) return true;
+          }
+        } catch (e) {
+          /* ignore */
+        }
+        return false;
+      }
       // Return the best display name for a hex:
       // prefer the book-page title (from HEXES[h].name), fall back to settlement name
-      function mkDot(x,y){return '<circle cx="'+x+'" cy="'+y+'" r="4" fill="var(--tag-hl-bg)" opacity="0.85" pointer-events="none"/>';}
-      function mkTagBadge(x,y){return '<rect x="+(x-15)+" y="+(y+16)+" width=\"30\" height=\"11\" rx=\"3\" ry=\"3\" style=\"fill:var(--tag-hl-bg)\" pointer-events=\"none\"/>';}
-      function hlHexTags(code){var hx=HEXES[code];if(!hx)return [];var a=[];(hx.hlTags||[]).forEach(function(t){if(hlGet(t))a.push(t);});if(hlGet('Settlements')&&a.indexOf('Settlements')<0&&(hx.modules||[]).some(function(m){return m.type==='Civilization';}))a.push('Settlements');return a;}
+      function hlTagCode(tag){
+        return ({
+          "Secret":"?",
+          "Atanuwe":"A",
+          "Church Figures":"C",
+          "Drune":"D",
+          "Fairies":"F",
+          "Human Nobility":"H",
+          "Longhorn Nobility":"L",
+          "Magicians":"M",
+          "Monsters":"O",
+          "Sages":"G",
+          "Settlements":"S",
+          "Standing Stones":"T",
+          "Taverners":"V",
+          "Undead":"U",
+          "Witches":"W",
+          "Wood Gods":"G",
+        })[tag] || (tag ? tag.charAt(0).toUpperCase() : "?");
+      }
+      const TAG_COLOR_MAP = {
+        regular: {
+          "Secret":"#0c0a09",
+          "Atanuwe":"#0f766e","Church Figures":"#2563eb","Drune":"#7c3aed","Fairies":"#db2777",
+          "Human Nobility":"#b45309","Longhorn Nobility":"#92400e","Magicians":"#4f46e5","Monsters":"#b91c1c",
+          "Sages":"#0369a1","Settlements":"#15803d","Standing Stones":"#57534e","Taverners":"#c2410c",
+          "Undead":"#334155","Witches":"#9333ea","Wood Gods":"#3f6212",
+        },
+        modern: {
+          "Secret":"#18181b",
+          "Atanuwe":"#14b8a6","Church Figures":"#3b82f6","Drune":"#8b5cf6","Fairies":"#ec4899",
+          "Human Nobility":"#d97706","Longhorn Nobility":"#b45309","Magicians":"#6366f1","Monsters":"#dc2626",
+          "Sages":"#0ea5e9","Settlements":"#16a34a","Standing Stones":"#78716c","Taverners":"#ea580c",
+          "Undead":"#475569","Witches":"#a855f7","Wood Gods":"#65a30d",
+        },
+        night: {
+          "Secret":"#d4d4d8",
+          "Atanuwe":"#5eead4","Church Figures":"#93c5fd","Drune":"#c4b5fd","Fairies":"#f9a8d4",
+          "Human Nobility":"#fbbf24","Longhorn Nobility":"#fcd34d","Magicians":"#a5b4fc","Monsters":"#fca5a5",
+          "Sages":"#7dd3fc","Settlements":"#86efac","Standing Stones":"#d6d3d1","Taverners":"#fdba74",
+          "Undead":"#cbd5e1","Witches":"#d8b4fe","Wood Gods":"#bef264",
+        },
+      };
+      function hlTagColor(tag){
+        var th = (typeof getTheme === "function") ? getTheme() : "regular";
+        var pal = TAG_COLOR_MAP[th] || TAG_COLOR_MAP.regular;
+        return pal[tag] || pal["Drune"];
+      }
+      function mkDot(x,y,tag){
+        var color=hlTagColor(tag);
+        return '<circle cx="'+x+'" cy="'+y+'" r="4" fill="'+color+'" opacity="0.92" pointer-events="none"/>';
+      }
+      function mkTagBadge(x,y,tag){
+        var color=hlTagColor(tag);
+        var code=hlTagCode(tag);
+        var txt=(typeof textColorFor==="function")?textColorFor(color):"#fff";
+        return '<rect x="'+x+'" y="'+y+'" width="12" height="10" rx="3" ry="3" style="fill:'+color+';stroke:#fff;stroke-width:0.8" pointer-events="none"/>' +
+          '<text x="'+(x+6)+'" y="'+(y+7.5)+'" text-anchor="middle" style="fill:'+txt+';font-family:var(--font-display);font-size:7px;font-weight:700;letter-spacing:0" pointer-events="none">'+code+'</text>';
+      }
+      function hlHexTags(code){var hx=HEXES[code];if(!hx)return [];var a=[];(hx.hlTags||[]).forEach(function(t){if(hlGet(t))a.push(t);});if(hlGet('Settlements')&&a.indexOf('Settlements')<0&&(hx.modules||[]).some(function(m){return m.type==='Civilization';}))a.push('Settlements');if(hlGet('Secret')&&a.indexOf('Secret')<0&&hexHasSecretEntry(code))a.unshift('Secret');return a;}
+      function hlPrimaryTag(code){var a=hlHexTags(code);return a.length?a[0]:null;}
       function hexNameOf(h) {
         if (!h) return "";
         const hx = HEXES[h];
@@ -10581,7 +10661,7 @@
       function settingsToggle(key, val) { settingsLoad()[key]=!!val; settingsSave(); settingsSyncSeg(key, !!val); if (key==="dualScreenPlayerView") { if (val) { openPvPopup(); } else { closePvPopup(); } } if (key==="nightMode") applyNightMode(); if (key==="alwaysDisableRest") { if (val) { _jrnIgnoreRest=true; } else { const tks=trackLoadAll(); const at=tks.find(function(x){return x.id===_trackActiveId;}); _jrnIgnoreRest=!!(at&&at.tpState&&at.tpState.ignoreRest); } } if (key==="disableEncounters" && val && typeof journeyClearEncounter==="function") journeyClearEncounter(); if (key==="disableLost" && val && typeof journeyClearLost==="function") { const _tks=trackLoadAll(); const _at=_tks.find(function(x){return x.id===_trackActiveId;}); if (_at&&_at.tpState&&_at.tpState.lost) journeyClearLost(); } if (key==="disableLost" && typeof settingsSyncLostFlipVis==="function") settingsSyncLostFlipVis(); if (key==="fogInPlayerView" && isPlayerView()) { const _fe=document.getElementById("tog-fog"); if(_fe) _fe.dataset.active = val ? "1" : "0"; } if (key==="lostFlipsPlayerView" && val) { const _rtk=trackLoadAll(); const _rat=_rtk.find(function(x){return x.id===_trackActiveId;}); if (_rat&&_rat.tpState&&_rat.tpState.lost && typeof promptLostNorthDir==="function") { _rat.tpState.lostNorthDir=null; trackSaveAll(_rtk); maybePromptLostNorth(); } } if (typeof trackUpdateUI==="function") trackUpdateUI(); if (typeof doLookAround==="function") doLookAround(); if (typeof isInWorldMapView==="function"&&isInWorldMapView()&&typeof renderWorldMap==="function") renderWorldMap(); }
       // ===== Tag Highlights (Highlight modal) =====
       const HL_KEY = "dolmenwood-tag-highlights";
-      const HL_TAGS = ["Atanuwe","Church Figures","Drune","Fairies","Human Nobility","Longhorn Nobility","Magicians","Monsters","Sages","Settlements","Standing Stones","Taverners","Undead","Witches","Wood Gods"];
+      const HL_TAGS = ["Secret","Atanuwe","Church Figures","Drune","Fairies","Human Nobility","Longhorn Nobility","Magicians","Monsters","Sages","Settlements","Standing Stones","Taverners","Undead","Witches","Wood Gods"];
       const HL_DEFAULTS = (function(){ var o={}; HL_TAGS.forEach(function(t){ o[t] = false; }); return o; })();
       let _hlState = null;
       function hlTagId(tag){ return tag.replace(/[^a-zA-Z0-9]+/g, "-"); }
@@ -10589,10 +10669,9 @@
       function hlGet(tag){ return !!hlLoad()[tag]; }
       function hlSave(){ try { localStorage.setItem(HL_KEY, JSON.stringify(hlLoad())); } catch (e) {} }
       function hlAnyActiveNonProminent(){ return HL_TAGS.some(function(t){ return t !== "Prominent" && hlGet(t); }); }
-      function hlSyncSeg(tag){ var id = hlTagId(tag); var y = document.getElementById("hl-" + id + "-yes"); var n = document.getElementById("hl-" + id + "-no"); var v = hlGet(tag); if (y) y.classList.toggle("toggle--on", v); if (n) n.classList.toggle("toggle--on", !v); }
-      function hlToggle(tag, val){ hlLoad()[tag] = !!val; hlSave(); hlSyncSeg(tag); if (typeof doLookAround === "function") doLookAround(); }
-      function hlRenderRows(){ var box = document.getElementById("highlight-tag-rows"); if (!box) return; var html = ""; HL_TAGS.forEach(function(tag){ var id = hlTagId(tag); html += '<div class="settings-row"><span>' + tag + '</span><div class="segmented">' + '<button id="hl-' + id + '-yes" class="toggle toggle--yes" onclick="hlToggle(\'' + tag + '\', true)">Yes</button>' + '<button id="hl-' + id + '-no" class="toggle toggle--no" onclick="hlToggle(\'' + tag + '\', false)">No</button>' + '</div></div>'; }); box.innerHTML = html; }
-      function openHighlight(){ hlRenderRows(); HL_TAGS.forEach(hlSyncSeg); document.getElementById("highlight-modal").style.display = "flex"; }
+      function hlRenderRows(){ var box = document.getElementById("highlight-tag-rows"); if (!box) return; var html = '<div class="tag-grid">'; HL_TAGS.forEach(function(tag){ var id = hlTagId(tag); var active = hlGet(tag); html += '<button id="hl-' + id + '" type="button" class="toggle tag-toggle' + (active ? ' toggle--on' : '') + '" onclick="hlToggle(\'' + tag + '\', ' + (!active) + ')">' + tag + '</button>'; }); html += '</div>'; box.innerHTML = html; }
+      function hlToggle(tag, val){ var st = hlLoad(); if (val) { HL_TAGS.forEach(function(t){ st[t] = false; }); st[tag] = true; } else { st[tag] = false; } hlSave(); hlRenderRows(); if (typeof doLookAround === "function") doLookAround(); }
+      function openHighlight(){ hlRenderRows(); document.getElementById("highlight-modal").style.display = "flex"; }
       function closeHighlight(){ document.getElementById("highlight-modal").style.display = "none"; }
       // Terrain type -> Travel Point cost to enter that hex.
       const TERRAIN_TP_COST = {
@@ -12049,7 +12128,7 @@
               ? rawBg
               : fmBlend(rawBg, rawBg === terrainColor("Aquatic") ? 0.5 : 0.3);
           svg += `<path d="${hexPath(p.x, p.y, r * 0.95)}" fill="${fill}" stroke="rgba(107,94,78,0.35)" stroke-width="0.6" style="cursor:pointer;" onclick="jumpToDetail('${code}')" data-fullmap-hex="${code}">${h.blank ? "" : `<title>${code}${h.name ? " — " + h.name : ""}</title>`}</path>`;
-        if(!h.blank){var _t=hlHexTags(code);if(_t.length)svg+=mkDot(p.x,p.y);}
+        if(!h.blank){var _t=hlPrimaryTag(code);if(_t)svg+=mkDot(p.x,p.y,_t);}
         }
 
         // Pass 1b: roads, trails, and rivers on the world map
@@ -13593,11 +13672,11 @@
                 svg += `<text class="hex-dir" x="${h.drawX}" y="${h.drawY - 18}" style="fill:var(--hex-center-text);font-size:7px;">This hex</text>`;
                 const tAbbrev = terrainAbbrevOf(h.hexCode);
                 const centerProminent = hexHasProminentEntry(h.hexCode);
-                const centerTagged = hlHexTags(h.hexCode).length > 0;
+                const centerTag = hlPrimaryTag(h.hexCode);
                 if (_blank) {
-                } else if (centerTagged) {
-                  svg += `<rect x="${h.drawX - 15}" y="${h.drawY - 16}" width="30" height="15" rx="3" ry="3" style="fill:var(--tag-hl-bg)" pointer-events="none"/>`;
-                  svg += `<text class="hex-text center-text" x="${h.drawX}" y="${h.drawY - 6}" style="fill:var(--tag-hl-text);font-size:11px">${h.hexCode}</text>`;
+                } else if (centerTag) {
+                  svg += `<text class="hex-text center-text" x="${h.drawX}" y="${h.drawY - 6}" style="font-size:11px">${h.hexCode}</text>`;
+                  svg += mkTagBadge(h.drawX + 10, h.drawY - 19, centerTag);
                 } else if (centerProminent) {
                   svg += `<rect x="${h.drawX - 15}" y="${h.drawY - 16}" width="30" height="15" rx="3" ry="3" style="fill:var(--prominent-bg)" pointer-events="none"/>`;
                   svg += `<text class="hex-text center-text" x="${h.drawX}" y="${h.drawY - 6}" style="fill:#ffffff;font-size:11px">${h.hexCode}</text>`;
@@ -13621,11 +13700,11 @@
               if (!pv) {
                 const tAbbrev = terrainAbbrevOf(h.hexCode);
                 const prominent = hexHasProminentEntry(h.hexCode);
-                const tagged = hlHexTags(h.hexCode).length > 0;
+                const tag = hlPrimaryTag(h.hexCode);
                 if (_blank) {
-                } else if (tagged) {
-                  svg += `<rect x="${h.drawX - 15}" y="${h.drawY - 17}" width="30" height="15" rx="3" ry="3" style="fill:var(--tag-hl-bg)" pointer-events="none"/>`;
-                  svg += `<text class="hex-text" x="${h.drawX}" y="${h.drawY - 6}" style="fill:var(--tag-hl-text);font-size:11px">${h.hexCode}</text>`;
+                } else if (tag) {
+                  svg += `<text class="hex-text" x="${h.drawX}" y="${h.drawY - 6}" style="fill:${h.fg};font-size:11px">${h.hexCode}</text>`;
+                  svg += mkTagBadge(h.drawX + 10, h.drawY - 20, tag);
                 } else if (prominent) {
                   svg += `<rect x="${h.drawX - 15}" y="${h.drawY - 17}" width="30" height="15" rx="3" ry="3" style="fill:var(--prominent-bg)" pointer-events="none"/>`;
                   svg += `<text class="hex-text" x="${h.drawX}" y="${h.drawY - 6}" style="fill:#ffffff;font-size:11px">${h.hexCode}</text>`;
@@ -19386,9 +19465,8 @@
       </div>
     </div>
     <div id="highlight-modal" class="modal" style="display: none; z-index: 10005">
-      <div class="modal__panel modal__panel--sm">
-        <div class="modal__title">Highlight</div>
-        <div class="modal__body" style="margin-bottom: var(--sp-3)">Toggle <span class="hl-title-word">highlights</span> on for hexes containing the elements below:</div>
+      <div class="modal__panel">
+        <div class="modal__title">Tags</div>
         <div class="settings-section" id="highlight-tag-rows"></div>
         <div class="modal__actions"><button class="btn btn--primary" type="button" onclick="closeHighlight()">Done</button></div>
       </div>
