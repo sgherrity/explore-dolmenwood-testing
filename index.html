@@ -3152,6 +3152,32 @@
         if (modal) modal.style.display = "flex";
       })();
 
+      function closeModalFromBackdrop(id) {
+        if (!id) return;
+        if (id === "spoiler-modal") return; // Require explicit acknowledgement.
+        if (id === "settings-modal" && typeof closeSettings === "function") return closeSettings();
+        if (id === "highlight-modal" && typeof closeHighlight === "function") return closeHighlight();
+        if (id === "lost-north-modal" && typeof lostNorthDismiss === "function") return lostNorthDismiss();
+        if (id === "track-chooser-modal" && typeof trackChooserCancel === "function") return trackChooserCancel();
+        if (id === "name-modal" && typeof nameModalCancel === "function") return nameModalCancel();
+        if (id === "color-modal" && typeof colorModalCancel === "function") return colorModalCancel();
+        if (id === "date-modal") {
+          if (typeof _dateCombinedResolve !== "undefined" && _dateCombinedResolve && typeof dateCombinedCancel === "function") return dateCombinedCancel();
+          if (typeof dateModalCancel === "function") return dateModalCancel();
+        }
+        if (id === "cal-type-modal" && typeof calTypeModalCancel === "function") return calTypeModalCancel();
+        if (id === "ui-modal" && typeof uiModalCancel === "function") return uiModalCancel();
+        if (id === "insuff-modal" && typeof insuffModalOK === "function") return insuffModalOK();
+        if (id === "log-modal" && typeof closeJourneyLog === "function") return closeJourneyLog();
+        var modal = document.getElementById(id);
+        if (modal) modal.style.display = "none";
+      }
+      document.addEventListener("click", function (e) {
+        var modal = e.target && e.target.classList && e.target.classList.contains("modal") ? e.target : null;
+        if (!modal) return;
+        closeModalFromBackdrop(modal.id);
+      });
+
       // Track state — hoisted so doDetail() can reference _trackActive before
       // the Party Track System block is reached during page load.
       let _trackActive = false;
@@ -15645,6 +15671,14 @@
         document.getElementById("name-modal").style.display = "none";
         if (_nameModalResolve) {
           _nameModalResolve({ name: val || null, color: _nameModalColor });
+          _nameModalResolve = null;
+        }
+      }
+
+      function nameModalCancel() {
+        document.getElementById("name-modal").style.display = "none";
+        if (_nameModalResolve) {
+          _nameModalResolve(null);
           _nameModalResolve = null;
         }
       }
